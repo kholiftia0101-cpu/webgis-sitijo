@@ -10,16 +10,16 @@ type Group = { id: string; name: string; layers: { id: string; name: string }[] 
 const groups: Group[] = [
   { id:"atribut_jalan", name:"Atribut Jalan", layers:[
     {id:"cermin_jalan",name:"Cermin Jalan"},{id:"kamera_pengawas",name:"Kamera Pengawas"},{id:"lampu_jalan",name:"Lampu Jalan"},{id:"lampu_lalin",name:"Lampu Lalu Lintas"},{id:"rambu_lalin",name:"Rambu Lalu Lintas"}]},
-  { id:"bangunan", name:"Bangunan", layers:[{id:"bangunan",name:"Bangunan"},{id:"rusunawa",name:"Rusunawa"}]},
+  { id:"bangunan", name:"Bangunan", layers:[{id:"bangunan",name:"Bangunan"},{id:"rusunawa",name:"Rusunawa"},{id:"kawasan_kumuh",name:"Kawasan Kumuh"},{id:"pembangunan_gedung",name:"Pembangunan Gedung"}]},
   { id:"halte", name:"Halte", layers:[{id:"jalur_halte",name:"Jalur Halte Trans"},{id:"titik_halte",name:"Titik Halte"}]},
   { id:"infrastruktur_pendukung", name:"Infrastruktur Pendukung", layers:[{id:"hidran",name:"Hidran"},{id:"rantai_pasok",name:"Rantai Pasok"},{id:"reklame",name:"Reklame"},{id:"titik_bm",name:"Titik Bench Mark"}]},
-  { id:"jaringan_drainase", name:"Jaringan Drainase", layers:[{id:"inlet",name:"Inlet"},{id:"manhole_drainase",name:"Manhole Drainase"},{id:"sumur_resapan",name:"Sumur Resapan"},{id:"zona_drainase",name:"Zona Drainase"}]},
+  { id:"jaringan_drainase", name:"Jaringan Drainase", layers:[{id:"inlet",name:"Inlet"},{id:"manhole_drainase",name:"Manhole Drainase"},{id:"sumur_resapan",name:"Sumur Resapan"},{id:"zona_drainase",name:"Zona Drainase"},{id:"saluran_air_hujan",name:"saluran_air_hujan"}]},
   { id:"jaringan_fiber_optik", name:"Jaringan Fiber Optik", layers:[{id:"kabel_fiber_optik",name:"Kabel Fiber Optik"},{id:"manhole_fiber_optik",name:"Manhole Fiber Optik"},{id:"tiang_fiber_optik",name:"Tiang Fiber Optik"}]},
   { id:"jaringan_ipal", name:"Jaringan Instalasi Pengolahan Air Limbah", layers:[{id:"manhole_sal",name:"Manhole Saluran Air Limbah"},{id:"pipa_induk",name:"Pipa Induk"},{id:"pipa_glontor",name:"Pipa Glontor"},{id:"pipa_lateral",name:"Pipa Lateral"}]},
   { id:"jaringan_jalan", name:"Jaringan Jalan", layers:[{id:"jalan_kota",name:"Jalan Kota"},{id:"jalan_lingkungan",name:"Jalan Lingkungan"},{id:"jalur_pemandu",name:"Jalur Pemandu"},{id:"jembatan",name:"Jembatan"},{id:"trotoar",name:"Trotoar"}]},
   { id:"jaringan_listrik", name:"Jaringan Listrik", layers:[{id:"tegangan_menengah",name:"Jaringan Kabel Listrik Tegangan Menengah"},{id:"tegangan_rendah",name:"Jaringan Kabel Listrik Tegangan Rendah"},{id:"rumah_kabel",name:"Rumah Kabel"},{id:"tiang_listrik",name:"Tiang Listrik"},{id:"trafo_listrik",name:"Trafo Listrik"}]},
   { id:"jaringan_pdam", name:"Jaringan Perusahaan Daerah Air Minum", layers:[{id:"jaringan_pdam",name:"Jaringan Perusahaan Daerah Air Minum"}]},
-  { id:"sungai", name:"Sungai", layers:[{id:"sungai",name:"Sungai"}]},
+  { id:"sungai", name:"Sungai", layers:[{id:"sungai",name:"Sungai"},{id:"talud_sungai",name:"Talud Sungai"}]},
 ];
 
 const baseLayers = [
