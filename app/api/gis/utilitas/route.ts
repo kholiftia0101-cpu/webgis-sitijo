@@ -34,7 +34,7 @@ const styles: Record<string, object> = {
   kabel_fiber_optik:{color:"#d946ef",weight:2}, jaringan_pdam:{color:"#00cfd1",weight:2}, sungai:{color:"#35c2ff",weight:2},
   pipa_glontor:{color:"#19a880",weight:2}, pipa_induk:{color:"#5691a8",weight:2}, pipa_lateral:{color:"#028ebd",weight:2},
   bangunan:{color:"#c0392b",weight:1,fillColor:"#e57373",fillOpacity:.45}, kawasan_kumuh:{color:"#e67e22",weight:2,fillColor:"#f39c12",fillOpacity:.2},
-  pembangunan_gedung:{color:"#16a34a",weight:2,fillColor:"#22c55e",fillOpacity:.35}, talud_sungai:{color:"#64748b",weight:2},
+  pembangunan_gedung:{color:"#16a34a",weight:2,fillColor:"#22c55e",fillOpacity:.35}, talud_sungai:{color:"#64748b",weight:2}, saluran_air_hujan:{color:"#0f766e",weight:2.5,opacity:.9},
 };
 
 function featureCollection(rows: Array<{ geometry: unknown; properties: Record<string, unknown> }>) {
