@@ -201,20 +201,23 @@ export default function DownloadDataClient({
           options.prj = data.crsWkt;
         }
 
-        const zipData = shpwrite.zip(
-          {
-            type: "FeatureCollection",
-            features: data.features,
-          } as never,
-          options as never,
-        );
-
-        const blob =
-          zipData instanceof Blob
-            ? zipData
-            : new Blob([zipData as BlobPart], {
-                type: "application/zip",
-              });
+        const zipData = await shpwrite.zip(
+        {
+          [fileName]: features,
+        },
+        {
+          outputType: "blob",
+          compression: "STORE",
+          prj: data.crsWkt,
+        }
+      );
+      
+      const blob =
+        zipData instanceof Blob
+          ? zipData
+          : new Blob([zipData as BlobPart], {
+              type: "application/zip",
+            });
 
         saveBlob(blob, `${filename}.zip`);
       }
