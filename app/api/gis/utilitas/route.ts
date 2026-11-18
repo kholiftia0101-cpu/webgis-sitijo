@@ -26,7 +26,7 @@ const LAYERS: Record<string, { table: string; geom?: string; range?: [string, nu
 
 const styles: Record<string, object> = {
   jalan_inspeksi:{color:"#e67e22",weight:2.5,opacity:.9}, jalan_kota:{color:"#f39c12",weight:3}, jalan_lingkungan:{color:"#f1c40f",weight:2},
-  trotoar:{color:"#9b59b6",weight:2}, jalur_pemandu:{color:"#fbff00",weight:2}, jembatan:{color:"#e74c3c",weight:3},
+  trotoar:{color:"#9b59b6",weight:2}, jalur_pemandu:{color:"#fbff00",weight:2}, jembatan:{radius:5,color:"#e74c3c",fillColor:"#e74c3c",fillOpacity:1,opacity:0},
   kabel_fiber_optik:{color:"#d946ef",weight:2}, jaringan_pdam:{color:"#00cfd1",weight:2}, sungai:{color:"#35c2ff",weight:2},
   pipa_glontor:{color:"#19a880",weight:2}, pipa_induk:{color:"#5691a8",weight:2}, pipa_lateral:{color:"#028ebd",weight:2},
   bangunan:{color:"#c0392b",weight:1,fillColor:"#e57373",fillOpacity:.45}, kawasan_kumuh:{color:"#e67e22",weight:2,fillColor:"#f39c12",fillOpacity:.2},
