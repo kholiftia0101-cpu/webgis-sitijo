@@ -9,7 +9,7 @@ type Group = { id: string; name: string; layers: { id: string; name: string }[] 
 
 const groups: Group[] = [
   { id:"atribut_jalan", name:"Atribut Jalan", layers:[
-    {id:"cermin_jalan",name:"Cermin Jalan"},{id:"kamera_pengawas",name:"Kamera Pengawas"},{id:"lampu_jalan",name:"Lampu Jalan"},{id:"lampu_lalin",name:"Lampu Lalu Lintas"},{id:"rambu_lalin",name:"Rambu Lalu Lintas"}]},
+  { id:"cermin_jalan",name:"Cermin Jalan"},{id:"kamera_pengawas",name:"Kamera Pengawas"},{id:"lampu_jalan",name:"Lampu Jalan"},{id:"lampu_lalin",name:"Lampu Lalu Lintas"},{id:"rambu_lalin",name:"Rambu Lalu Lintas"}]},
   { id:"bangunan", name:"Bangunan", layers:[{id:"bangunan",name:"Bangunan"},{id:"rusunawa",name:"Rusunawa"},{id:"kawasan_kumuh",name:"Kawasan Kumuh"},{id:"pembangunan_gedung",name:"Pembangunan Gedung"}]},
   { id:"halte", name:"Halte", layers:[{id:"jalur_halte",name:"Jalur Halte Trans"},{id:"titik_halte",name:"Titik Halte"}]},
   { id:"infrastruktur_pendukung", name:"Infrastruktur Pendukung", layers:[{id:"hidran",name:"Hidran"},{id:"rantai_pasok",name:"Rantai Pasok"},{id:"reklame",name:"Reklame"},{id:"titik_bm",name:"Titik Bench Mark"}]},
