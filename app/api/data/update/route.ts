@@ -248,8 +248,15 @@ export async function DELETE(request: NextRequest) {
     );
     if (!removed.rowCount) throw new Error("Data tidak ditemukan atau sudah dihapus.");
     await client.query(
-      `INSERT INTO public.log_penghapusan (subkelas, id_data, nama_penghapus, unit_penghapus, alasan_penghapusan)
-       VALUES ($1, $2, $3, $4, $5)`,
+      `INSERT INTO public.log_penghapusan (
+         subkelas,
+         id_data,
+         nama_penghapus,
+         unit_penghapus,
+         alasan_penghapusan,
+         waktu
+       )
+       VALUES ($1, $2, $3, $4, $5, NOW())`,
       [table, String(id), name, unit, reason],
     );
     await writeAccessLog(client, user, "Hapus", `Menghapus data ID ${id} dari ${table}. Nama: ${name}. Unit: ${unit}. Alasan: ${reason}`, request);
