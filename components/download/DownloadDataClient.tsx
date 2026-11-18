@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -48,12 +49,15 @@ function safeFilename(value: string) {
 function saveBlob(blob: Blob, filename: string) {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement("a");
+
   anchor.href = url;
   anchor.download = filename;
+
   document.body.appendChild(anchor);
   anchor.click();
   anchor.remove();
-  URL.revokeObjectURL(url);
+
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
 }
 
 export default function DownloadDataClient({
@@ -70,6 +74,7 @@ export default function DownloadDataClient({
   const [format, setFormat] = useState<Format>("geojson");
   const [loadingGroups, setLoadingGroups] = useState(true);
   const [downloading, setDownloading] = useState(false);
+
   const [message, setMessage] = useState<{
     type: "success" | "error" | "info";
     text: string;
@@ -83,6 +88,7 @@ export default function DownloadDataClient({
         const response = await fetch("/api/data/download", {
           cache: "no-store",
         });
+
         const result = await response.json();
 
         if (!response.ok) {
@@ -104,7 +110,9 @@ export default function DownloadDataClient({
           });
         }
       } finally {
-        if (active) setLoadingGroups(false);
+        if (active) {
+          setLoadingGroups(false);
+        }
       }
     }
 
@@ -117,7 +125,7 @@ export default function DownloadDataClient({
 
   const selectedGroup = useMemo(
     () => groups.find((group) => group.id === groupId),
-    [groups, groupId],
+    [groups, groupId]
   );
 
   const selectedLabel = labels[table] || table;
@@ -140,7 +148,7 @@ export default function DownloadDataClient({
     try {
       const response = await fetch(
         `/api/data/download?table=${encodeURIComponent(table)}`,
-        { cache: "no-store" },
+        { cache: "no-store" }
       );
 
       const result = await response.json();
@@ -157,62 +165,80 @@ export default function DownloadDataClient({
 
       const filename = safeFilename(data.label || table);
 
+      // ==========================================
+      // FORMAT GEOJSON
+      // ==========================================
       if (format === "geojson") {
         const blob = new Blob(
           [JSON.stringify(data, null, 2)],
-          { type: "application/geo+json;charset=utf-8" },
+          {
+            type: "application/geo+json;charset=utf-8",
+          }
         );
 
         saveBlob(blob, `${filename}.geojson`);
-      } else {
+      }
+
+      // ==========================================
+      // FORMAT SHAPEFILE
+      // ==========================================
+      else {
         const geometryTypes = new Set(
           data.features.map((feature) => {
-            const geometry = feature.geometry as { type?: string } | null;
+            const geometry = feature.geometry as
+              | { type?: string }
+              | null;
+
             return geometry?.type || "Unknown";
-          }),
+          })
         );
 
+        const supportedTypes = [
+          "Point",
+          "MultiPoint",
+          "LineString",
+          "MultiLineString",
+          "Polygon",
+          "MultiPolygon",
+        ];
+
         const unsupported = [...geometryTypes].filter(
-          (type) =>
-            ![
-              "Point",
-              "MultiPoint",
-              "LineString",
-              "MultiLineString",
-              "Polygon",
-              "MultiPolygon",
-            ].includes(type),
+          (type) => !supportedTypes.includes(type)
         );
 
         if (unsupported.length) {
           throw new Error(
-            `Tipe geometri tidak didukung Shapefile: ${unsupported.join(", ")}`,
+            `Tipe geometri tidak didukung Shapefile: ${unsupported.join(", ")}`
           );
         }
 
-        const options: Record<string, unknown> = {
-          folder: filename,
-          filename,
-          outputType: "blob",
-          compression: "STORE",
-        };
-
-        if (data.crsWkt) {
-          options.prj = data.crsWkt;
+        if (geometryTypes.size > 1) {
+          throw new Error(
+            "Data memiliki lebih dari satu tipe geometri. Shapefile harus dibuat dengan satu tipe geometri yang sama. Silakan gunakan GeoJSON untuk data campuran."
+          );
         }
 
-        const zipData = await shpwrite.zip(features, {
-          outputType: "blob",
-          compression: "STORE",
-          prj: data.crsWkt,
-        });
-        
+        const zipData = await shpwrite.zip(
+          data as unknown as Parameters<typeof shpwrite.zip>[0],
+          {
+            folder: filename,
+            filename,
+            outputType: "blob",
+            compression: "STORE",
+            ...(data.crsWkt ? { prj: data.crsWkt } : {}),
+          }
+        );
+
         const blob =
           zipData instanceof Blob
             ? zipData
-            : new Blob([zipData as BlobPart], {
-                type: "application/zip",
-              });
+            : new Blob(
+                [zipData as unknown as BlobPart],
+                { type: "application/zip" }
+              );
+
+        saveBlob(blob, `${filename}.zip`);
+      }
 
       setMessage({
         type: "success",
@@ -222,7 +248,8 @@ export default function DownloadDataClient({
       if (format === "shapefile" && !data.crsWkt) {
         setMessage({
           type: "info",
-          text: "Shapefile berhasil dibuat, tetapi SRID data tidak ditemukan. File .prj mungkin tidak tersedia. Periksa sistem koordinat data sebelum digunakan.",
+          text:
+            "Shapefile berhasil dibuat, tetapi SRID data tidak ditemukan. File .prj mungkin tidak tersedia. Periksa sistem koordinat data sebelum digunakan.",
         });
       }
     } catch (error) {
@@ -242,9 +269,12 @@ export default function DownloadDataClient({
     <main className="dd-page">
       <header className="dd-header">
         <div className="dd-brand-wrap">
-          <Link href="/" className="dd-brand">SITIJO</Link>
+          <Link href="/" className="dd-brand">
+            SITIJO
+          </Link>
           <span>Sistem Informasi Infrastruktur Kota Yogyakarta</span>
         </div>
+
         <Link href="/peta" className="dd-back">
           <ArrowLeft size={16} />
           Kembali ke Peta
@@ -254,8 +284,12 @@ export default function DownloadDataClient({
       <div className="dd-container">
         <div className="dd-title-row">
           <div>
-            <div className="dd-eyebrow">PENGELOLAAN DATA INFRASTRUKTUR</div>
+            <div className="dd-eyebrow">
+              PENGELOLAAN DATA INFRASTRUKTUR
+            </div>
+
             <h1>Download Data Infrastruktur</h1>
+
             <p>
               Unduh data infrastruktur berdasarkan kelas dan subkelas
               dalam format GeoJSON atau Shapefile.
@@ -269,9 +303,14 @@ export default function DownloadDataClient({
         </div>
 
         {message && (
-          <div className={`dd-alert ${message.type}`} role="status">
+          <div
+            className={`dd-alert ${message.type}`}
+            role="status"
+          >
             <span>{message.text}</span>
-            {downloading && <LoaderCircle className="dd-spin" size={17} />}
+            {downloading && (
+              <LoaderCircle className="dd-spin" size={17} />
+            )}
           </div>
         )}
 
@@ -280,15 +319,19 @@ export default function DownloadDataClient({
             <div className="dd-heading-icon">
               <Database size={19} />
             </div>
+
             <div>
               <h2>Pilih Data Infrastruktur</h2>
-              <p>Tentukan kelas dan subkelas data yang akan diunduh.</p>
+              <p>
+                Tentukan kelas dan subkelas data yang akan diunduh.
+              </p>
             </div>
           </div>
 
           <div className="dd-filter-grid">
             <label>
               Kelas Infrastruktur
+
               <select
                 value={groupId}
                 disabled={loadingGroups}
@@ -297,6 +340,7 @@ export default function DownloadDataClient({
                 <option value="">
                   {loadingGroups ? "Memuat kelas..." : "Pilih kelas..."}
                 </option>
+
                 {groups.map((group) => (
                   <option key={group.id} value={group.id}>
                     {group.label}
@@ -307,6 +351,7 @@ export default function DownloadDataClient({
 
             <label>
               Subkelas Infrastruktur
+
               <select
                 value={table}
                 disabled={!selectedGroup}
@@ -316,6 +361,7 @@ export default function DownloadDataClient({
                 }}
               >
                 <option value="">Pilih subkelas...</option>
+
                 {(selectedGroup?.tables || []).map((name) => (
                   <option key={name} value={name}>
                     {labels[name] || name}
@@ -331,23 +377,32 @@ export default function DownloadDataClient({
             <div className="dd-heading-icon">
               <Download size={19} />
             </div>
+
             <div>
               <h2>Format Unduhan</h2>
-              <p>Pilih format file yang sesuai dengan kebutuhan.</p>
+              <p>
+                Pilih format file yang sesuai dengan kebutuhan.
+              </p>
             </div>
           </div>
 
           <div className="dd-format-grid">
             <button
               type="button"
-              className={`dd-format-option ${format === "geojson" ? "active" : ""}`}
+              className={`dd-format-option ${
+                format === "geojson" ? "active" : ""
+              }`}
               onClick={() => setFormat("geojson")}
             >
               <FileJson size={28} />
+
               <span>
                 <strong>GeoJSON</strong>
-                <small>.geojson · Data geometri dan atribut</small>
+                <small>
+                  .geojson · Data geometri dan atribut
+                </small>
               </span>
+
               <span className="dd-radio">
                 {format === "geojson" ? "✓" : ""}
               </span>
@@ -355,14 +410,18 @@ export default function DownloadDataClient({
 
             <button
               type="button"
-              className={`dd-format-option ${format === "shapefile" ? "active" : ""}`}
+              className={`dd-format-option ${
+                format === "shapefile" ? "active" : ""
+              }`}
               onClick={() => setFormat("shapefile")}
             >
               <FileArchive size={28} />
+
               <span>
                 <strong>Shapefile</strong>
                 <small>.zip · SHP, SHX, DBF, PRJ</small>
               </span>
+
               <span className="dd-radio">
                 {format === "shapefile" ? "✓" : ""}
               </span>
@@ -379,7 +438,8 @@ export default function DownloadDataClient({
               <>
                 Shapefile akan dikemas dalam ZIP. Nama kolom pada DBF
                 mengikuti batas 10 karakter Shapefile. Sistem koordinat
-                mengikuti SRID sumber jika tersedia.
+                mengikuti SRID sumber jika tersedia. Data dengan tipe
+                geometri campuran perlu diunduh dalam format GeoJSON.
               </>
             )}
           </div>
@@ -387,8 +447,11 @@ export default function DownloadDataClient({
           <div className="dd-download-summary">
             <div>
               <span>Data terpilih</span>
-              <strong>{table ? selectedLabel : "Belum ada subkelas dipilih"}</strong>
+              <strong>
+                {table ? selectedLabel : "Belum ada subkelas dipilih"}
+              </strong>
             </div>
+
             <button
               type="button"
               className="dd-download-button"
@@ -400,6 +463,7 @@ export default function DownloadDataClient({
               ) : (
                 <Download size={18} />
               )}
+
               {downloading ? "Menyiapkan..." : "Download Data"}
             </button>
           </div>
@@ -407,6 +471,7 @@ export default function DownloadDataClient({
 
         <div className="dd-help">
           <Map size={18} />
+
           <div>
             <strong>Informasi</strong>
             <p>
