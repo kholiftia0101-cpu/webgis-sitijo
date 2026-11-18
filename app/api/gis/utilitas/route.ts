@@ -20,8 +20,8 @@ const LAYERS: Record<string, { table: string; geom?: string; range?: [string, nu
   titik_halte:{table:"titik_halte",geom:"geom"}, jalur_halte:{table:"jalur_halte_trans",geom:"geom"}, tegangan_menengah:{table:"tegangan_menengah"}, tegangan_rendah:{table:"tegangan_rendah"}, rumah_kabel:{table:"rumah_kabel",geom:"geom"}, tiang_listrik:{table:"tiang_listrik",geom:"geom"}, trafo_listrik:{table:"trafo_listrik",geom:"geom"},
   hidran:{table:"hidran",geom:"geom"}, rantai_pasok:{table:"rantai_pasok"}, reklame:{table:"reklame",geom:"geom"}, titik_bm:{table:"titik_bench_mark",geom:"geom"}, manhole_sal:{table:"manhole_sal"}, pipa_glontor:{table:"pipa_glontor"}, pipa_induk:{table:"pipa_induk"}, pipa_lateral:{table:"pipa_lateral"}, jaringan_pdam:{table:"jaringan_pdam"}, sungai:{table:"sungai"},
   inlet:{table:"inlet",geom:"geom"}, saluran_air_hujan:{table:"saluran_air_hujan",geom:"geom"}, manhole_drainase:{table:"manhole_drainase",geom:"geom"}, sumur_resapan:{table:"sumur_resapan"}, zona_drainase:{table:"zona_drainase"}, kabel_fiber_optik:{table:"kabel_fo"}, manhole_fiber_optik:{table:"manhole_fo"}, tiang_fiber_optik:{table:"tiang_fiber_optik",geom:"geom"},
-  jalur_pemandu:{table:"jalur_pemandu"}, jalan_kota:{table:"jalan_kota"}, jembatan:{table:"jembatan"}, jalan_inspeksi:{table:"jalan_inspeksi",geom:"geom"}, jalan_lingkungan:{table:"jalan_lingkungan"}, trotoar:{table:"trotoar"},
-  kawasan_kumuh:{table:"kawasan_kumuh"}, pembangunan_gedung:{table:"pembangunan_gedung"}, talud_sungai:{table:"talud_sungai"},
+  jalur_pemandu:{table:"jalur_pemandu",geom:"geom"}, jalan_kota:{table:"jalan_kota",geom:"geom"}, jembatan:{table:"jembatan",geom:"geom"}, jalan_inspeksi:{table:"jalan_inspeksi",geom:"geom"}, jalan_lingkungan:{table:"jalan_lingkungan",geom:"geom"}, trotoar:{table:"trotoar",geom:"geom"},
+  kawasan_kumuh:{table:"kawasan_kumuh",geom:"geom"}, pembangunan_gedung:{table:"pembangunan_gedung",geom:"geom"}, talud_sungai:{table:"talud_sungai",geom:"geom"},
 };
 
 const styles: Record<string, object> = {
