@@ -1,0 +1,74 @@
+
+import { NextResponse } from "next/server";
+import { Pool } from "pg";
+
+export const runtime = "nodejs";
+export const dynamic = "force-dynamic";
+
+const globalForPg = globalThis as typeof globalThis & {
+  pgPool?: Pool;
+};
+
+const pool =
+  globalForPg.pgPool ??
+  new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false },
+    max: 5,
+  });
+
+if (process.env.NODE_ENV !== "production") {
+  globalForPg.pgPool = pool;
+}
+
+export async function GET() {
+  try {
+    if (!process.env.DATABASE_URL) {
+      return NextResponse.json(
+        { error: "DATABASE_URL belum diatur di .env.local" },
+        { status: 500 }
+      );
+    }
+
+    const result = await pool.query(`
+      SELECT
+        id_kel,
+        luas_kel,
+        kelurahan,
+        kemantren,
+        kota,
+        provinsi,
+        negara,
+        ST_AsGeoJSON(geometri, 6)::json AS geometry
+      FROM batas_administrasi
+      WHERE geometri IS NOT NULL
+      ORDER BY kelurahan;
+    `);
+
+    const features = result.rows.map((row) => {
+      const { geometry, ...properties } = row;
+
+      return {
+        type: "Feature",
+        geometry,
+        properties,
+      };
+    });
+
+    return NextResponse.json({
+      type: "FeatureCollection",
+      features,
+    });
+  } catch (error) {
+    console.error("Batas administrasi error:", error);
+
+    return NextResponse.json(
+      {
+        error: "Gagal mengambil batas administrasi.",
+        detail:
+          error instanceof Error ? error.message : "Unknown error",
+      },
+      { status: 500 }
+    );
+  }
+}

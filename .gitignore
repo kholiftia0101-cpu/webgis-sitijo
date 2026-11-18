@@ -1,0 +1,17 @@
+node_modules
+.next
+out
+.env
+.env.local
+.env.*.local
+*.log
+.DS_Store
+.env.development.local
+.vercel
+*.tsbuildinfo
+# Backup dan file sementara
+app/app.zip
+legacy-reference/backend/temp_uploads/
+legacy-reference/phpinfo.php
+legacy-reference/backend/data/temp_*.geojson
+legacy-reference/backend/db/koneksi.php

@@ -1,0 +1,1399 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&display=swap');
+/* =========================================================
+   1. GLOBAL / TEMA UTAMA
+   ========================================================= */
+
+:root {
+    --header: 60px;
+    --brand: #0f3073;
+    --brand-dark: #003366;
+    --brand-accent: #ffcc00;
+    --text-main: #333;
+    --text-muted: #64748b;
+    --page-bg: #f5f7fa;
+    --border-color: #e0e0e0;
+    --card-bg: #ffffff;
+}
+
+html,
+body {
+    min-height: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+    background: var(--page-bg);
+    color: var(--text-main);
+}
+
+* {
+    box-sizing: border-box;
+}
+
+/* =========================================================
+   2. HALAMAN PETA (peta.php)
+   ========================================================= */
+
+.page-peta {
+    height: 100%;
+    overflow: hidden;
+}
+
+.page-peta #map {
+    position: absolute;
+    top: 85px;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    margin-top: -25px;
+    background: transparent !important;
+}
+
+.page-peta .sidebar {
+    position: fixed;
+    top: 80px;
+    left: 0;
+    bottom: 0;
+    width: 250px;
+    padding: 10px;
+    z-index: 1100;
+    overflow-y: auto;
+    font-size: 14px;
+    background: #ffffffee;
+    backdrop-filter: blur(6px);
+    border-right: 1px solid var(--border-color);
+    border-radius: 0 10px 10px 0;
+    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+}
+
+.page-peta .sidebar.hidden {
+    transform: translateX(-100%);
+}
+
+.page-peta .sidebar h5,
+.page-peta .sidebar h6 {
+    margin: 15px 0 10px;
+    padding: 0;
+    color: #02106e;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.page-peta .sidebar input,
+.page-peta .sidebar select {
+    margin-bottom: 8px;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+}
+
+.page-peta .toggle-btn {
+    position: fixed;
+    top: 90px;
+    left: 10px;
+    z-index: 1200;
+    padding: 6px 10px;
+    color: #09017d;
+    background: var(--brand-accent);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.page-peta .leaflet-textpath {
+    pointer-events: none;
+}
+
+.page-peta .legend-container {
+    max-height: 250px;
+    padding: 8px;
+    overflow-y: auto;
+    background: #fff;
+    border-radius: 6px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+    font-size: 13px;
+}
+
+.page-peta .layer-class {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-top: 5px;
+    padding: 8px 10px;
+    background: #f8f9fa;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    font-weight: 500;
+    transition: background 0.2s;
+}
+
+.page-peta .layer-class:hover {
+    background: #e9ecef;
+}
+
+.page-peta .layer-sub {
+    display: none;
+    margin-left: 15px;
+    padding: 5px 0;
+}
+
+.page-peta .layer-sub div {
+    padding: 5px 0;
+    font-size: 13px;
+}
+
+.page-peta .layer-sub input {
+    margin-right: 5px;
+}
+
+.page-peta .legend-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.page-peta .legend-header .toggle {
+    color: #06005c;
+    font-size: 15px;
+}
+
+.page-peta .legend-content div {
+    display: flex;
+    align-items: center;
+    margin-bottom: 3px;
+}
+
+.page-peta .legend-content span {
+    display: inline-block;
+    width: 18px;
+    height: 12px;
+    margin-right: 6px;
+    border: 1px solid #001659;
+}
+
+.page-peta #loadingOverlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0, 0, 0, 0.35);
+    backdrop-filter: blur(3px);
+    color: #222;
+    font-family: Arial, sans-serif;
+}
+
+.page-peta #loadingOverlay .loading-box {
+    min-width: 300px;
+    padding: 25px 35px;
+    background: #fff;
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+    text-align: center;
+}
+
+.page-peta #loadingOverlay h2 {
+    margin: 5px 0 8px;
+    color: var(--brand);
+    font-size: 18px;
+}
+
+.page-peta #loadingOverlay p {
+    margin: 0;
+    color: #666;
+    font-size: 13px;
+}
+
+.page-peta .loader {
+    width: 45px;
+    height: 45px;
+    margin: 0 auto 15px;
+    border: 5px solid #e9ecef;
+    border-top-color: var(--brand);
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.page-peta .locate-button {
+    padding: 6px;
+    background: #fff;
+    border-radius: 4px;
+    cursor: pointer;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
+}
+
+.page-peta .locate-button img {
+    display: block;
+    width: 20px;
+    height: 20px;
+}
+
+.page-peta .label-jalan {
+    color: #000;
+    font-size: 8px;
+    font-weight: bold;
+    white-space: nowrap;
+    pointer-events: none;
+    text-shadow:
+        -1px -1px 0 #fff,
+        1px -1px 0 #fff,
+        -1px 1px 0 #fff,
+        1px 1px 0 #fff;
+}
+
+.page-peta .coords-info {
+    padding: 4px 8px;
+    background: #fff;
+    border-radius: 4px;
+    font-size: 12px;
+    box-shadow: 0 0 4px rgba(0, 0, 0, 0.3);
+}
+
+.page-peta .leaflet-control-compass {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: #fff;
+    border-radius: 50%;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+.page-peta .leaflet-control-compass img {
+    width: 28px;
+    height: 28px;
+}
+
+.page-peta .layer-loading-notification {
+    position: absolute;
+    top: 12px;
+    right: 60px;
+    z-index: 2000;
+    display: none;
+    width: 300px;
+    max-width: calc(100vw - 80px);
+    padding: 14px 16px;
+    color: #222;
+    background: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(15, 48, 115, 0.12);
+    border-radius: 14px;
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.18),
+        0 2px 8px rgba(0, 0, 0, 0.08);
+    font-size: 12px;
+    pointer-events: none;
+    opacity: 0;
+    transform: translateY(-6px);
+    transition: opacity 0.25s ease, transform 0.25s ease;
+}
+
+.page-peta .layer-loading-notification.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.page-peta .loading-header {
+    display: flex;
+    align-items: flex-start;
+    gap: 11px;
+}
+
+.page-peta .loading-spinner {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    border: 3px solid #e7ebf3;
+    border-top-color: var(--brand);
+    border-radius: 50%;
+    animation: layerSpinner 0.8s linear infinite;
+}
+
+@keyframes layerSpinner {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.page-peta .loading-text-wrap {
+    flex: 1;
+    min-width: 0;
+}
+
+.page-peta .loading-title {
+    margin-bottom: 4px;
+    color: #555;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.page-peta .loading-layer,
+.page-peta .loading-layer strong {
+    color: var(--brand);
+    font-size: 13px;
+}
+
+.page-peta .loading-layer {
+    line-height: 1.5;
+    word-break: break-word;
+}
+
+.page-peta .loading-layer strong {
+    font-weight: 700;
+}
+
+.page-peta .loading-progress {
+    height: 4px;
+    margin-top: 12px;
+    overflow: hidden;
+    background: #e9edf5;
+    border-radius: 99px;
+}
+
+.page-peta .loading-progress-bar {
+    width: 40%;
+    height: 100%;
+    background: linear-gradient(90deg, var(--brand), #4a76c5, var(--brand));
+    background-size: 200% 100%;
+    border-radius: 99px;
+    animation: loadingProgress 1.3s ease-in-out infinite;
+}
+
+.page-peta .loading-count {
+    margin-top: 7px;
+    color: #777;
+    font-size: 11px;
+}
+
+@keyframes loadingProgress {
+    0% {
+        transform: translateX(-120%);
+    }
+
+    100% {
+        transform: translateX(300%);
+    }
+}
+
+/* =========================================================
+   POPUP INFORMASI RUSUNAWA & AKSES DITOLAK
+   ========================================================= */
+
+.page-peta .layer-info-overlay,
+.page-riwayat-akses .layer-info-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 100000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    background: rgba(15, 23, 42, 0.48);
+    backdrop-filter: blur(4px);
+}
+
+.page-peta .layer-info-modal,
+.page-riwayat-akses .layer-info-modal {
+    width: 100%;
+    max-width: 360px;
+    padding: 28px 24px 24px;
+    background: #fff;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
+    text-align: center;
+    animation: layerModalIn 0.22s ease-out;
+}
+
+.page-peta .layer-info-icon,
+.page-riwayat-akses .layer-info-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 62px;
+    height: 62px;
+    margin: 0 auto 18px;
+    background: #e8f1ff;
+    color: #0d47a1;
+    border-radius: 50%;
+    font-size: 32px;
+    font-weight: 600;
+}
+
+.page-peta #layerInfoTitle,
+.page-riwayat-akses #layerInfoTitle {
+    margin: 0 0 10px;
+    color: #172033;
+    font-size: 19px;
+    font-weight: 700;
+    line-height: 1.4;
+}
+
+.page-peta #layerInfoMessage,
+.page-riwayat-akses #layerInfoMessage {
+    margin: 0 0 18px;
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+.page-peta .layer-info-note,
+.page-riwayat-akses .layer-info-note {
+    margin-bottom: 22px;
+    padding: 12px;
+    background: #f8fafc;
+    color: #475569;
+    border-radius: 10px;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+.page-peta #layerInfoClose,
+.page-riwayat-akses #layerInfoClose {
+    width: 100%;
+    padding: 12px 16px;
+    color: #fff;
+    background: #0d47a1;
+    border: none;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.2s;
+}
+
+.page-peta #layerInfoClose:hover,
+.page-riwayat-akses #layerInfoClose:hover {
+    background: #1d4ed8;
+}
+
+.page-peta #layerInfoClose:active,
+.page-riwayat-akses #layerInfoClose:active {
+    transform: scale(0.98);
+}
+
+@keyframes layerModalIn {
+    from {
+        opacity: 0;
+        transform: translateY(10px) scale(0.98);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+}
+
+/* =========================================================
+   3. HALAMAN JENIS DATA (jenisdata.php)
+   ========================================================= */
+
+.page-jenisdata .main {
+    height: calc(100vh - 100px);
+    margin: 80px 30px;
+    overflow-y: auto;
+}
+
+.page-jenisdata .cards-wrapper {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+    padding: 1rem;
+}
+
+.page-jenisdata .card {
+    display: flex;
+    flex: 1 1 280px;
+    flex-direction: column;
+    align-items: center;
+    max-width: 320px;
+    padding: 1.5rem;
+    background: #fff;
+    border: none;
+    border-radius: 16px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    text-align: center;
+    cursor: pointer;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.page-jenisdata .card img {
+    width: 120px;
+    height: 120px;
+    margin-bottom: 1rem;
+    border-radius: 50%;
+    object-fit: cover;
+    transition: transform 0.3s;
+}
+
+.page-jenisdata .card p {
+    margin: 0;
+    color: #444;
+    font-size: 1.1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+}
+
+.page-jenisdata .card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.page-jenisdata .card:hover img {
+    transform: scale(1.05);
+}
+
+.page-jenisdata #infoModal .modal-dialog {
+    width: 60vw;
+    max-width: 800px;
+    max-height: 85vh;
+}
+
+.page-jenisdata #infoModal .modal-content {
+    max-height: 70vh;
+    overflow-y: auto;
+    border-radius: 12px;
+}
+
+.page-jenisdata #infoModal .modal-body {
+    display: flex !important;
+    flex-direction: row !important;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 0.5rem;
+}
+
+.page-jenisdata #infoModal .modal-left {
+    flex: 0 0 35%;
+    max-width: 35%;
+    min-width: 200px;
+    padding-right: 1rem;
+    text-align: left;
+}
+
+.page-jenisdata #infoModal .modal-right {
+    flex: 0 0 65%;
+    max-width: 65%;
+    min-width: 300px;
+    padding-left: 1rem;
+    text-align: left;
+}
+
+.page-jenisdata #infoModal .modal-left h6,
+.page-jenisdata #infoModal .modal-right h6 {
+    color: #000;
+    font-family: "Times New Roman", Times, serif;
+    font-weight: bold;
+}
+
+.page-jenisdata #infoModal .modal-left h6 {
+    font-size: 18px;
+}
+
+.page-jenisdata #infoModal .modal-right h6 {
+    font-size: 17px;
+}
+
+.page-jenisdata #infoModal .modal-title h6 {
+    font-size: 15px;
+}
+
+.page-jenisdata #infoModal .modal-left table {
+    width: 95%;
+    margin: auto;
+    color: #000;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 15px;
+}
+
+.page-jenisdata #infoModal .modal-left p {
+    margin-top: 0.5rem;
+    margin-bottom: 1.5rem;
+    color: #000;
+    font-family: "Times New Roman", Times, serif;
+    text-align: justify;
+}
+
+.page-jenisdata #infoModal .modal-right p {
+    margin-right: 30px;
+    color: #000;
+    font-family: "Times New Roman", Times, serif;
+    font-size: 15px;
+    text-align: justify;
+}
+
+.page-jenisdata #infoModal .modal-left ol#modalSubkelas,
+.page-jenisdata #infoModal .modal-left ol#modalSubkelas li {
+    color: #000;
+    font-family: "Times New Roman", Times, serif;
+    text-align: justify;
+}
+
+.page-jenisdata #modalSubkelas {
+    padding-left: 1.2em;
+    color: #555;
+}
+
+.page-jenisdata #modalChart {
+    display: block;
+    width: 100%;
+    max-width: 400px;
+    height: auto;
+    max-height: 350px;
+    margin: 0 auto;
+}
+
+/* =========================================================
+   4. HALAMAN PANDUAN (panduan.php)
+   ========================================================= */
+
+.page-panduan {
+    min-height: 100vh;
+    height: auto;
+    overflow-x: hidden;
+}
+
+.page-panduan .main-container {
+    display: block;
+    width: calc(100% - 100px);
+    max-width: 1200px;
+    margin: 35px 20px 40px 80px;
+    padding: 24px;
+}
+
+.page-panduan .main-container .card {
+    display: block;
+    width: 100%;
+    max-width: none;
+    margin: 0 0 24px;
+    padding: 24px;
+    background: #fff;
+    border: none;
+    border-radius: 14px;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.07);
+}
+
+.page-panduan h4 {
+    margin: 0 0 24px;
+    color: #042a51;
+    font-size: 26px;
+    font-weight: 700;
+    line-height: 1.4;
+    text-align: center;
+}
+
+.page-panduan iframe.video-box,
+.page-panduan iframe.pdf-box {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 10px;
+}
+
+.page-panduan iframe.video-box {
+    height: clamp(280px, 40vw, 520px);
+    margin-bottom: 18px;
+    border: none;
+}
+
+.page-panduan iframe.pdf-box {
+    height: clamp(400px, 60vw, 700px);
+    margin-top: 14px;
+    background: #fff;
+    border: 1px solid #d0d0d0;
+}
+
+.page-panduan .download-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 14px;
+    padding: 12px 18px;
+    color: #fff;
+    background: var(--brand-dark);
+    border-radius: 8px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.page-panduan .download-btn:hover {
+    color: #fff;
+    background: #1c2f70;
+}
+
+/* =========================================================
+   5. HALAMAN SIGN IN (signin.php)
+   ========================================================= */
+
+.page-signin {
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: "Montserrat", sans-serif;
+    background: linear-gradient(2deg, #fff 0%, #74a4ce 100%);
+}
+
+.page-signin .login-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.page-signin .login-box {
+    position: relative;
+    width: 100%;
+    max-width: 400px;
+    padding: 30px;
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+    animation: signInFadeInUp 1s ease forwards;
+}
+
+@keyframes signInFadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.page-signin .login-box h2 {
+    margin: -30px -30px 25px;
+    padding: 14px;
+    color: #fff;
+    background: #213878;
+    border-radius: 16px 16px 0 0;
+    text-align: center;
+    letter-spacing: 1px;
+}
+
+.page-signin .login-box label {
+    display: block;
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.page-signin .login-box input[type="text"],
+.page-signin .login-box input[type="password"] {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 12px 15px;
+    background: #f2f5ff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.page-signin .login-box input[type="text"]:focus,
+.page-signin .login-box input[type="password"]:focus {
+    border-color: #001a66;
+    box-shadow: 0 0 8px rgba(0, 26, 102, 0.3);
+    outline: none;
+}
+
+.page-signin .login-box .remember {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+    font-size: 14px;
+}
+
+.page-signin .login-box .remember input {
+    margin-right: 6px;
+}
+
+.page-signin .login-box button {
+    width: 100%;
+    padding: 14px;
+    background: #ffcc00;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+
+.page-signin .login-box button:hover {
+    background: #ffb400;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.page-signin .login-box .password-wrapper {
+    position: relative;
+}
+
+.page-signin .login-box .password-wrapper i {
+    position: absolute;
+    top: 50%;
+    right: 12px;
+    color: #001a66;
+    transform: translateY(-50%);
+    cursor: pointer;
+    transition: color 0.3s, transform 0.3s;
+}
+
+.page-signin .login-box .password-wrapper i:hover {
+    color: #ffcc00;
+    transform: translateY(-50%) scale(1.2);
+}
+
+.page-signin .error {
+    margin-bottom: 12px;
+    color: #e53935;
+    font-weight: 600;
+    text-align: center;
+}
+
+
+/* =========================================================
+   6. HALAMAN DOWNLOAD DATA (download_data.php)
+   ========================================================= */
+
+.page-download-data {
+    padding: 100px 0 20px;
+    background: #f4f6f9;
+    color: #333;
+    font-family: "Segoe UI", sans-serif;
+}
+
+.page-download-data h2,
+.page-download-data h4 {
+    color: #003366;
+    text-align: center;
+    font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+}
+
+.page-download-data h4 {
+    margin-bottom: 20px;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.page-download-data .card {
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.page-download-data .btn-primary {
+    background-color: #003366 !important;
+    border-color: #170080 !important;
+    font-weight: 600;
+}
+
+.page-download-data .btn-primary:hover {
+    background-color: #040067 !important;
+    border-color: #0b0070 !important;
+}
+
+
+/* =========================================================
+   7. HALAMAN RIWAYAT AKSES (riwayat_akses.php)
+   ========================================================= */
+
+.page-riwayat-akses {
+    margin-top: 100px;
+    margin-right: 50px;
+    margin-left: 80px;
+}
+
+.page-riwayat-akses .filter-wrapper {
+    margin-bottom: 20px;
+}
+
+.page-riwayat-akses .filter-label {
+    margin-bottom: 6px;
+    font-weight: 600;
+}
+
+.page-riwayat-akses #logTable {
+    width: 100% !important;
+}
+
+.page-riwayat-akses #logTable td {
+    vertical-align: top;
+}
+
+.page-riwayat-akses #logTable td:nth-child(7) {
+    min-width: 350px;
+    max-width: 500px;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.page-riwayat-akses #logTable td:nth-child(9) {
+    min-width: 250px;
+    max-width: 350px;
+    white-space: normal;
+    word-break: break-word;
+}
+
+.page-riwayat-akses .dt-buttons {
+    margin-bottom: 15px;
+}
+
+.page-riwayat-akses .dt-buttons .btn {
+    margin-right: 3px;
+}
+
+
+/* =========================================================
+   8. HALAMAN TAMBAH DATA (tambah_data.php)
+   ========================================================= */
+
+.page-tambah-data {
+    padding: 20px;
+    background: #f0f2f5;
+    color: #212529;
+    font-family: "Montserrat", sans-serif;
+}
+
+.page-tambah-data .container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+.page-tambah-data .card {
+    flex: 1 1 45%;
+    min-width: 320px;
+    margin-bottom: 0;
+    padding: 20px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.page-tambah-data h4 {
+    margin: 0 0 25px;
+    color: #000;
+    font-size: 28px;
+    text-align: center;
+}
+
+.page-tambah-data h5 {
+    margin-bottom: 15px;
+    color: #003366;
+    font-size: 20px;
+}
+
+.page-tambah-data ul {
+    padding: 0;
+    list-style: none;
+}
+
+.page-tambah-data li {
+    margin-bottom: 8px;
+}
+
+.page-tambah-data a.download-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 12px;
+    color: #fff;
+    background: #003366;
+    border-radius: 6px;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background 0.3s;
+}
+
+.page-tambah-data a.download-btn:hover {
+    background: #1c2f70;
+}
+
+.page-tambah-data select,
+.page-tambah-data input[type="file"],
+.page-tambah-data button {
+    width: 100%;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+.page-tambah-data button {
+    color: #fff;
+    background: #003366;
+    border: none;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.page-tambah-data button:hover {
+    background: #1c2f70;
+}
+
+.page-tambah-data #subkelasSelect {
+    max-height: 160px;
+    overflow-y: auto;
+}
+
+.page-tambah-data .accordion-item {
+    margin-bottom: 6px;
+    overflow: hidden;
+    color: #fff;
+    background: #003366;
+    border-radius: 8px;
+    transition: background 0.2s ease-in-out;
+}
+
+.page-tambah-data .accordion-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 14px;
+    color: #fff;
+    background: #003366;
+    border: none;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.page-tambah-data .accordion-header:hover {
+    background: #00227b;
+}
+
+.page-tambah-data .accordion-header i {
+    transition: transform 0.3s ease;
+}
+
+.page-tambah-data .accordion-header.active i {
+    transform: rotate(180deg);
+}
+
+.page-tambah-data .accordion-content {
+    max-height: 0;
+    margin: 0;
+    padding: 5px 15px;
+    overflow: hidden;
+    opacity: 0;
+    color: #fff;
+    background: #f2f4ff;
+    list-style: none;
+    transition: max-height 0.35s ease, opacity 0.3s ease;
+}
+
+.page-tambah-data .accordion-content.show {
+    padding: 10px 16px 16px;
+    opacity: 1;
+}
+
+.page-tambah-data .accordion-content li {
+    margin: 6px 0;
+}
+
+.page-tambah-data .accordion-content a {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 0;
+    color: #003366;
+    font-weight: 500;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.page-tambah-data .accordion-content a:hover {
+    color: #0044ff;
+}
+
+/* =========================================================
+   RESPONSIVE
+   ========================================================= */
+
+@media (max-width: 1200px) {
+    .page-jenisdata .main {
+        margin: 70px 20px;
+    }
+
+    .page-jenisdata .card img {
+        width: 100px;
+        height: 100px;
+    }
+
+    .page-jenisdata .card p {
+        font-size: 1rem;
+    }
+
+    .page-jenisdata #infoModal .modal-dialog {
+        width: 80vw;
+    }
+}
+
+@media (max-width: 1024px) {
+    .page-jenisdata .main {
+        margin: 70px 20px;
+    }
+
+    .page-jenisdata .cards-wrapper {
+        gap: 1rem;
+    }
+
+    .page-jenisdata .card {
+        flex: 1 1 45%;
+        max-width: 45%;
+        padding: 1rem;
+    }
+
+    .page-jenisdata .card img {
+        width: 90px;
+        height: 90px;
+    }
+
+    .page-jenisdata .card p {
+        font-size: 0.95rem;
+    }
+
+    .page-jenisdata #infoModal .modal-body {
+        flex-direction: column !important;
+    }
+
+    .page-jenisdata #infoModal .modal-left,
+    .page-jenisdata #infoModal .modal-right {
+        flex: 1 1 100%;
+        max-width: 100%;
+        padding: 0.5rem;
+    }
+
+    .page-jenisdata #infoModal .modal-dialog {
+        width: 75vw;
+        max-width: 700px;
+    }
+}
+
+@media (max-width: 991px) {
+    .page-panduan h4 {
+        font-size: 22px;
+    }
+
+    .page-panduan iframe.video-box {
+        height: 380px;
+    }
+
+    .page-panduan iframe.pdf-box {
+        height: 450px;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-panduan .main-container {
+        width: calc(100% - 24px);
+        max-width: none;
+        margin: 24px 12px;
+        padding: 8px;
+    }
+
+    .page-panduan .main-container .card {
+        padding: 16px;
+    }
+
+    .page-panduan h4 {
+        font-size: 20px;
+    }
+
+    .page-panduan iframe.video-box {
+        height: 280px;
+    }
+
+    .page-panduan iframe.pdf-box {
+        height: 420px;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-panduan .main-container {
+        width: calc(100% - 16px);
+        margin: 20px 8px;
+        padding: 4px;
+    }
+
+    .page-panduan .main-container .card {
+        padding: 12px;
+    }
+
+    .page-panduan h4 {
+        font-size: 18px;
+    }
+
+    .page-panduan iframe.video-box {
+        height: 220px;
+    }
+
+    .page-panduan iframe.pdf-box {
+        height: 380px;
+    }
+
+    .page-panduan .download-btn {
+        max-width: 100%;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 768px) {
+    .page-jenisdata .main {
+        margin: 60px 15px;
+    }
+
+    .page-jenisdata .cards-wrapper {
+        gap: 1rem;
+    }
+
+    .page-jenisdata .card {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+
+    .page-jenisdata .card img {
+        width: 80px;
+        height: 80px;
+    }
+
+    .page-jenisdata .card p {
+        font-size: 0.9rem;
+    }
+
+    .page-jenisdata #infoModal .modal-dialog {
+        width: 90vw;
+        max-width: 600px;
+    }
+
+    .page-jenisdata #infoModal .modal-body {
+        flex-direction: column !important;
+    }
+
+}
+
+@media (max-width: 480px) {
+    .page-jenisdata .main {
+        margin: 50px 10px;
+    }
+
+    .page-jenisdata .cards-wrapper {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .page-jenisdata .card {
+        width: 100%;
+        max-width: 100%;
+        padding: 1rem;
+    }
+
+    .page-jenisdata .card img {
+        width: 70px;
+        height: 70px;
+    }
+
+    .page-jenisdata .card p {
+        font-size: 0.85rem;
+    }
+
+    .page-jenisdata #infoModal .modal-dialog,
+    .page-jenisdata #infoModal .modal-content {
+        width: 95vw;
+        max-width: 95vw;
+    }
+
+    .page-jenisdata #infoModal .modal-content {
+        font-size: 12px;
+    }
+
+    .page-jenisdata #infoModal .modal-body {
+        padding: 0.5rem;
+    }
+
+    .page-jenisdata #infoModal .modal-body h6,
+    .page-jenisdata #infoModal .modal-left,
+    .page-jenisdata #infoModal .modal-right {
+        font-size: 12px;
+    }
+
+    .page-jenisdata #infoModal .modal-right h6,
+    .page-jenisdata #infoModal .modal-right p {
+        font-size: 12px;
+        line-height: 1.4;
+    }
+
+    .page-jenisdata #infoModal .modal-left table {
+        font-size: 12px;
+    }
+
+    .page-jenisdata #modalChart {
+        max-width: 100%;
+        height: auto;
+    }
+}
+
+@media (max-width: 991px) {
+
+    .page-download-data h4,
+    .page-tambah-data h4 {
+        font-size: 25px;
+    }
+}
+
+@media (max-width: 575px) {
+    .page-download-data {
+        padding-right: 10px;
+        padding-left: 10px;
+    }
+
+    .page-download-data h4,
+    .page-tambah-data h4 {
+        font-size: 22px;
+    }
+
+    .page-tambah-data {
+        padding-top: 50px;
+        padding-right: 5px;
+        padding-left: 1px;
+    }
+
+    .page-tambah-data .card {
+        flex-basis: 100%;
+        min-width: 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .page-signin .login-box {
+        padding: 20px;
+    }
+
+    .page-signin .login-box h2 {
+        font-size: 18px;
+    }
+}
