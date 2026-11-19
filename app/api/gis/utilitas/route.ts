@@ -26,12 +26,12 @@ const LAYERS: Record<string, { table: string; geom?: string; range?: [string, nu
 
 const styles: Record<string, object> = {
   cermin_jalan:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#374151",fillOpacity:1,opacity:1}, kamera_pengawas:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#6B7280",fillOpacity:1,opacity:1}, lampu_jalan:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#B8B094",fillOpacity:1,opacity:1}, lampu_lalin:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#D1D5DB",fillOpacity:1,opacity:1}, rambu_lalin:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#9CA3AF",fillOpacity:1,opacity:1},
+  bangunan:{color:"#C44E52",weight:0.7,fillColor:"#C44E52",fillOpacity:.45}, kawasan_kumuh:{color:"#A8433E",weight:0.7,fillColor:"#A8433E",fillOpacity:.2}, pembangunan_gedung:{color:"#E08A78",weight:0.7,fillColor:"#E08A78",fillOpacity:.35},
   jalan_inspeksi:{color:"#e67e22",weight:2.5,opacity:.9}, jalan_kota:{color:"#f39c12",weight:3}, jalan_lingkungan:{color:"#f1c40f",weight:2},
   trotoar:{color:"#9b59b6",weight:2}, jalur_pemandu:{color:"#fbff00",weight:2}, jembatan:{radius:5,color:"#e74c3c",fillColor:"#e74c3c",fillOpacity:1,opacity:0},
   kabel_fiber_optik:{color:"#d946ef",weight:2}, jaringan_pdam:{color:"#00cfd1",weight:2}, sungai:{color:"#35c2ff",weight:2},
   pipa_glontor:{color:"#19a880",weight:2}, pipa_induk:{color:"#5691a8",weight:2}, pipa_lateral:{color:"#028ebd",weight:2},
-  bangunan:{color:"#c0392b",weight:1,fillColor:"#e57373",fillOpacity:.45}, kawasan_kumuh:{color:"#e67e22",weight:2,fillColor:"#f39c12",fillOpacity:.2},
-  pembangunan_gedung:{color:"#16a34a",weight:2,fillColor:"#22c55e",fillOpacity:.35}, talud_sungai:{color:"#64748b",weight:2}, saluran_air_hujan:{color:"#0f766e",weight:2.5,opacity:.9},
+  talud_sungai:{color:"#64748b",weight:2}, saluran_air_hujan:{color:"#0f766e",weight:2.5,opacity:.9},
 };
 
 function featureCollection(rows: Array<{ geometry: unknown; properties: Record<string, unknown> }>) {
