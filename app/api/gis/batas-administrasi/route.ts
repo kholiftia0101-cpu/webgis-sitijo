@@ -52,12 +52,12 @@ export async function GET() {
         kelurahan,
         perimeter,
         luas,
-        luas_ha,,
+        luas_ha,
         ST_AsGeoJSON(geom, 6)::json AS geometry
       FROM public.batas_administrasi_kelurahan
       WHERE geom IS NOT NULL
       ORDER BY
-        kelurahan,
+        kelurahan;
     `);
 
     // Mengubah hasil query menjadi GeoJSON FeatureCollection
