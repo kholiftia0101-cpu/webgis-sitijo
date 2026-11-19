@@ -195,6 +195,7 @@ export default function DownloadDataClient({
         const supportedTypes = [
           "Point",
           "MultiPoint",
+          "Polyline",
           "LineString",
           "MultiLineString",
           "Polygon",
