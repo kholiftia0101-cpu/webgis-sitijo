@@ -35,35 +35,28 @@ export async function GET() {
       );
     }
 
-    // Menggabungkan seluruh polygon RW berdasarkan Kelurahan
+    // Mengambil seluruh polygon RW secara terpisah
     const result = await pool.query(`
       SELECT
+        id,
         kelurah_id,
         kelurahan,
         kecamatan AS kemantren,
-
-        SUM(luas) AS luas,
-        SUM(luas_ha) AS luas_ha,
-
-        ST_AsGeoJSON(
-          ST_Multi(
-            ST_Union(geom)
-          ),
-          6
-        )::json AS geometry
-
+        nama_rw,
+        kampung,
+        kampung_id,
+        rw_id,
+        luas,
+        luas_ha,
+        kelas,
+        subkelas,
+        ST_AsGeoJSON(geom, 6)::json AS geometry
       FROM public.batas_administrasi_rw
-
       WHERE geom IS NOT NULL
-
-      GROUP BY
-        kelurah_id,
-        kelurahan,
-        kecamatan
-
       ORDER BY
         kecamatan,
-        kelurahan;
+        kelurahan,
+        nama_rw;
     `);
 
     // Mengubah hasil query menjadi GeoJSON FeatureCollection
@@ -81,7 +74,6 @@ export async function GET() {
       type: "FeatureCollection",
       features,
     });
-
   } catch (error) {
     console.error("Batas administrasi error:", error);
 
