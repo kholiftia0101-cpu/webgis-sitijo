@@ -39,24 +39,25 @@ export async function GET() {
     const result = await pool.query(`
       SELECT
         id,
-        kelurah_id,
-        kelurahan,
-        kecamatan AS kemantren,
-        nama_rw,
-        kampung,
-        kampung_id,
-        rw_id,
-        luas,
-        luas_ha,
-        kelas,
-        subkelas,
-        ST_AsGeoJSON(geom, 6)::json AS geometry
-      FROM public.batas_administrasi_rw
-      WHERE geom IS NOT NULL
-      ORDER BY
+        nama,
+        fcode,
+        srs_id,
+        kdcpum,
+        kdepum,
+        kdpkab,
+        kdppum,
+        luaswh,
+        tipadm,
         kecamatan,
         kelurahan,
-        nama_rw;
+        perimeter,
+        luas,
+        luas_ha,,
+        ST_AsGeoJSON(geom, 6)::json AS geometry
+      FROM public.batas_administrasi_kelurahan
+      WHERE geom IS NOT NULL
+      ORDER BY
+        kelurahan,
     `);
 
     // Mengubah hasil query menjadi GeoJSON FeatureCollection
