@@ -80,6 +80,7 @@ const LAYERS: Record<string, LayerConfig> = {
   // PDAM dan Sungai
   jaringan_pdam: { table: "jaringan_pdam" },
   sungai: { table: "sungai" },
+  talud_sungai: { table: "talud_sungai", geom: "geom" },
 
   // Drainase
   inlet: { table: "inlet", geom: "geom" },
@@ -94,17 +95,16 @@ const LAYERS: Record<string, LayerConfig> = {
   tiang_fiber_optik: { table: "tiang_fiber_optik", geom: "geom" },
 
   // Jaringan Jalan
-  jalur_pemandu: { table: "jalur_pemandu", geom: "geom" },
-  jalan_kota: { table: "jalan_kota", geom: "geom" },
-  jembatan: { table: "jembatan", geom: "geom" },
+  jalur_pemandu: { table: "jalur_pemandu" },
+  jalan_kota: { table: "jalan_kota" },
+  jembatan: { table: "jembatan" },
   jalan_inspeksi: { table: "jalan_inspeksi", geom: "geom" },
-  jalan_lingkungan: { table: "jalan_lingkungan", geom: "geom" },
-  trotoar: { table: "trotoar", geom: "geom" },
+  jalan_lingkungan: { table: "jalan_lingkungan" },
+  trotoar: { table: "trotoar" },
 
-  // Infrastruktur lainnya
+  // Bangunan
   kawasan_kumuh: { table: "kawasan_kumuh", geom: "geom" },
   pembangunan_gedung: { table: "pembangunan_gedung", geom: "geom" },
-  talud_sungai: { table: "talud_sungai", geom: "geom" },
 };
 
 // =====================================================
