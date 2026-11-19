@@ -46,7 +46,7 @@ export async function GET() {
         subkelas,
         ST_AsGeoJSON(geom, 6)::json AS geometry
       FROM batas_administrasi_rw
-      WHERE geometri IS NOT NULL
+      WHERE geom IS NOT NULL
       ORDER BY nama_rw;
     `);
 
