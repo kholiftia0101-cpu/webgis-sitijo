@@ -160,7 +160,7 @@ export default function MapClient() {
             const rows = [
               ["Kemantren", p.kecamatan],
               ["Kelurahan", p.kelurahan],
-              ["Luas Area", p.luas ? `${p.luas} km²` : null]
+              ["Luas Area", p.luas_ha ? `${p.luas_ha} ha` : null]
             ];
     
             featureLayer.bindPopup(
