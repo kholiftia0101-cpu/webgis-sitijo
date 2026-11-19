@@ -1,3 +1,4 @@
+
 "use client";
 
 import JSZip from "jszip";
@@ -27,6 +28,12 @@ type Geometry = {
   [key: string]: unknown;
 };
 
+type Feature = {
+  type: "Feature";
+  geometry: Geometry | null;
+  properties: Record<string, unknown>;
+};
+
 type FeatureCollection = {
   type: "FeatureCollection";
   table: string;
@@ -34,11 +41,7 @@ type FeatureCollection = {
   total: number;
   srid: number;
   crsWkt: string | null;
-  features: Array<{
-    type: "Feature";
-    geometry: Geometry | null;
-    properties: Record<string, unknown>;
-  }>;
+  features: Feature[];
 };
 
 type Format = "geojson" | "shapefile";
@@ -68,79 +71,86 @@ function saveBlob(blob: Blob, filename: string) {
 }
 
 // =====================================================
-// NORMALISASI GEOMETRI UNTUK SHAPEFILE
+// NORMALISASI GEOMETRI
 // =====================================================
 
-function normalizeGeometry(geometry: Geometry | null): Geometry | null {
+function normalizeGeometry(
+  geometry: Geometry | null
+): Geometry | null {
   if (!geometry) return null;
 
-  const rawType = String(geometry.type || "").toLowerCase();
+  const rawType = String(
+    geometry.type || ""
+  ).toLowerCase();
 
-  // GeoJSON LineString / MultiLineString
+  // GeoJSON standar
   if (
-    rawType === "linestring" ||
-    rawType === "multilinestring"
+    [
+      "point",
+      "multipoint",
+      "linestring",
+      "multilinestring",
+      "polygon",
+      "multipolygon",
+    ].includes(rawType)
   ) {
     return geometry;
   }
 
-  // GeoJSON Polygon / MultiPolygon
-  if (
-    rawType === "polygon" ||
-    rawType === "multipolygon"
-  ) {
-    return geometry;
-  }
-
-  // GeoJSON Point / MultiPoint
-  if (
-    rawType === "point" ||
-    rawType === "multipoint"
-  ) {
-    return geometry;
-  }
-
-  // ArcGIS Polyline dengan struktur paths
+  // ArcGIS Polyline menggunakan paths
   if (rawType === "polyline") {
-    const paths = geometry.paths;
+    if (Array.isArray(geometry.paths)) {
+      const paths = geometry.paths;
 
-    if (!Array.isArray(paths) || paths.length === 0) {
-      throw new Error(
-        "Geometri Polyline tidak memiliki paths yang valid."
-      );
-    }
+      if (!paths.length) {
+        throw new Error("Polyline tidak memiliki paths.");
+      }
 
-    if (paths.length === 1) {
+      if (paths.length === 1) {
+        return {
+          type: "LineString",
+          coordinates: paths[0],
+        };
+      }
+
       return {
-        type: "LineString",
-        coordinates: paths[0],
+        type: "MultiLineString",
+        coordinates: paths,
       };
     }
 
-    return {
-      type: "MultiLineString",
-      coordinates: paths,
-    };
-  }
+    // Polyline dengan struktur coordinates
+    if (Array.isArray(geometry.coordinates)) {
+      const coordinates = geometry.coordinates;
 
-  // Polyline yang sudah menggunakan koordinat GeoJSON
-  if (rawType === "polyline" || rawType === "multipolyline") {
-    const coordinates = geometry.coordinates;
+      if (!coordinates.length) {
+        throw new Error("Koordinat Polyline kosong.");
+      }
 
-    if (!Array.isArray(coordinates) || coordinates.length === 0) {
-      throw new Error("Koordinat Polyline tidak valid.");
-    }
+      const first = coordinates[0];
 
-    const first = coordinates[0];
+      if (
+        Array.isArray(first) &&
+        typeof first[0] === "number"
+      ) {
+        return {
+          type: "LineString",
+          coordinates,
+        };
+      }
 
-    if (
-      Array.isArray(first) &&
-      typeof first[0] === "number"
-    ) {
       return {
-        type: "LineString",
+        type: "MultiLineString",
         coordinates,
       };
+    }
+  }
+
+  if (rawType === "multipolyline") {
+    const coordinates = geometry.coordinates;
+
+    if (!Array.isArray(coordinates) || !coordinates.length) {
+      throw new Error("Koordinat MultiPolyline tidak valid.");
     }
 
     return {
@@ -150,9 +160,165 @@ function normalizeGeometry(geometry: Geometry | null): Geometry | null {
   }
 
   throw new Error(
-    `Tipe geometri tidak didukung Shapefile: ${geometry.type || "Unknown"}`
+    `Tipe geometri tidak didukung: ${geometry.type || "Unknown"}`
   );
 }
+
+// =====================================================
+// EXPORTER KHUSUS POLYLINE
+// Setiap Feature GeoJSON ditulis sebagai satu record SHP.
+// Tidak menggunakan shpwrite.zip() untuk data garis.
+// =====================================================
+
+async function createPolylineZip(
+  features: Feature[],
+  filename: string,
+  crsWkt: string | null
+): Promise<Blob> {
+  type LineCoordinates = number[][][];
+
+  const attributes = features.map((feature) => {
+    const properties = feature.properties || {};
+
+    return Object.fromEntries(
+      Object.entries(properties).map(([key, value]) => [
+        key,
+        value !== null && typeof value === "object"
+          ? JSON.stringify(value)
+          : value,
+      ])
+    );
+  });
+
+  // Satu elemen array = satu fitur Shapefile.
+  // LineString: [ [x,y], [x,y], ... ]
+  // MultiLineString: [ garis1, garis2, ... ]
+  const geometries: LineCoordinates[] = features.map(
+    (feature, index) => {
+      const geometry = feature.geometry;
+
+      if (!geometry) {
+        throw new Error(
+          `Geometri fitur ke-${index + 1} kosong.`
+        );
+      }
+
+      const type = geometry.type;
+      const coordinates = geometry.coordinates;
+
+      if (
+        type !== "LineString" &&
+        type !== "MultiLineString"
+      ) {
+        throw new Error(
+          `Tipe geometri fitur ke-${index + 1} bukan garis.`
+        );
+      }
+
+      if (
+        !Array.isArray(coordinates) ||
+        coordinates.length === 0
+      ) {
+        throw new Error(
+          `Koordinat fitur ke-${index + 1} kosong.`
+        );
+      }
+
+      if (type === "LineString") {
+        // Jangan membungkus seluruh kumpulan fitur menjadi satu geometri.
+        return coordinates as LineCoordinates[number];
+      }
+
+      // MultiLineString tetap satu fitur dengan beberapa bagian.
+      return coordinates as LineCoordinates[number];
+    }
+  );
+
+  if (attributes.length !== geometries.length) {
+    throw new Error(
+      "Jumlah atribut dan geometri tidak sama."
+    );
+  }
+
+  const shpwriteApi = shpwrite as unknown as {
+    write: (
+      rows: Record<string, unknown>[],
+      geometryType: string,
+      geometries: LineCoordinates[],
+      callback: (
+        error: Error | null,
+        result?: {
+          shp: DataView;
+          shx: DataView;
+          dbf: DataView;
+        }
+      ) => void
+    ) => void;
+  };
+
+  const result = await new Promise<{
+    shp: DataView;
+    shx: DataView;
+    dbf: DataView;
+  }>((resolve, reject) => {
+    shpwriteApi.write(
+      attributes,
+      "POLYLINE",
+      geometries,
+      (error, output) => {
+        if (error) {
+          reject(error);
+          return;
+        }
+
+        if (!output) {
+          reject(
+            new Error("Gagal membentuk file Shapefile.")
+          );
+          return;
+        }
+
+        resolve(output);
+      }
+    );
+  });
+
+  const toBytes = (view: DataView) =>
+    new Uint8Array(
+      view.buffer,
+      view.byteOffset,
+      view.byteLength
+    );
+
+  const zip = new JSZip();
+
+  // Struktur folder tetap mengikuti nama subkelas.
+  const folder = zip.folder(filename);
+
+  if (!folder) {
+    throw new Error("Gagal membuat folder ZIP.");
+  }
+
+  folder.file(`${filename}.shp`, toBytes(result.shp));
+  folder.file(`${filename}.shx`, toBytes(result.shx));
+  folder.file(`${filename}.dbf`, toBytes(result.dbf));
+  folder.file(`${filename}.cpg`, "UTF-8");
+
+  if (crsWkt) {
+    folder.file(`${filename}.prj`, crsWkt);
+  }
+
+  const blob = await zip.generateAsync({
+    type: "blob",
+    compression: "STORE",
+  });
+
+  return blob;
+}
+
+// =====================================================
+// KOMPONEN DOWNLOAD DATA
+// =====================================================
 
 export default function DownloadDataClient({
   username,
@@ -174,14 +340,19 @@ export default function DownloadDataClient({
     text: string;
   } | null>(null);
 
+  // ===================================================
+  // LOAD KELAS DAN SUBKELAS
+  // ===================================================
+
   useEffect(() => {
     let active = true;
 
     async function loadGroups() {
       try {
-        const response = await fetch("/api/data/download", {
-          cache: "no-store",
-        });
+        const response = await fetch(
+          "/api/data/download",
+          { cache: "no-store" }
+        );
 
         const result = await response.json();
 
@@ -232,6 +403,10 @@ export default function DownloadDataClient({
     setMessage(null);
   }
 
+  // ===================================================
+  // DOWNLOAD DATA
+  // ===================================================
+
   async function handleDownload() {
     if (!table || downloading) return;
 
@@ -264,11 +439,13 @@ export default function DownloadDataClient({
         );
       }
 
-      const filename = safeFilename(data.label || table);
+      const filename = safeFilename(
+        data.label || table
+      );
 
-      // ==========================================
+      // ================================================
       // FORMAT GEOJSON
-      // ==========================================
+      // ================================================
 
       if (format === "geojson") {
         const blob = new Blob(
@@ -281,12 +458,11 @@ export default function DownloadDataClient({
         saveBlob(blob, `${filename}.geojson`);
       }
 
-      // ==========================================
+      // ================================================
       // FORMAT SHAPEFILE
-      // ==========================================
+      // ================================================
 
       else {
-        // Normalisasi seluruh geometri.
         const normalizedFeatures = data.features.map(
           (feature, index) => {
             try {
@@ -311,10 +487,10 @@ export default function DownloadDataClient({
           features: normalizedFeatures,
         };
 
-        // Periksa tipe geometri setelah normalisasi.
         const geometryTypes = new Set(
           shapefileData.features.map(
-            (feature) => feature.geometry?.type || "Unknown"
+            (feature) =>
+              feature.geometry?.type || "Unknown"
           )
         );
 
@@ -326,60 +502,89 @@ export default function DownloadDataClient({
 
         if (geometryTypes.size > 1) {
           throw new Error(
-            "Data memiliki lebih dari satu tipe geometri. Gunakan GeoJSON untuk data campuran."
+            "Data memiliki tipe geometri campuran. Gunakan GeoJSON."
           );
         }
 
-        const zipData = await shpwrite.zip(
-          shapefileData as unknown as Parameters<
-            typeof shpwrite.zip
-          >[0],
-          {
-            folder: filename,
-            filename,
-            outputType: "blob",
-            compression: "STORE",
-            ...(data.crsWkt ? { prj: data.crsWkt } : {}),
-            types: {
-              point: filename,
-              polygon: filename,
-              polyline: filename,
-            } as unknown as {
-              point?: string;
-              polygon?: string;
-              line?: string;
-              multipolygon?: string;
-              multiline?: string;
-            },
-          }
-        );
+        const geometryType = Array.from(geometryTypes)[0];
 
-        const blob =
-          zipData instanceof Blob
-            ? zipData
-            : new Blob(
-                [zipData as unknown as BlobPart],
-                {
-                  type: "application/zip",
-                }
-              );
+        let blob: Blob;
+
+        // ----------------------------------------------
+        // GARIS: PAKAI LOW-LEVEL WRITE
+        // ----------------------------------------------
+
+        if (
+          geometryType === "LineString" ||
+          geometryType === "MultiLineString"
+        ) {
+          blob = await createPolylineZip(
+            normalizedFeatures,
+            filename,
+            data.crsWkt
+          );
+        }
+
+        // ----------------------------------------------
+        // POINT / POLYGON: TETAP PAKAI ZIP
+        // ----------------------------------------------
+
+        else {
+          const zipData = await shpwrite.zip(
+            shapefileData as unknown as Parameters<
+              typeof shpwrite.zip
+            >[0],
+            {
+              folder: filename,
+              filename,
+              outputType: "blob",
+              compression: "STORE",
+              ...(data.crsWkt
+                ? { prj: data.crsWkt }
+                : {}),
+              types: {
+                point: filename,
+                polygon: filename,
+                polyline: filename,
+              } as unknown as {
+                point?: string;
+                polygon?: string;
+                line?: string;
+                multipolygon?: string;
+                multiline?: string;
+              },
+            }
+          );
+
+          blob =
+            zipData instanceof Blob
+              ? zipData
+              : new Blob(
+                  [zipData as unknown as BlobPart],
+                  {
+                    type: "application/zip",
+                  }
+                );
+        }
 
         saveBlob(blob, `${filename}.zip`);
       }
 
       setMessage({
         type: "success",
-        text: `${formatNumber(data.total)} fitur ${data.label} berhasil disiapkan untuk diunduh.`,
+        text: `${formatNumber(data.features.length)} fitur ${data.label} berhasil disiapkan untuk diunduh.`,
       });
 
       if (format === "shapefile" && !data.crsWkt) {
         setMessage({
           type: "info",
           text:
-            "Shapefile berhasil dibuat, tetapi SRID data tidak ditemukan. File .prj mungkin tidak tersedia. Periksa sistem koordinat data sebelum digunakan.",
+            "Shapefile berhasil dibuat, tetapi SRID data tidak ditemukan. File .prj mungkin tidak tersedia.",
         });
       }
     } catch (error) {
+      console.error("Download data error:", error);
+
       setMessage({
         type: "error",
         text:
@@ -391,6 +596,10 @@ export default function DownloadDataClient({
       setDownloading(false);
     }
   }
+
+  // ===================================================
+  // UI
+  // ===================================================
 
   return (
     <main className="dd-page">
@@ -440,7 +649,10 @@ export default function DownloadDataClient({
             <span>{message.text}</span>
 
             {downloading && (
-              <LoaderCircle className="dd-spin" size={17} />
+              <LoaderCircle
+                className="dd-spin"
+                size={17}
+              />
             )}
           </div>
         )}
@@ -477,7 +689,10 @@ export default function DownloadDataClient({
                 </option>
 
                 {groups.map((group) => (
-                  <option key={group.id} value={group.id}>
+                  <option
+                    key={group.id}
+                    value={group.id}
+                  >
                     {group.label}
                   </option>
                 ))}
@@ -495,13 +710,17 @@ export default function DownloadDataClient({
                   setMessage(null);
                 }}
               >
-                <option value="">Pilih subkelas...</option>
+                <option value="">
+                  Pilih subkelas...
+                </option>
 
-                {(selectedGroup?.tables || []).map((name) => (
-                  <option key={name} value={name}>
-                    {labels[name] || name}
-                  </option>
-                ))}
+                {(selectedGroup?.tables || []).map(
+                  (name) => (
+                    <option key={name} value={name}>
+                      {labels[name] || name}
+                    </option>
+                  )
+                )}
               </select>
             </label>
           </div>
@@ -554,7 +773,9 @@ export default function DownloadDataClient({
 
               <span>
                 <strong>Shapefile</strong>
-                <small>.zip · SHP, SHX, DBF, PRJ</small>
+                <small>
+                  .zip · SHP, SHX, DBF, PRJ
+                </small>
               </span>
 
               <span className="dd-radio">
@@ -566,15 +787,16 @@ export default function DownloadDataClient({
           <div className="dd-format-note">
             {format === "geojson" ? (
               <>
-                GeoJSON dapat digunakan pada QGIS, aplikasi WebGIS, dan
-                berbagai perangkat lunak GIS lainnya.
+                GeoJSON dapat digunakan pada QGIS, aplikasi WebGIS,
+                dan berbagai perangkat lunak GIS lainnya.
               </>
             ) : (
               <>
-                Shapefile akan dikemas dalam ZIP. Nama kolom pada DBF
-                mengikuti batas 10 karakter Shapefile. Sistem koordinat
-                mengikuti SRID sumber jika tersedia. Data dengan tipe
-                geometri campuran perlu diunduh dalam format GeoJSON.
+                Shapefile akan dikemas dalam ZIP. Nama kolom pada
+                DBF mengikuti batas 10 karakter Shapefile.
+                Sistem koordinat mengikuti SRID sumber jika tersedia.
+                Data dengan tipe geometri campuran perlu diunduh
+                dalam format GeoJSON.
               </>
             )}
           </div>
@@ -597,7 +819,10 @@ export default function DownloadDataClient({
               onClick={handleDownload}
             >
               {downloading ? (
-                <LoaderCircle className="dd-spin" size={18} />
+                <LoaderCircle
+                  className="dd-spin"
+                  size={18}
+                />
               ) : (
                 <Download size={18} />
               )}
@@ -616,8 +841,9 @@ export default function DownloadDataClient({
             <strong>Informasi</strong>
 
             <p>
-              Data yang diunduh berasal dari database infrastruktur SITIJO.
-              Seluruh fitur dengan geometri akan disertakan dalam file.
+              Data yang diunduh berasal dari database infrastruktur
+              SITIJO. Seluruh fitur dengan geometri akan disertakan
+              dalam file.
             </p>
           </div>
         </div>
