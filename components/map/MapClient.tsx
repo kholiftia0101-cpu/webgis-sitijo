@@ -158,12 +158,9 @@ export default function MapClient() {
             const p = (feature.properties || {}) as Record<string, unknown>;
     
             const rows = [
-              ["Negara", p.negara],
-              ["Provinsi", p.provinsi],
-              ["Kota", p.kota],
-              ["Kemantren", p.kemantren],
+              ["Kemantren", p.kecamatan],
               ["Kelurahan", p.kelurahan],
-              ["Luas Area", p.luas_kel ? `${p.luas_kel} km²` : null]
+              ["Luas Area", p.luas ? `${p.luas} km²` : null]
             ];
     
             featureLayer.bindPopup(
