@@ -70,92 +70,146 @@ export default function MapClient() {
   const checkedRef = useRef<string[]>([]);
     const selectedBase=useMemo(()=>baseLayers.find(x=>x.id===baseId)!,[baseId]);
 
-  const wilayah=useMemo(()=>{
-    const result:Record<string,string[]>={};
-    for(const f of boundaryData?.features ?? []){
-      const p=(f.properties||{}) as Record<string,string>;
-      const kem=p.kemantren, kel=p.kelurahan;
-      if(kem && kel){result[kem] ||= []; if(!result[kem].includes(kel))result[kem].push(kel);}
-    }
-    return result;
-  },[boundaryData]);
 
-  useEffect(()=>{
-    let alive=true;
-    fetch("/api/gis/batas-administrasi",{cache:"no-store"})
-      .then(async r=>{if(!r.ok)throw new Error(`HTTP ${r.status}`);return r.json()})
-      .then(data=>{if(alive)setBoundaryData(data)})
-      .catch(e=>{if(alive)setBoundaryError(`Batas administrasi belum terhubung (${e.message}).`)})
-      .finally(()=>{if(alive)setLoading(false)});
-    return()=>{alive=false};
-  },[]);
-
-  useEffect(()=>{
-    if(!map || !boundaryData)return;
-    boundaryLayer.current?.remove();
-    const layer=L.geoJSON(boundaryData,{
-      style:()=>({color:"#fa2b66",weight:2.5,opacity:1,dashArray:"12",fillOpacity:0}),
-      onEachFeature:(feature,featureLayer)=>{
-        const p=(feature.properties||{}) as Record<string,unknown>;
-        const rows=[["Negara",p.negara],["Provinsi",p.provinsi],["Kota",p.kota],["Kemantren",p.kemantren],["Kelurahan",p.kelurahan],["Luas Area",p.luas_kel ? `${p.luas_kel} km²`:null]];
-        featureLayer.bindPopup(`<table class="sitijo-popup">${rows.map(([k,v])=>`<tr><td><b>${k}</b></td><td>: ${escapeHtml(v)}</td></tr>`).join("")}</table>`);
+    const wilayah = useMemo(() => {
+      const result: Record<string, string[]> = {};
+    
+      for (const f of boundaryData?.features ?? []) {
+        const p = (f.properties || {}) as Record<string, string>;
+        const kem = p.kemantren;
+        const kel = p.kelurahan;
+    
+        if (kem && kel) {
+          result[kem] ||= [];
+          if (!result[kem].includes(kel)) {
+            result[kem].push(kel);
+          }
+        }
       }
-    }).addTo(map);
-    boundaryLayer.current=layer;
-    return()=>{layer.remove()};
-  },[map,boundaryData]);
-
-  useEffect(()=>{
-    if(!map || !boundaryData)return;
-  
-    const features=boundaryData.features.filter(f=>{
-      const p=(f.properties||{}) as Record<string,string>;
-      return (!kemantren || p.kemantren===kemantren) &&
-             (!kelurahan || p.kelurahan===kelurahan);
-    });
-  
-    if(boundaryLayer.current)map.removeLayer(boundaryLayer.current);
-  
-    if(features.length){
-      const layer=L.geoJSON(
-        {type:"FeatureCollection",features} as GeoJSON.FeatureCollection,
+    
+      return result;
+    }, [boundaryData]);
+    
+    // Mengambil data batas administrasi
+    useEffect(() => {
+      let alive = true;
+    
+      fetch("/api/gis/batas-administrasi", { cache: "no-store" })
+        .then(async r => {
+          if (!r.ok) throw new Error(`HTTP ${r.status}`);
+          return r.json();
+        })
+        .then(data => {
+          if (alive) setBoundaryData(data);
+        })
+        .catch(e => {
+          if (alive) {
+            setBoundaryError(`Batas administrasi belum terhubung (${e.message}).`);
+          }
+        })
+        .finally(() => {
+          if (alive) setLoading(false);
+        });
+    
+      return () => {
+        alive = false;
+      };
+    }, []);
+    
+    // Mengatur batas administrasi, filter wilayah, dan popup
+    useEffect(() => {
+      if (!map || !boundaryData) return;
+    
+      const features = boundaryData.features.filter(f => {
+        const p = (f.properties || {}) as Record<string, string>;
+    
+        return (
+          (!kemantren || p.kemantren === kemantren) &&
+          (!kelurahan || p.kelurahan === kelurahan)
+        );
+      });
+    
+      // Hapus layer batas sebelumnya
+      boundaryLayer.current?.remove();
+    
+      // Jika filter tidak menghasilkan data, jangan tampilkan layer kosong
+      if (!features.length) {
+        boundaryLayer.current = null;
+        return;
+      }
+    
+      const layer = L.geoJSON(
         {
-          style:()=>({
-            color:"#fa2b66",
-            weight:2.5,
-            opacity:1,
-            dashArray:"12",
-            fillOpacity:0
-          })
+          type: "FeatureCollection",
+          features
+        } as GeoJSON.FeatureCollection,
+        {
+          // Style batas kelurahan
+          style: () => ({
+            color: "#fa2b66",
+            weight: 2.5,
+            opacity: 1,
+            dashArray: "12",
+            fillOpacity: 0
+          }),
+    
+          // Popup informasi batas administrasi
+          onEachFeature: (feature, featureLayer) => {
+            const p = (feature.properties || {}) as Record<string, unknown>;
+    
+            const rows = [
+              ["Negara", p.negara],
+              ["Provinsi", p.provinsi],
+              ["Kota", p.kota],
+              ["Kemantren", p.kemantren],
+              ["Kelurahan", p.kelurahan],
+              ["Luas Area", p.luas_kel ? `${p.luas_kel} km²` : null]
+            ];
+    
+            featureLayer.bindPopup(
+              `<table class="sitijo-popup">
+                ${rows.map(([k, v]) =>
+                  `<tr><td><b>${escapeHtml(k)}</b></td><td>: ${escapeHtml(v)}</td></tr>`
+                ).join("")}
+              </table>`
+            );
+          }
         }
       ).addTo(map);
-  
-      boundaryLayer.current=layer;
-  
-      try{
-        map.fitBounds(layer.getBounds(),{padding:[30,30]});
-      }catch{}
-    } else if(!kemantren && boundaryData){
-      boundaryLayer.current=L.geoJSON(boundaryData,{
-        style:()=>({
-          color:"#fa2b66",
-          weight:2.5,
-          opacity:1,
-          dashArray:"12",
-          fillOpacity:0
-        })
-      }).addTo(map);
-    }
-  },[map,kemantren,kelurahan,boundaryData]);
-
-  useEffect(()=>{
-    if(!map)return;
-    const layers=activeLayerRef.current;
-    for(const id of Object.keys(layers)){
-      if(checked.includes(id)){if(!map.hasLayer(layers[id]))map.addLayer(layers[id])}
-      else if(map.hasLayer(layers[id]))map.removeLayer(layers[id]);
-    }
-  },[map,checked]);
+    
+      boundaryLayer.current = layer;
+    
+      // Zoom otomatis ketika filter wilayah digunakan
+      if (kemantren || kelurahan) {
+        try {
+          map.fitBounds(layer.getBounds(), {
+            padding: [30, 30]
+          });
+        } catch {}
+      }
+    
+      return () => {
+        layer.remove();
+      };
+    
+    }, [map, boundaryData, kemantren, kelurahan]);
+    
+    // Mengatur visibilitas layer infrastruktur
+    useEffect(() => {
+      if (!map) return;
+    
+      const layers = activeLayerRef.current;
+    
+      for (const id of Object.keys(layers)) {
+        if (checked.includes(id)) {
+          if (!map.hasLayer(layers[id])) {
+            map.addLayer(layers[id]);
+          }
+        } else if (map.hasLayer(layers[id])) {
+          map.removeLayer(layers[id]);
+        }
+      }
+    }, [map, checked]);
 
   // Daftar nama jalan hanya berasal dari layer Jalan Kota.
   const roadNames = useMemo(() => {
