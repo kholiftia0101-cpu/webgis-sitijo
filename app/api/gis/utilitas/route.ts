@@ -58,22 +58,43 @@ export async function GET(req: NextRequest) {
         );
       }
 
-      const data = await response.json();
-
-      if (data.type !== "FeatureCollection" || !Array.isArray(data.features)) {
-        throw new Error("Format GeoJSON bangunan dari R2 tidak valid.");
-      }
-
-      const data = await response.json() as {
-        type: "FeatureCollection";
-        features: GeoJSONFeature[];
+      type BuildingFeature = {
+        type: "Feature";
+        geometry: unknown;
+        properties?: Record<string, unknown> | null;
+        [key: string]: unknown;
       };
-      
-      if (data.type !== "FeatureCollection" || !Array.isArray(data.features)) {
-        throw new Error("Format GeoJSON bangunan dari R2 tidak valid.");
+
+      type BuildingCollection = {
+        type: "FeatureCollection";
+        features: BuildingFeature[];
+      };
+
+      const buildingData =
+        (await response.json()) as BuildingCollection;
+
+      if (
+        buildingData.type !== "FeatureCollection" ||
+        !Array.isArray(buildingData.features)
+      ) {
+        throw new Error(
+          "Format GeoJSON bangunan dari R2 tidak valid."
+        );
       }
-      return NextResponse.json(data);
+
+      buildingData.features = buildingData.features.map(
+        (feature) => ({
+          ...feature,
+          properties: {
+            ...(feature.properties ?? {}),
+            style: styles.bangunan,
+          },
+        })
+      );
+
+      return NextResponse.json(buildingData);
     }
+
     const config = LAYERS[layer];
     if (!config) return NextResponse.json({error:`Layer '${layer}' tidak dikenal.`},{status:404});
     const geom = config.geom || "geometri";
