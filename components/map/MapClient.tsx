@@ -107,19 +107,44 @@ export default function MapClient() {
 
   useEffect(()=>{
     if(!map || !boundaryData)return;
+  
     const features=boundaryData.features.filter(f=>{
       const p=(f.properties||{}) as Record<string,string>;
-      return (!kemantren || p.kemantren===kemantren) && (!kelurahan || p.kelurahan===kelurahan);
+      return (!kemantren || p.kemantren===kemantren) &&
+             (!kelurahan || p.kelurahan===kelurahan);
     });
+  
     if(boundaryLayer.current)map.removeLayer(boundaryLayer.current);
+  
     if(features.length){
-      const layer=L.geoJSON({type:"FeatureCollection",features} as GeoJSON.FeatureCollection,{
-        style:()=>({color:"#cfa3f7",weight:3,fillOpacity:.1,fillColor:"#ff6200"})
-      }).addTo(map);
+      const layer=L.geoJSON(
+        {type:"FeatureCollection",features} as GeoJSON.FeatureCollection,
+        {
+          style:()=>({
+            color:"#fa2b66",
+            weight:2.5,
+            opacity:1,
+            dashArray:"12",
+            fillOpacity:0
+          })
+        }
+      ).addTo(map);
+  
       boundaryLayer.current=layer;
-      try{map.fitBounds(layer.getBounds(),{padding:[30,30]})}catch{}
+  
+      try{
+        map.fitBounds(layer.getBounds(),{padding:[30,30]});
+      }catch{}
     } else if(!kemantren && boundaryData){
-      boundaryLayer.current=L.geoJSON(boundaryData,{style:()=>({color:"#fa2b66",weight:2.5,dashArray:"12",fillOpacity:0})}).addTo(map);
+      boundaryLayer.current=L.geoJSON(boundaryData,{
+        style:()=>({
+          color:"#fa2b66",
+          weight:2.5,
+          opacity:1,
+          dashArray:"12",
+          fillOpacity:0
+        })
+      }).addTo(map);
     }
   },[map,kemantren,kelurahan,boundaryData]);
 
