@@ -1,5 +1,6 @@
 "use client";
 
+import JSZip from "jszip";
 import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import shpwrite from "@mapbox/shp-write";
