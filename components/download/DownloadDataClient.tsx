@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -346,6 +345,7 @@ export default function DownloadDataClient({
               line: filename,
               multipolygon: filename,
               multiline: filename,
+              polyline: filename
             },
           }
         );
