@@ -190,7 +190,7 @@ export async function GET(request: NextRequest) {
     if (srid > 0) {
       const crsResult = await client.query(
         `SELECT srtext
-         FROM public.spatial_ref_sys
+         FROM extensions.spatial_ref_sys
          WHERE srid = $1
          LIMIT 1`,
         [srid],
