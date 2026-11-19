@@ -114,7 +114,7 @@ export default function MapClient() {
     if(boundaryLayer.current)map.removeLayer(boundaryLayer.current);
     if(features.length){
       const layer=L.geoJSON({type:"FeatureCollection",features} as GeoJSON.FeatureCollection,{
-        style:()=>({color:"#ff6200",weight:3,fillOpacity:.1,fillColor:"#ff6200"})
+        style:()=>({color:"#cfa3f7",weight:3,fillOpacity:.1,fillColor:"#ff6200"})
       }).addTo(map);
       boundaryLayer.current=layer;
       try{map.fitBounds(layer.getBounds(),{padding:[30,30]})}catch{}
