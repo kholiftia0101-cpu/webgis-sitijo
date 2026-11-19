@@ -64,13 +64,23 @@ export async function GET(req: NextRequest) {
         throw new Error("Format GeoJSON bangunan dari R2 tidak valid.");
       }
 
-      data.features = data.features.map((feature: any) => ({
+      const data = await response.json() as {
+        type: "FeatureCollection";
+        features: GeoJSONFeature[];
+      };
+      
+      if (data.type !== "FeatureCollection" || !Array.isArray(data.features)) {
+        throw new Error("Format GeoJSON bangunan dari R2 tidak valid.");
+      }
+      
+      data.features = data.features.map((feature) => ({
         ...feature,
         properties: {
-          ...feature.properties,
+          ...(feature.properties ?? {}),
           style: styles.bangunan
         }
       }));
+      
       return NextResponse.json(data);
     }
     const config = LAYERS[layer];
