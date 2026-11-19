@@ -113,6 +113,14 @@ const LAYERS: Record<string, LayerConfig> = {
 
 const GROUPS = [
   {
+    id: "bangunan",
+    label: "Bangunan",
+    tables: [
+      "kawasan_kumuh",
+      "pembangunan_gedung",
+    ],
+  },
+  {
     id: "atribut_jalan",
     label: "Atribut Jalan",
     tables: [
@@ -136,8 +144,6 @@ const GROUPS = [
       "rantai_pasok",
       "reklame",
       "titik_bm",
-      "kawasan_kumuh",
-      "pembangunan_gedung",
     ],
   },
   {
