@@ -228,7 +228,9 @@ export default function DownloadDataClient({
             types: {
               point: filename,
               polygon: filename,
-              polyline: filename,
+              line: filename,
+              multipolygon: filename,
+              multiline: filename,
             },
           }
         );
