@@ -717,6 +717,7 @@
   box-shadow: 0 2px 8px #0002;
 }
 
+
 /* Legend */
 .sitijo-legend {
   position: absolute;
@@ -758,13 +759,29 @@
   color: #8290a0;
 }
 
-.legend-swatch {
-  width: 17px;
-  height: 4px;
-  flex: none;
-  background: #555;
+/* Simbol legenda titik */
+.legend-swatch-point {
+  display: inline-block;
+  flex-shrink: 0;
 }
 
+/* Simbol legenda garis */
+.legend-swatch-line {
+  display: inline-block;
+  width: 18px;
+  height: 0;
+  flex-shrink: 0;
+}
+
+/* Simbol legenda poligon */
+.legend-swatch-polygon {
+  display: inline-block;
+  width: 18px;
+  height: 12px;
+  flex-shrink: 0;
+}
+
+/* Batas Kelurahan */
 .boundary-swatch {
   width: 17px;
   height: 3px;
