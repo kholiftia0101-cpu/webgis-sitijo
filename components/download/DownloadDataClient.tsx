@@ -342,10 +342,13 @@ export default function DownloadDataClient({
             types: {
               point: filename,
               polygon: filename,
-              line: filename,
-              multipolygon: filename,
-              multiline: filename,
-              polyline: filename
+              polyline: filename,
+            } as unknown as {
+              point?: string;
+              polygon?: string;
+              line?: string;
+              multipolygon?: string;
+              multiline?: string;
             },
           }
         );
