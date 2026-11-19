@@ -1,3 +1,4 @@
+
 import { NextResponse } from "next/server";
 import { Pool } from "pg";
 
@@ -30,24 +31,24 @@ export async function GET() {
     }
 
     const result = await pool.query(`
-
-    SELECT
+      SELECT
         kelurah_id,
         kelurahan,
-        kecamatan,
+        kecamatan AS kemantren,
         SUM(luas) AS luas,
         SUM(luas_ha) AS luas_ha,
         ST_AsGeoJSON(
-            ST_Multi(ST_Union(geom)),
-            6
+          ST_Multi(ST_Union(geom)),
+          6
         )::json AS geometry
-    FROM batas_administrasi_rw
-    WHERE geom IS NOT NULL
-    GROUP BY
+      FROM batas_administrasi_rw
+      WHERE geom IS NOT NULL
+      GROUP BY
         kelurah_id,
         kelurahan,
         kecamatan
-    ORDER BY kelurahan;
+      ORDER BY kelurahan;
+    `);
 
     const features = result.rows.map((row) => {
       const { geometry, ...properties } = row;
@@ -63,6 +64,7 @@ export async function GET() {
       type: "FeatureCollection",
       features,
     });
+
   } catch (error) {
     console.error("Batas administrasi error:", error);
 
