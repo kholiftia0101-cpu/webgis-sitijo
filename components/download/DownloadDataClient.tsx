@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -19,6 +20,13 @@ type Group = {
   tables: string[];
 };
 
+type Geometry = {
+  type?: string;
+  coordinates?: unknown;
+  paths?: unknown;
+  [key: string]: unknown;
+};
+
 type FeatureCollection = {
   type: "FeatureCollection";
   table: string;
@@ -28,7 +36,7 @@ type FeatureCollection = {
   crsWkt: string | null;
   features: Array<{
     type: "Feature";
-    geometry: unknown;
+    geometry: Geometry | null;
     properties: Record<string, unknown>;
   }>;
 };
@@ -57,6 +65,93 @@ function saveBlob(blob: Blob, filename: string) {
   anchor.remove();
 
   window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+// =====================================================
+// NORMALISASI GEOMETRI UNTUK SHAPEFILE
+// =====================================================
+
+function normalizeGeometry(geometry: Geometry | null): Geometry | null {
+  if (!geometry) return null;
+
+  const rawType = String(geometry.type || "").toLowerCase();
+
+  // GeoJSON LineString / MultiLineString
+  if (
+    rawType === "linestring" ||
+    rawType === "multilinestring"
+  ) {
+    return geometry;
+  }
+
+  // GeoJSON Polygon / MultiPolygon
+  if (
+    rawType === "polygon" ||
+    rawType === "multipolygon"
+  ) {
+    return geometry;
+  }
+
+  // GeoJSON Point / MultiPoint
+  if (
+    rawType === "point" ||
+    rawType === "multipoint"
+  ) {
+    return geometry;
+  }
+
+  // ArcGIS Polyline dengan struktur paths
+  if (rawType === "polyline") {
+    const paths = geometry.paths;
+
+    if (!Array.isArray(paths) || paths.length === 0) {
+      throw new Error(
+        "Geometri Polyline tidak memiliki paths yang valid."
+      );
+    }
+
+    if (paths.length === 1) {
+      return {
+        type: "LineString",
+        coordinates: paths[0],
+      };
+    }
+
+    return {
+      type: "MultiLineString",
+      coordinates: paths,
+    };
+  }
+
+  // Polyline yang sudah menggunakan koordinat GeoJSON
+  if (rawType === "polyline" || rawType === "multipolyline") {
+    const coordinates = geometry.coordinates;
+
+    if (!Array.isArray(coordinates) || coordinates.length === 0) {
+      throw new Error("Koordinat Polyline tidak valid.");
+    }
+
+    const first = coordinates[0];
+
+    if (
+      Array.isArray(first) &&
+      typeof first[0] === "number"
+    ) {
+      return {
+        type: "LineString",
+        coordinates,
+      };
+    }
+
+    return {
+      type: "MultiLineString",
+      coordinates,
+    };
+  }
+
+  throw new Error(
+    `Tipe geometri tidak didukung Shapefile: ${geometry.type || "Unknown"}`
+  );
 }
 
 export default function DownloadDataClient({
@@ -91,7 +186,9 @@ export default function DownloadDataClient({
         const result = await response.json();
 
         if (!response.ok) {
-          throw new Error(result.error || "Gagal memuat daftar data.");
+          throw new Error(
+            result.error || "Gagal memuat daftar data."
+          );
         }
 
         if (active) {
@@ -139,6 +236,7 @@ export default function DownloadDataClient({
     if (!table || downloading) return;
 
     setDownloading(true);
+
     setMessage({
       type: "info",
       text: "Sedang mengambil data dari database...",
@@ -153,13 +251,17 @@ export default function DownloadDataClient({
       const result = await response.json();
 
       if (!response.ok) {
-        throw new Error(result.error || "Gagal mengambil data.");
+        throw new Error(
+          result.error || "Gagal mengambil data."
+        );
       }
 
       const data = result as FeatureCollection;
 
       if (!data.features?.length) {
-        throw new Error("Tidak ada data geometri untuk diunduh.");
+        throw new Error(
+          "Tidak ada data geometri untuk diunduh."
+        );
       }
 
       const filename = safeFilename(data.label || table);
@@ -167,6 +269,7 @@ export default function DownloadDataClient({
       // ==========================================
       // FORMAT GEOJSON
       // ==========================================
+
       if (format === "geojson") {
         const blob = new Blob(
           [JSON.stringify(data, null, 2)],
@@ -181,45 +284,56 @@ export default function DownloadDataClient({
       // ==========================================
       // FORMAT SHAPEFILE
       // ==========================================
+
       else {
+        // Normalisasi seluruh geometri.
+        const normalizedFeatures = data.features.map(
+          (feature, index) => {
+            try {
+              return {
+                ...feature,
+                geometry: normalizeGeometry(feature.geometry),
+              };
+            } catch (error) {
+              throw new Error(
+                `Fitur ke-${index + 1}: ${
+                  error instanceof Error
+                    ? error.message
+                    : "Geometri tidak valid."
+                }`
+              );
+            }
+          }
+        );
+
+        const shapefileData = {
+          ...data,
+          features: normalizedFeatures,
+        };
+
+        // Periksa tipe geometri setelah normalisasi.
         const geometryTypes = new Set(
-          data.features.map((feature) => {
-            const geometry = feature.geometry as
-              | { type?: string }
-              | null;
-
-            return geometry?.type || "Unknown";
-          })
+          shapefileData.features.map(
+            (feature) => feature.geometry?.type || "Unknown"
+          )
         );
 
-        const supportedTypes = [
-          "Point",
-          "MultiPoint",
-          "Polyline",
-          "LineString",
-          "MultiLineString",
-          "Polygon",
-          "MultiPolygon",
-        ];
-
-        const unsupported = [...geometryTypes].filter(
-          (type) => !supportedTypes.includes(type)
-        );
-
-        if (unsupported.length) {
+        if (geometryTypes.has("Unknown")) {
           throw new Error(
-            `Tipe geometri tidak didukung Shapefile: ${unsupported.join(", ")}`
+            "Terdapat fitur tanpa geometri yang valid."
           );
         }
 
         if (geometryTypes.size > 1) {
           throw new Error(
-            "Data memiliki lebih dari satu tipe geometri. Shapefile harus dibuat dengan satu tipe geometri yang sama. Silakan gunakan GeoJSON untuk data campuran."
+            "Data memiliki lebih dari satu tipe geometri. Gunakan GeoJSON untuk data campuran."
           );
         }
 
         const zipData = await shpwrite.zip(
-          data as unknown as Parameters<typeof shpwrite.zip>[0],
+          shapefileData as unknown as Parameters<
+            typeof shpwrite.zip
+          >[0],
           {
             folder: filename,
             filename,
@@ -241,7 +355,9 @@ export default function DownloadDataClient({
             ? zipData
             : new Blob(
                 [zipData as unknown as BlobPart],
-                { type: "application/zip" }
+                {
+                  type: "application/zip",
+                }
               );
 
         saveBlob(blob, `${filename}.zip`);
@@ -279,7 +395,10 @@ export default function DownloadDataClient({
           <Link href="/" className="dd-brand">
             SITIJO
           </Link>
-          <span>Sistem Informasi Infrastruktur Kota Yogyakarta</span>
+
+          <span>
+            Sistem Informasi Infrastruktur Kota Yogyakarta
+          </span>
         </div>
 
         <Link href="/peta" className="dd-back">
@@ -315,6 +434,7 @@ export default function DownloadDataClient({
             role="status"
           >
             <span>{message.text}</span>
+
             {downloading && (
               <LoaderCircle className="dd-spin" size={17} />
             )}
@@ -342,10 +462,14 @@ export default function DownloadDataClient({
               <select
                 value={groupId}
                 disabled={loadingGroups}
-                onChange={(event) => chooseGroup(event.target.value)}
+                onChange={(event) =>
+                  chooseGroup(event.target.value)
+                }
               >
                 <option value="">
-                  {loadingGroups ? "Memuat kelas..." : "Pilih kelas..."}
+                  {loadingGroups
+                    ? "Memuat kelas..."
+                    : "Pilih kelas..."}
                 </option>
 
                 {groups.map((group) => (
@@ -454,8 +578,11 @@ export default function DownloadDataClient({
           <div className="dd-download-summary">
             <div>
               <span>Data terpilih</span>
+
               <strong>
-                {table ? selectedLabel : "Belum ada subkelas dipilih"}
+                {table
+                  ? selectedLabel
+                  : "Belum ada subkelas dipilih"}
               </strong>
             </div>
 
@@ -471,7 +598,9 @@ export default function DownloadDataClient({
                 <Download size={18} />
               )}
 
-              {downloading ? "Menyiapkan..." : "Download Data"}
+              {downloading
+                ? "Menyiapkan..."
+                : "Download Data"}
             </button>
           </div>
         </section>
@@ -481,6 +610,7 @@ export default function DownloadDataClient({
 
           <div>
             <strong>Informasi</strong>
+
             <p>
               Data yang diunduh berasal dari database infrastruktur SITIJO.
               Seluruh fitur dengan geometri akan disertakan dalam file.
