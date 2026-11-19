@@ -226,11 +226,10 @@ async function createPolylineZip(
 
       if (type === "LineString") {
         // Jangan membungkus seluruh kumpulan fitur menjadi satu geometri.
-        return coordinates as LineCoordinates[number];
+        return coordinates as LineCoordinates;
       }
-
       // MultiLineString tetap satu fitur dengan beberapa bagian.
-      return coordinates as LineCoordinates[number];
+      return coordinates as LineCoordinates;
     }
   );
 
