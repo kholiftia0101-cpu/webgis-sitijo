@@ -70,7 +70,7 @@ export async function GET(req: NextRequest) {
     if (!config) return NextResponse.json({error:`Layer '${layer}' tidak dikenal.`},{status:404});
     const geom = config.geom || "geometri";
     const sql = `SELECT ST_AsGeoJSON(${geom},6)::json AS geometry, (to_jsonb(t)-'${geom}') || jsonb_build_object('style',$1::jsonb) AS properties FROM public."${config.table}" t WHERE ${geom} IS NOT NULL`;
-    const result = await pool.query(sql,[JSON.stringify(styles[layer] || {color:"#555",weight:2,fillOpacity:.25})]);
+    const result = await pool.query(sql,[JSON.stringify(styles[layer] || {color:"#C44E52",weight:2,fillOpacity:.25})]);
     return NextResponse.json(featureCollection(result.rows));
   } catch (error) {
     console.error(`GIS layer ${layer} error:`,error);
