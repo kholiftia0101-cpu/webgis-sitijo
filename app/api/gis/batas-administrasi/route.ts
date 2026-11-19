@@ -32,17 +32,22 @@ export async function GET() {
 
     const result = await pool.query(`
       SELECT
-        id_kel,
-        luas_kel,
+        id,
         kelurahan,
-        kemantren,
-        kota,
-        provinsi,
-        negara,
-        ST_AsGeoJSON(geometri, 6)::json AS geometry
-      FROM batas_administrasi
+        kecamatan,
+        nama_rw,
+        kampung,
+        kampung_id,
+        kelurah_id,
+        rw_id,
+        luas,
+        luas_ha,
+        kelas,
+        subkelas,
+        ST_AsGeoJSON(geom, 6)::json AS geometry
+      FROM batas_administrasi_rw
       WHERE geometri IS NOT NULL
-      ORDER BY kelurahan;
+      ORDER BY nama_rw;
     `);
 
     const features = result.rows.map((row) => {
