@@ -10,7 +10,7 @@ const features = [
   ["data.png", "Ketersediaan Data Infrastruktur", "/jenisdata"],
   ["peta.png", "Peta Infrastruktur", "/peta"],
   ["update.png", "Update Data Infrastruktur", "/update"],
-  ["tambah.png", "Tambah Data Infrastruktur", "/tambah"],
+  ["tambah.png", "Tambah Data Infrastruktur", "/tambah_data"],
   ["download.png", "Download Data Infrastruktur", "/download"],
   ["riwayat.png", "Riwayat Akses Pengguna", "/riwayat"],
   ["panduan.png", "Panduan Penggunaan WEBGIS SITIJO", "/panduan"],
@@ -84,7 +84,7 @@ export default async function Home() {
                 Update Data
               </Link>
 
-              <Link href={protectedHref("/tambah")}>
+              <Link href={protectedHref("/tambah_data")}>
                 Tambah Data
               </Link>
 
