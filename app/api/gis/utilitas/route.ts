@@ -20,18 +20,22 @@ const LAYERS: Record<string, { table: string; geom?: string; range?: [string, nu
   titik_halte:{table:"titik_halte",geom:"geom"}, jalur_halte:{table:"jalur_halte_trans",geom:"geom"}, tegangan_menengah:{table:"tegangan_menengah"}, tegangan_rendah:{table:"tegangan_rendah"}, rumah_kabel:{table:"rumah_kabel",geom:"geom"}, tiang_listrik:{table:"tiang_listrik",geom:"geom"}, trafo_listrik:{table:"trafo_listrik",geom:"geom"},
   hidran:{table:"hidran",geom:"geom"}, rantai_pasok:{table:"rantai_pasok"}, reklame:{table:"reklame",geom:"geom"}, titik_bm:{table:"titik_bench_mark",geom:"geom"}, manhole_sal:{table:"manhole_sal"}, pipa_glontor:{table:"pipa_glontor"}, pipa_induk:{table:"pipa_induk"}, pipa_lateral:{table:"pipa_lateral"}, jaringan_pdam:{table:"jaringan_pdam"}, sungai:{table:"sungai"},
   inlet:{table:"inlet",geom:"geom"}, saluran_air_hujan:{table:"saluran_air_hujan",geom:"geom"}, manhole_drainase:{table:"manhole_drainase",geom:"geom"}, sumur_resapan:{table:"sumur_resapan"}, zona_drainase:{table:"zona_drainase"}, kabel_fiber_optik:{table:"kabel_fo"}, manhole_fiber_optik:{table:"manhole_fo"}, tiang_fiber_optik:{table:"tiang_fiber_optik",geom:"geom"},
-  jalur_pemandu:{table:"jalur_pemandu",geom:"geom"}, jalan_kota:{table:"jalan_kota",geom:"geom"}, jembatan:{table:"jembatan",geom:"geom"}, jalan_inspeksi:{table:"jalan_inspeksi",geom:"geom"}, jalan_lingkungan:{table:"jalan_lingkungan",geom:"geom"}, trotoar:{table:"trotoar",geom:"geom"},
+  jalur_pemandu:{table:"jalur_pemandu"}, jalan_kota:{table:"jalan_kota"}, jembatan:{table:"jembatan"}, jalan_inspeksi:{table:"jalan_inspeksi",geom:"geom"}, jalan_lingkungan:{table:"jalan_lingkungan"}, trotoar:{table:"trotoar"},
   kawasan_kumuh:{table:"kawasan_kumuh",geom:"geom"}, pembangunan_gedung:{table:"pembangunan_gedung",geom:"geom"}, talud_sungai:{table:"talud_sungai",geom:"geom"},
 };
 
 const styles: Record<string, object> = {
   cermin_jalan:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#374151",fillOpacity:1,opacity:1}, kamera_pengawas:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#6B7280",fillOpacity:1,opacity:1}, lampu_jalan:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#B8B094",fillOpacity:1,opacity:1}, lampu_lalin:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#D1D5DB",fillOpacity:1,opacity:1}, rambu_lalin:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#9CA3AF",fillOpacity:1,opacity:1},
   bangunan:{color:"#FFFFFF",weight:0.7,fillColor:"#C44E52",fillOpacity:0.7,opacity:1},kawasan_kumuh:{color:"#FFFFFF",weight:0.7,fillColor:"#A8433E",fillOpacity:0.7,opacity:1}, pembangunan_gedung:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#E08A78",fillOpacity:1,opacity:1},
+  jalur_halte:{color:"#795548",weight:2.5,opacity:1}, titik_halte:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#B08968",fillOpacity:1,opacity:1},
+  hidran:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#69456F",fillOpacity:1,opacity:1}, rantai_pasok:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#805B83",fillOpacity:1,opacity:1}, reklame:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#9B7599",fillOpacity:1,opacity:1}, titik_bm:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#B69BB0",fillOpacity:1,opacity:1},
+  inlet:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#1565C0",fillOpacity:1,opacity:1}, manhole_drainase:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#197F9D",fillOpacity:1,opacity:1}, sumur_resapan:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#2699B5",fillOpacity:1,opacity:1}, zona_drainase:{color:"#FFFFFF",weight:0.7,fillColor:"#0D477A",fillOpacity:0.35,opacity:1}, saluran_air_hujan:{color:"#00A6B2",weight:2.5,opacity:1},
+  kabel_fiber_optik:{color:"#8E24AA",weight:2.5,opacity:1}, manhole_fiber_optik:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#AB47BC",fillOpacity:1,opacity:1}, tiang_fiber_optik:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#6A1B9A",fillOpacity:1,opacity:1},
+  manhole_sal:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#7B3545",fillOpacity:1,opacity:1}, pipa_induk:{color:"#A34252",weight:2.5,opacity:1}, pipa_glontor:{color:"#C16A70",weight:2.5,opacity:1}, pipa_lateral:{color:"#8F4A58",weight:2.5,opacity:1},
   jalan_inspeksi:{color:"#e67e22",weight:2.5,opacity:.9}, jalan_kota:{color:"#f39c12",weight:3}, jalan_lingkungan:{color:"#f1c40f",weight:2},
   trotoar:{color:"#9b59b6",weight:2}, jalur_pemandu:{color:"#fbff00",weight:2}, jembatan:{radius:5,color:"#e74c3c",fillColor:"#e74c3c",fillOpacity:1,opacity:0},
-  kabel_fiber_optik:{color:"#d946ef",weight:2}, jaringan_pdam:{color:"#00cfd1",weight:2}, sungai:{color:"#35c2ff",weight:2},
-  pipa_glontor:{color:"#19a880",weight:2}, pipa_induk:{color:"#5691a8",weight:2}, pipa_lateral:{color:"#028ebd",weight:2},
-  talud_sungai:{color:"#64748b",weight:2}, saluran_air_hujan:{color:"#0f766e",weight:2.5,opacity:.9},
+  jaringan_pdam:{color:"#00cfd1",weight:2}, sungai:{color:"#35c2ff",weight:2},
+  talud_sungai:{color:"#64748b",weight:2}
 };
 
 function featureCollection(rows: Array<{ geometry: unknown; properties: Record<string, unknown> }>) {
