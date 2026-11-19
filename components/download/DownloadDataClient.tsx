@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
@@ -226,6 +225,11 @@ export default function DownloadDataClient({
             outputType: "blob",
             compression: "STORE",
             ...(data.crsWkt ? { prj: data.crsWkt } : {}),
+            types: {
+              point: filename,
+              polygon: filename,
+              polyline: filename,
+            },
           }
         );
 
