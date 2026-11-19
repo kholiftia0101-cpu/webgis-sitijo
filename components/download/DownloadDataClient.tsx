@@ -1,4 +1,3 @@
-
 "use client";
 
 import JSZip from "jszip";
@@ -555,7 +554,8 @@ export default function DownloadDataClient({
             }
           );
 
-          blob =
+          // Ubah hasil ZIP menjadi Blob
+          const originalBlob =
             zipData instanceof Blob
               ? zipData
               : new Blob(
@@ -564,6 +564,33 @@ export default function DownloadDataClient({
                     type: "application/zip",
                   }
                 );
+          
+          // Buka ZIP
+          const zip = await JSZip.loadAsync(originalBlob);
+          
+          // Cari file DBF
+          const dbfPath = Object.keys(zip.files).find(
+            (path) =>
+              !zip.files[path].dir &&
+              path.toLowerCase().endsWith(".dbf")
+          );
+          
+          if (!dbfPath) {
+            throw new Error(
+              "File DBF tidak ditemukan dalam ZIP Shapefile."
+            );
+          }
+          
+          // Tambahkan CPG dengan nama yang sama seperti DBF
+          const cpgPath = dbfPath.replace(/\.dbf$/i, ".cpg");
+          
+          zip.file(cpgPath, "UTF-8");
+          
+          // Buat ulang ZIP
+          blob = await zip.generateAsync({
+            type: "blob",
+            compression: "STORE",
+          });
         }
 
         saveBlob(blob, `${filename}.zip`);
