@@ -382,6 +382,62 @@ export default function MapClient() {
   };
   const locate=()=>{if(!map)return;if(!navigator.geolocation){window.alert("Browser tidak mendukung lokasi.");return}navigator.geolocation.getCurrentPosition(pos=>map.setView([pos.coords.latitude,pos.coords.longitude],17),()=>window.alert("Lokasi tidak dapat diakses."))};
 
+  const getLegendSwatch = (id: string) => {
+  const feature = dataCacheRef.current[id]?.features?.[0];
+
+  const style = (feature?.properties as Record<string, unknown> | undefined)
+    ?.style as Record<string, unknown> | undefined;
+
+  if (!style) {
+    return (
+      <span className="legend-swatch" />
+    );
+  }
+
+  const isPoint = style.radius !== undefined;
+  const hasFill = style.fillColor !== undefined;
+
+  if (isPoint) {
+    return (
+      <span
+        className="legend-swatch-point"
+        style={{
+          width: 10,
+          height: 10,
+          borderRadius: "50%",
+          backgroundColor: String(style.fillColor || style.color || "#555"),
+          border: `${Number(style.weight || 1)}px solid ${String(style.color || "#555")}`,
+          opacity: Number(style.fillOpacity ?? style.opacity ?? 1),
+        }}
+      />
+    );
+  }
+
+  if (hasFill) {
+    return (
+      <span
+        className="legend-swatch-polygon"
+        style={{
+          backgroundColor: String(style.fillColor),
+          border: `${Number(style.weight || 1)}px solid ${String(style.color || "#555")}`,
+          opacity: Number(style.fillOpacity ?? 1),
+        }}
+      />
+    );
+  }
+
+  return (
+    <span
+      className="legend-swatch-line"
+      style={{
+        borderTop: `${Number(style.weight || 2)}px ${
+          style.dashArray ? "dashed" : "solid"
+        } ${String(style.color || "#555")}`,
+        opacity: Number(style.opacity ?? 1),
+      }}
+    />
+  );
+};
   return <div className="sitijo-map-shell">
     <style>{`
       .sitijo-road-label {
@@ -483,7 +539,32 @@ export default function MapClient() {
       <MapControls onFit={fitAll} onLocate={locate} baseId={baseId} onBaseChange={setBaseId}/>
     </MapContainer>
     <div className="sitijo-status">{checked.length} layer dipilih</div>
-    <div className="sitijo-legend"><strong>Legenda</strong><div className="legend-content">{checked.length?checked.map(id=><div key={id}><span className="legend-swatch"/>{groups.flatMap(g=>g.layers).find(x=>x.id===id)?.name||id}</div>):<i>Tidak ada layer aktif</i>}<div><span className="boundary-swatch"/>Batas Kelurahan</div></div></div>
+    <div className="sitijo-legend">
+  <strong>Legenda</strong>
+
+  <div className="legend-content">
+    {checked.length ? (
+      checked.map(id => (
+        <div key={id}>
+          {getLegendSwatch(id)}
+          {groups.flatMap(g => g.layers).find(x => x.id === id)?.name || id}
+        </div>
+      ))
+    ) : (
+      <i>Tidak ada layer aktif</i>
+    )}
+
+    <div>
+      <span
+        className="legend-swatch-line"
+        style={{
+          borderTop: "2.5px dashed #fa2b66",
+        }}
+      />
+      Batas Kelurahan
+    </div>
+  </div>
+</div>
   </div>;
 }
 
