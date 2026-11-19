@@ -30,24 +30,24 @@ export async function GET() {
     }
 
     const result = await pool.query(`
-      SELECT
-        id,
+
+    SELECT
+        kelurah_id,
         kelurahan,
         kecamatan,
-        nama_rw,
-        kampung,
-        kampung_id,
+        SUM(luas) AS luas,
+        SUM(luas_ha) AS luas_ha,
+        ST_AsGeoJSON(
+            ST_Multi(ST_Union(geom)),
+            6
+        )::json AS geometry
+    FROM batas_administrasi_rw
+    WHERE geom IS NOT NULL
+    GROUP BY
         kelurah_id,
-        rw_id,
-        luas,
-        luas_ha,
-        kelas,
-        subkelas,
-        ST_AsGeoJSON(geom, 6)::json AS geometry
-      FROM batas_administrasi_rw
-      WHERE geom IS NOT NULL
-      ORDER BY nama_rw;
-    `);
+        kelurahan,
+        kecamatan
+    ORDER BY kelurahan;
 
     const features = result.rows.map((row) => {
       const { geometry, ...properties } = row;
