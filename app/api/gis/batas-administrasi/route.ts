@@ -13,8 +13,13 @@ const pool =
   globalForPg.pgPool ??
   new Pool({
     connectionString: process.env.DATABASE_URL,
-    ssl: { rejectUnauthorized: false },
+    ssl:
+      process.env.DATABASE_SSL === "false"
+        ? false
+        : { rejectUnauthorized: false },
     max: 5,
+    idleTimeoutMillis: 30_000,
+    connectionTimeoutMillis: 10_000,
   });
 
 if (process.env.NODE_ENV !== "production") {
@@ -30,26 +35,38 @@ export async function GET() {
       );
     }
 
+    // Menggabungkan seluruh polygon RW berdasarkan Kelurahan
     const result = await pool.query(`
       SELECT
         kelurah_id,
         kelurahan,
         kecamatan AS kemantren,
+
         SUM(luas) AS luas,
         SUM(luas_ha) AS luas_ha,
+
         ST_AsGeoJSON(
-          ST_Multi(ST_Union(geom)),
+          ST_Multi(
+            ST_Union(geom)
+          ),
           6
         )::json AS geometry
-      FROM batas_administrasi_rw
+
+      FROM public.batas_administrasi_rw
+
       WHERE geom IS NOT NULL
+
       GROUP BY
         kelurah_id,
         kelurahan,
         kecamatan
-      ORDER BY kelurahan;
+
+      ORDER BY
+        kecamatan,
+        kelurahan;
     `);
 
+    // Mengubah hasil query menjadi GeoJSON FeatureCollection
     const features = result.rows.map((row) => {
       const { geometry, ...properties } = row;
 
@@ -72,7 +89,9 @@ export async function GET() {
       {
         error: "Gagal mengambil batas administrasi.",
         detail:
-          error instanceof Error ? error.message : "Unknown error",
+          error instanceof Error
+            ? error.message
+            : "Unknown error",
       },
       { status: 500 }
     );
