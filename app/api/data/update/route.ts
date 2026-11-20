@@ -41,7 +41,7 @@ const GROUPS = [
 
 const LABELS: Record<string, string> = {
   cermin_jalan: "Cermin Jalan", kamera_pengawas: "Kamera Pengawas", lampu_jalan: "Lampu Jalan", lampu_lalin: "Lampu Lalu Lintas", rambu_lalin: "Rambu Lalu Lintas",
-  titik_halte: "Titik Halte", jalur_halte: "Jalur Halte Trans", hidran: "Hidran", rantai_pasok: "Rantai Pasok", reklame: "Reklame", titik_bm: "Titik Bench Mark",
+  titik_halte: "Titik Halte", jalur_halte: "Jalur Halte Trans", hidran: "Hidran", rantai_pasok: "Rantai Pasok", reklame: "Reklame", titik_bench_mark: "Titik Bench Mark",
   inlet: "Inlet", manhole_drainase: "Manhole Drainase", sumur_resapan: "Sumur Resapan", zona_drainase: "Zona Drainase", kabel_fo: "Kabel Fiber Optik", manhole_fo: "Manhole Fiber Optik", tiang_fo: "Tiang Fiber Optik",
   manhole_sal: "Manhole Saluran Air Limbah", pipa_glontor: "Pipa Glontor", pipa_induk: "Pipa Induk", pipa_lateral: "Pipa Lateral", jalan_kota: "Jalan Kota", jalan_lingkungan: "Jalan Lingkungan", jalur_pemandu: "Jalur Pemandu", jembatan: "Jembatan", trotoar: "Trotoar",
   tegangan_menengah: "Jaringan Kabel Listrik Tegangan Menengah", tegangan_rendah: "Jaringan Kabel Listrik Tegangan Rendah", rumah_kabel: "Rumah Kabel", tiang_listrik: "Tiang Listrik", trafo_listrik: "Trafo Listrik", jaringan_pdam: "Jaringan PDAM", sungai: "Sungai", high_mes_tower: "High Mes Tower",
@@ -50,8 +50,8 @@ const LABELS: Record<string, string> = {
 
 // Diambil dari pemetaan primary key pada update_proses.php versi lama.
 const PRIMARY_KEYS: Record<string, string> = {
-  cermin_jalan: "id", kamera_pengawas: "id", lampu_jalan: "id", lampu_lalin: "id", rantai_pasok: "id", rambu_lalin: "id", reklame: "id_reklame", titik_bm: "id", hidran: "id", sumur_resapan: "id", inlet: "id", zona_drainase: "id", manhole_drainase: "id", manhole_fo: "id", tiang_fo: "id", kabel_fo: "id", manhole_sal: "id", pipa_glontor: "id", pipa_induk: "id", pipa_lateral: "id",
-  jalan_kota: "id_jalan", jalan_lingkungan: "id_jalan", jalur_pemandu: "id", jembatan: "id", trotoar: "id_trotoar", rumah_kabel: "id", tegangan_menengah: "id_tm", tegangan_rendah: "id_tr", tiang_listrik: "id", trafo_listrik: "id", jaringan_pdam: "id_pdam", titik_halte: "id", jalur_halte: "id", sungai: "id", high_mess_tower: "id",
+  cermin_jalan: "id", kamera_pengawas: "id", lampu_jalan: "id", lampu_lalin: "id", rantai_pasok: "id", rambu_lalin: "id", reklame: "id", titik_bm: "id", hidran: "id", sumur_resapan: "id", inlet: "id", zona_drainase: "id", manhole_drainase: "id", manhole_fo: "id", tiang_fo: "id", kabel_fo: "id", manhole_sal: "id", pipa_glontor: "id", pipa_induk: "id", pipa_lateral: "id",
+  jalan_kota: "id_jalan", jalan_lingkungan: "id_jalan", jalur_pemandu: "id", jembatan: "id", trotoar: "id_trotoar", rumah_kabel: "id", tegangan_menengah: "id_tm", tegangan_rendah: "id_tr", tiang_listrik: "id", trafo_listrik: "id", jaringan_pdam: "id_pdam", titik_halte: "id", jalur_halte: "id", sungai: "id", high_mes_tower: "id",
   papan_tanah_negara: "id", rumija: "id"
 };
 
