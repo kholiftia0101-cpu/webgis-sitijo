@@ -33,7 +33,7 @@ const styles: Record<string, object> = {
   kabel_fiber_optik:{color:"#8E24AA",weight:2,opacity:1}, manhole_fiber_optik:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#AB47BC",fillOpacity:1,opacity:1}, tiang_fiber_optik:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#6A1B9A",fillOpacity:1,opacity:1},
   manhole_sal:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#7B3545",fillOpacity:1,opacity:1}, pipa_induk:{color:"#A34252",weight:2,opacity:1}, pipa_glontor:{color:"#C16A70",weight:2,opacity:1}, pipa_lateral:{color:"#8F4A58",weight:2,opacity:1},
   jalan_inspeksi:{color:"#e67e22",weight:2,opacity:.9}, jalan_kota:{color:"#f39c12",weight:3}, jalan_lingkungan:{color:"#f1c40f",weight:2},
-  trotoar:{color:"#9b59b6",weight:2}, jalur_pemandu:{color:"#fbff00",weight:2}, jembatan:{radius:5,color:"#e74c3c",fillColor:"#e74c3c",fillOpacity:1,opacity:0},
+  trotoar:{color:"#9b59b6",weight:2}, jalur_pemandu:{color:"#fbff00",weight:2}, jembatan:{radius:5,color:"#e74c3c",weight:0.7,fillColor:"#e74c3c",fillOpacity:1,opacity:1},
   tegangan_menengah:{color:"#A16207",weight:2,opacity:1}, tegangan_rendah:{color:"#EAB308",weight:2,opacity:1}, rumah_kabel:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#7C8B42",fillOpacity:1,opacity:1}, tiang_listrik:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#D97706",fillOpacity:1,opacity:1}, trafo_listrik:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#B59B35",fillOpacity:1,opacity:1},
   jaringan_pdam:{color:"#00cfd1",weight:2}, 
   sungai:{color:"#35c2ff",weight:2}, talud_sungai:{color:"#D4E600",weight:2,opacity:1},
