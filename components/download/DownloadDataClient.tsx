@@ -491,20 +491,32 @@ export default function DownloadDataClient({
               feature.geometry?.type || "Unknown"
           )
         );
-
+        
         if (geometryTypes.has("Unknown")) {
           throw new Error(
             "Terdapat fitur tanpa geometri yang valid."
           );
         }
-
-        if (geometryTypes.size > 1) {
+        
+        // Kelompokkan tipe geometri yang masih satu keluarga.
+        const isLineGeometry = (type: string) =>
+          type === "LineString" ||
+          type === "MultiLineString";
+        
+        const isAllLines = Array.from(geometryTypes).every(
+          isLineGeometry
+        );
+        
+        if (geometryTypes.size > 1 && !isAllLines) {
           throw new Error(
             "Data memiliki tipe geometri campuran. Gunakan GeoJSON."
           );
         }
-
-        const geometryType = Array.from(geometryTypes)[0];
+        
+        // Jika seluruhnya garis, gunakan exporter Polyline.
+        const geometryType = isAllLines
+          ? "LineString"
+          : Array.from(geometryTypes)[0];
 
         let blob: Blob;
 
