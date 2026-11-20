@@ -51,7 +51,7 @@ const LABELS: Record<string, string> = {
 // Diambil dari pemetaan primary key pada update_proses.php versi lama.
 const PRIMARY_KEYS: Record<string, string> = {
   cermin_jalan: "id", kamera_pengawas: "id", lampu_jalan: "id", lampu_lalin: "id", rantai_pasok: "id", rambu_lalin: "id", reklame: "id_reklame", titik_bm: "id", hidran: "id", sumur_resapan: "id", inlet: "id", zona_drainase: "id", manhole_drainase: "id", manhole_fo: "id", tiang_fo: "id", kabel_fo: "id", manhole_sal: "id", pipa_glontor: "id", pipa_induk: "id", pipa_lateral: "id",
-  jalan_kota: "id_jalan", jalan_lingkungan: "id_jalan", jalur_pemandu: "id", jembatan: "id", trotoar: "id_trotoar", rumah_kabel: "id", tegangan_menengah: "id_tm", tegangan_rendah: "id_tr", tiang_listrik: "id", trafo_listrik: "id", jaringan_pdam: "id_pdam", titik_halte: "id", jalur_halte: "id", sungai: "id",high_mess_tower: "id",
+  jalan_kota: "id_jalan", jalan_lingkungan: "id_jalan", jalur_pemandu: "id", jembatan: "id", trotoar: "id_trotoar", rumah_kabel: "id", tegangan_menengah: "id_tm", tegangan_rendah: "id_tr", tiang_listrik: "id", trafo_listrik: "id", jaringan_pdam: "id_pdam", titik_halte: "id", jalur_halte: "id", sungai: "id", high_mess_tower: "id",
   papan_tanah_negara: "id", rumija: "id"
 };
 
