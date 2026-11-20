@@ -37,9 +37,9 @@ const styles: Record<string, object> = {
   tegangan_menengah:{color:"#A16207",weight:2,opacity:1}, tegangan_rendah:{color:"#EAB308",weight:2,opacity:1}, rumah_kabel:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#7C8B42",fillOpacity:1,opacity:1}, tiang_listrik:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#D97706",fillOpacity:1,opacity:1}, trafo_listrik:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#B59B35",fillOpacity:1,opacity:1},
   jaringan_pdam:{color:"#00cfd1",weight:2}, 
   sungai:{color:"#35c2ff",weight:2}, talud_sungai:{color:"#D4E600",weight:2,opacity:1},
-  high_mes_tower:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#7B3545",fillOpacity:1,opacity:1},
-  papan_tanah_negara:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#7B3545",fillOpacity:1,opacity:1},
-  rumija:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#7B3545",fillOpacity:1,opacity:1}
+  high_mes_tower:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#FF0059",fillOpacity:1,opacity:1},
+  papan_tanah_negara:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#00BFFF",fillOpacity:1,opacity:1},
+  rumija:{radius:5,color:"#FFFFFF",weight:0.7,fillColor:"#7300FF",fillOpacity:1,opacity:1}
 };
 
 function featureCollection(rows: Array<{ geometry: unknown; properties: Record<string, unknown> }>) {
