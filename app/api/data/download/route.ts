@@ -53,6 +53,7 @@ const LAYERS: Record<string, LayerConfig> = {
   lampu_jalan: { table: "lampu_jalan", geom: "geom" },
   lampu_lalin: { table: "lampu_lalu_lintas", geom: "geom" },
   rambu_lalin: { table: "rambu_lalu_lintas", geom: "geom" },
+  high_mes_tower: { table: "high_mes_tower", geom: "geom" },
 
   // Halte
   titik_halte: { table: "titik_halte", geom: "geom" },
@@ -70,6 +71,7 @@ const LAYERS: Record<string, LayerConfig> = {
   rantai_pasok: { table: "rantai_pasok" },
   reklame: { table: "reklame", geom: "geom" },
   titik_bm: { table: "titik_bench_mark", geom: "geom" },
+  papan_tanah_negara: { table: "papan_tanah_negara", geom: "geom" },
 
   // Jaringan IPAL
   manhole_sal: { table: "manhole_sal" },
@@ -101,6 +103,7 @@ const LAYERS: Record<string, LayerConfig> = {
   jalan_inspeksi: { table: "jalan_inspeksi", geom: "geom" },
   jalan_lingkungan: { table: "jalan_lingkungan" },
   trotoar: { table: "trotoar" },
+  rumija: { table: "rumija", geom: "geom" },
 
   // Bangunan
   kawasan_kumuh: { table: "kawasan_kumuh", geom: "geom" },
