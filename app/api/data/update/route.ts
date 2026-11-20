@@ -29,7 +29,7 @@ const GROUPS = [
   { id: "bangunan", label: "Bangunan", tables: ["kawasan_kumuh","pembangunan_gedung"] },
   { id: "atribut_jalan", label: "Atribut Jalan", tables: ["cermin_jalan", "kamera_pengawas", "lampu_jalan", "lampu_lalin", "rambu_lalin", "high_mes_tower"] },
   { id: "halte", label: "Halte", tables: ["titik_halte", "jalur_halte"] },
-  { id: "infrastruktur_pendukung", label: "Infrastruktur Pendukung", tables: ["hidran", "rantai_pasok", "reklame", "titik_bm", "papan_tanah_negara"] },
+  { id: "infrastruktur_pendukung", label: "Infrastruktur Pendukung", tables: ["hidran", "rantai_pasok", "reklame", "titik_bench_mark", "papan_tanah_negara"] },
   { id: "jaringan_drainase", label: "Jaringan Drainase", tables: ["inlet", "manhole_drainase", "sumur_resapan", "zona_drainase","saluran_air_hujan"] },
   { id: "jaringan_fiber_optik", label: "Jaringan Fiber Optik", tables: ["kabel_fo", "manhole_fo", "tiang_fo"] },
   { id: "jaringan_ipal", label: "Jaringan Instalasi Pengolahan Air Limbah", tables: ["manhole_sal", "pipa_glontor", "pipa_induk", "pipa_lateral"] },
