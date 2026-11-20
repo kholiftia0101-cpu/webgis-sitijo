@@ -27,11 +27,11 @@ function getPool() {
 
 const GROUPS = [
   { id: "bangunan", label: "Bangunan", tables: ["kawasan_kumuh","pembangunan_gedung"] },
-  { id: "atribut_jalan", label: "Atribut Jalan", tables: ["cermin_jalan", "kamera_pengawas", "lampu_jalan", "lampu_lalin", "rambu_lalin", "high_mes_tower"] },
-  { id: "halte", label: "Halte", tables: ["titik_halte", "jalur_halte"] },
+  { id: "atribut_jalan", label: "Atribut Jalan", tables: ["cermin_jalan", "kamera_pengawas", "lampu_jalan", "lampu_lalu_lintas", "rambu_lalu_lintas", "high_mes_tower"] },
+  { id: "halte", label: "Halte", tables: ["titik_halte", "jalur_halte_trans"] },
   { id: "infrastruktur_pendukung", label: "Infrastruktur Pendukung", tables: ["hidran", "rantai_pasok", "reklame", "titik_bench_mark", "papan_tanah_negara"] },
   { id: "jaringan_drainase", label: "Jaringan Drainase", tables: ["inlet", "manhole_drainase", "sumur_resapan", "zona_drainase","saluran_air_hujan"] },
-  { id: "jaringan_fiber_optik", label: "Jaringan Fiber Optik", tables: ["kabel_fo", "manhole_fo", "tiang_fo"] },
+  { id: "jaringan_fiber_optik", label: "Jaringan Fiber Optik", tables: ["kabel_fo", "manhole_fo", "tiang_fiber_optik"] },
   { id: "jaringan_ipal", label: "Jaringan Instalasi Pengolahan Air Limbah", tables: ["manhole_sal", "pipa_glontor", "pipa_induk", "pipa_lateral"] },
   { id: "jaringan_jalan", label: "Jaringan Jalan", tables: ["jalan_kota", "jalan_lingkungan", "jalur_pemandu", "jembatan", "trotoar","jalan_inspeksi", "rumija"] },
   { id: "jaringan_listrik", label: "Jaringan Listrik", tables: ["tegangan_menengah", "tegangan_rendah", "rumah_kabel", "tiang_listrik", "trafo_listrik"] },
@@ -40,19 +40,28 @@ const GROUPS = [
 ] as const;
 
 const LABELS: Record<string, string> = {
-  cermin_jalan: "Cermin Jalan", kamera_pengawas: "Kamera Pengawas", lampu_jalan: "Lampu Jalan", lampu_lalin: "Lampu Lalu Lintas", rambu_lalin: "Rambu Lalu Lintas",
-  titik_halte: "Titik Halte", jalur_halte: "Jalur Halte Trans", hidran: "Hidran", rantai_pasok: "Rantai Pasok", reklame: "Reklame", titik_bench_mark: "Titik Bench Mark",
-  inlet: "Inlet", manhole_drainase: "Manhole Drainase", sumur_resapan: "Sumur Resapan", zona_drainase: "Zona Drainase", kabel_fo: "Kabel Fiber Optik", manhole_fo: "Manhole Fiber Optik", tiang_fo: "Tiang Fiber Optik",
-  manhole_sal: "Manhole Saluran Air Limbah", pipa_glontor: "Pipa Glontor", pipa_induk: "Pipa Induk", pipa_lateral: "Pipa Lateral", jalan_kota: "Jalan Kota", jalan_lingkungan: "Jalan Lingkungan", jalur_pemandu: "Jalur Pemandu", jembatan: "Jembatan", trotoar: "Trotoar",
-  tegangan_menengah: "Jaringan Kabel Listrik Tegangan Menengah", tegangan_rendah: "Jaringan Kabel Listrik Tegangan Rendah", rumah_kabel: "Rumah Kabel", tiang_listrik: "Tiang Listrik", trafo_listrik: "Trafo Listrik", jaringan_pdam: "Jaringan PDAM", sungai: "Sungai", high_mes_tower: "High Mes Tower",
-  papan_tanah_negara: "Papan_Tanah_Negara", rumija: "Rumija"
+  kawasan_kumuh: "Kawasan Kumuh", pembangunan_gedung: "Pembangunan Gedung",
+  cermin_jalan: "Cermin Jalan", kamera_pengawas: "Kamera Pengawas", lampu_jalan: "Lampu Jalan", lampu_lalu_lintas: "Lampu Lalu Lintas", rambu_lalu_lintas: "Rambu Lalu Lintas", high_mes_tower: "High Mes Tower",
+  titik_halte: "Titik Halte", jalur_halte_trans: "Jalur Halte Trans",
+  hidran: "Hidran", rantai_pasok: "Rantai Pasok", reklame: "Reklame", titik_bench_mark: "Titik Bench Mark", papan_tanah_negara: "Papan_Tanah_Negara",
+  inlet: "Inlet", manhole_drainase: "Manhole Drainase", sumur_resapan: "Sumur Resapan", zona_drainase: "Zona Drainase", saluran_air_hujan: "Saluran Air Hujan", kabel_fo: "Kabel Fiber Optik", manhole_fo: "Manhole Fiber Optik", tiang_fiber_optik: "Tiang Fiber Optik",
+  manhole_sal: "Manhole Saluran Air Limbah", pipa_glontor: "Pipa Glontor", pipa_induk: "Pipa Induk", pipa_lateral: "Pipa Lateral", jalan_kota: "Jalan Kota", jalan_lingkungan: "Jalan Lingkungan", jalur_pemandu: "Jalur Pemandu", jembatan: "Jembatan", trotoar: "Trotoar", rumija: "Rumija",
+  tegangan_menengah: "Jaringan Kabel Listrik Tegangan Menengah", tegangan_rendah: "Jaringan Kabel Listrik Tegangan Rendah", rumah_kabel: "Rumah Kabel", tiang_listrik: "Tiang Listrik", trafo_listrik: "Trafo Listrik", jaringan_pdam: "Jaringan PDAM", sungai: "Sungai", talud_sungai: "Talud Sungai"
 };
 
 // Diambil dari pemetaan primary key pada update_proses.php versi lama.
 const PRIMARY_KEYS: Record<string, string> = {
-  cermin_jalan: "id", kamera_pengawas: "id", lampu_jalan: "id", lampu_lalin: "id", rantai_pasok: "id", rambu_lalin: "id", reklame: "id", titik_bm: "id", hidran: "id", sumur_resapan: "id", inlet: "id", zona_drainase: "id", manhole_drainase: "id", manhole_fo: "id", tiang_fo: "id", kabel_fo: "id", manhole_sal: "id", pipa_glontor: "id", pipa_induk: "id", pipa_lateral: "id",
-  jalan_kota: "id_jalan", jalan_lingkungan: "id_jalan", jalur_pemandu: "id", jembatan: "id", trotoar: "id_trotoar", rumah_kabel: "id", tegangan_menengah: "id_tm", tegangan_rendah: "id_tr", tiang_listrik: "id", trafo_listrik: "id", jaringan_pdam: "id_pdam", titik_halte: "id", jalur_halte: "id", sungai: "id", high_mes_tower: "id",
-  papan_tanah_negara: "id", rumija: "id"
+  kawasan_kumuh: "id", pembangunan_gedung: "id",
+  cermin_jalan: "id", kamera_pengawas: "id", lampu_jalan: "id", lampu_lalu_lintas: "id", rambu_lalu_lintas: "id",  high_mes_tower: "id",
+  titik_halte: "id", jalur_halte_trans: "id",
+  hidran: "id", rantai_pasok: "id", reklame: "id", titik_bench_mark: "id", papan_tanah_negara: "id",
+  inlet: "id", manhole_drainase: "id", sumur_resapan: "id", zona_drainase: "id", saluran_air_hujan: "Saluran Air Hujan",
+  kabel_fo: "id", manhole_fo: "id", tiang_fiber_optik: "id",
+  manhole_sal: "id", pipa_glontor: "id", pipa_induk: "id", pipa_lateral: "id",
+  jalan_kota: "id_jalan", jalan_lingkungan: "id_jalan", jalur_pemandu: "id", jembatan: "id", trotoar: "id_trotoar",  jalan_inspeksi: "Jalan Inspeksi", rumija: "id",
+  tegangan_menengah: "id_tm", tegangan_rendah: "id_tr", rumah_kabel: "id", tiang_listrik: "id", trafo_listrik: "id",
+  jaringan_pdam: "id_pdam",
+  sungai: "id"
 };
 
 const ALLOWED_TABLES = new Set<string>(GROUPS.flatMap((group) => [...group.tables]));
