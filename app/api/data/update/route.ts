@@ -26,16 +26,17 @@ function getPool() {
 }
 
 const GROUPS = [
+  { id:"bangunan", label: "Bangunan", tables: ["kawasan_kumuh","pembangunan_gedung"] },
   { id: "atribut_jalan", label: "Atribut Jalan", tables: ["cermin_jalan", "kamera_pengawas", "lampu_jalan", "lampu_lalin", "rambu_lalin"] },
   { id: "halte", label: "Halte", tables: ["titik_halte", "jalur_halte"] },
   { id: "infrastruktur_pendukung", label: "Infrastruktur Pendukung", tables: ["hidran", "rantai_pasok", "reklame", "titik_bm"] },
-  { id: "jaringan_drainase", label: "Jaringan Drainase", tables: ["inlet", "manhole_drainase", "sumur_resapan", "zona_drainase"] },
+  { id: "jaringan_drainase", label: "Jaringan Drainase", tables: ["inlet", "manhole_drainase", "sumur_resapan", "zona_drainase","saluran_air_hujan"] },
   { id: "jaringan_fiber_optik", label: "Jaringan Fiber Optik", tables: ["kabel_fo", "manhole_fo", "tiang_fo"] },
   { id: "jaringan_ipal", label: "Jaringan Instalasi Pengolahan Air Limbah", tables: ["manhole_sal", "pipa_glontor", "pipa_induk", "pipa_lateral"] },
-  { id: "jaringan_jalan", label: "Jaringan Jalan", tables: ["jalan_kota", "jalan_lingkungan", "jalur_pemandu", "jembatan", "trotoar"] },
+  { id: "jaringan_jalan", label: "Jaringan Jalan", tables: ["jalan_kota", "jalan_lingkungan", "jalur_pemandu", "jembatan", "trotoar","jalan_inspeksi"] },
   { id: "jaringan_listrik", label: "Jaringan Listrik", tables: ["tegangan_menengah", "tegangan_rendah", "rumah_kabel", "tiang_listrik", "trafo_listrik"] },
   { id: "jaringan_pdam", label: "Jaringan PDAM", tables: ["jaringan_pdam"] },
-  { id: "sungai", label: "Sungai", tables: ["sungai"] },
+  { id: "sungai", label: "Sungai", tables: ["sungai","talud_sungai"] },
 ] as const;
 
 const LABELS: Record<string, string> = {
