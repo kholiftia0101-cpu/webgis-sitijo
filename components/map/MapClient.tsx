@@ -659,7 +659,7 @@ function MapControls({onFit,onLocate,baseId,onBaseChange,basemapOpen,onBasemapTo
   return <>
     <div className="leaflet-top leaflet-right sitijo-map-controls">
       <div className="leaflet-control sitijo-control-dock">
-        <button className="sitijo-basemap-trigger" title="Pilih basemap" aria-label="Pilih basemap" onClick={onBasemapToggle}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="m3 7 9-4 9 4-9 4-9-4Z"/><path d="m3 12 9 4 9-4M3 17l9 4 9-4"/></svg></button>
+        <button className="sitijo-basemap-trigger" title="Pilih basemap" aria-label="Pilih basemap" onClick={onBasemapToggle}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><rect x="3.5" y="3.5" width="7" height="7" rx="1.4"/><rect x="13.5" y="3.5" width="7" height="7" rx="1.4"/><rect x="3.5" y="13.5" width="7" height="7" rx="1.4"/><rect x="13.5" y="13.5" width="7" height="7" rx="1.4"/></svg></button>
         <div className="leaflet-control sitijo-modern-control">
         <button title="Arah Utara" className="sitijo-compass" aria-label="Arah Utara"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" stroke="#bfdbfe" strokeWidth="1.5"/><path d="M20 5 26 22 20 19 14 22Z" fill="#1685f5" stroke="#1685f5"/><path d="M20 35 14 18 20 21 26 18Z" fill="#60a5fa" stroke="#60a5fa"/><circle cx="20" cy="20" r="2.4" fill="#fff" stroke="#1685f5"/></svg></button>
         <button title="Perbesar seluruh layer" aria-label="Perbesar seluruh layer" onClick={onFit}><svg viewBox="0 0 24 24"><path d="m4 8 4-4M4 4h4M4 4v4M20 8l-4-4M20 4h-4M20 4v4M4 16l4 4M4 20h4M4 20v-4M20 16l-4 4M20 20h-4M20 20v-4"/><path d="M8 10h8v4H8z"/></svg></button>
