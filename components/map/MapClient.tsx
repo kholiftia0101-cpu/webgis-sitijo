@@ -581,12 +581,12 @@ export default function MapClient() {
       .sitijo-map-info-coords span{font-size:9px;font-weight:800;letter-spacing:.04em;color:#8ba0b8}
       .sitijo-map-info-coords strong{font-weight:600;color:#375778}
       .sitijo-map-info-coords i{height:12px;width:1px;background:#dbe6f2;margin:0 2px}
-      .sitijo-legend-modern{position:absolute;z-index:850;right:14px;bottom:54px;max-width:250px;min-width:190px;padding:11px 12px;background:rgba(255,255,255,.96);border:1px solid #dce8f8;border-radius:15px;box-shadow:0 6px 20px rgba(20,70,130,.14);backdrop-filter:blur(12px);color:#23466e}
+      .sitijo-legend-modern{position:absolute;z-index:850;right:14px;bottom:54px;max-width:250px;min-width:190px;padding:5.5px 6px;background:rgba(255,255,255,.96);border:1px solid #dce8f8;border-radius:15px;box-shadow:0 6px 20px rgba(20,70,130,.14);backdrop-filter:blur(12px);color:#23466e}
       .sitijo-legend-heading{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:#173e73}
       .sitijo-legend-icon{display:grid;place-items:center;color:#1685f5}
       .sitijo-legend-icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
       .sitijo-legend-active{margin-left:auto;font-size:10px;font-weight:700;color:#1676d3;background:#eaf3ff;border-radius:999px;padding:4px 8px;white-space:nowrap}
-      .sitijo-legend-coords{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:9px;padding:7px 8px;background:#f4f8fd;border:1px solid #e7eef8;border-radius:9px;font-size:9px;color:#607995;font-variant-numeric:tabular-nums}
+      .sitijo-legend-coords{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4.5px;padding:3.5px 4px;background:#f4f8fd;border:1px solid #e7eef8;border-radius:9px;font-size:9px;color:#607995;font-variant-numeric:tabular-nums}
       .sitijo-legend-coords span{font-weight:800;letter-spacing:.03em;color:#8ba0b8}
       .sitijo-legend-coords strong{font-size:10px;font-weight:600;color:#375778}
       .sitijo-legend-content{display:flex;flex-direction:column;gap:5px;max-height:150px;overflow:auto}
@@ -594,7 +594,7 @@ export default function MapClient() {
       .sitijo-legend-row>span:last-child{overflow-wrap:anywhere}
       .sitijo-legend-empty{font-size:10px;color:#9aabc0;font-style:italic}
       .sitijo-legend-modern .legend-swatch-line{flex:none;width:18px}
-      @media(max-width:600px){.sitijo-legend-modern{right:8px;bottom:48px;max-width:190px;min-width:155px;padding:8px 10px}.sitijo-legend-content{max-height:105px}.sitijo-legend-coords{gap:5px;padding:6px}}
+      @media(max-width:600px){.sitijo-legend-modern{right:8px;bottom:48px;max-width:190px;min-width:155px;padding:4px 5px}.sitijo-legend-content{max-height:105px}.sitijo-legend-coords{gap:5px;padding:3px}}
       @media(max-width:600px){.sitijo-modern-panel{left:66px;width:calc(100vw - 82px);top:10px;bottom:10px}.sitijo-basemap-pop{right:66px;width:min(280px,calc(100vw - 80px))}}
     `}</style>
     <div className="sitijo-modern-toolbar">
