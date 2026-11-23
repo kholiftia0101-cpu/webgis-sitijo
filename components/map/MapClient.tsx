@@ -9,6 +9,7 @@ type Group = { id: string; name: string; layers: { id: string; name: string }[] 
 
 const groups: Group[] = [
   { id:"atribut_jalan", name:"Atribut Jalan", layers:[{ id:"cermin_jalan",name:"Cermin Jalan"},{ id:"high_mes_tower",name:"High Mes Tower"}, {id:"kamera_pengawas",name:"Kamera Pengawas"},{id:"lampu_jalan",name:"Lampu Jalan"},{id:"lampu_lalin",name:"Lampu Lalu Lintas"},{id:"rambu_lalin",name:"Rambu Lalu Lintas"}]},
+  { id:"bangunan", name:"Bangunan", layers:[{ id:"bangunan",name:"Bangunan"},{ id:"kawasan_kumuh",name:"Kawasan Kumuh"}, {id:"rusunawa",name:"Rusunawa"},
   { id:"batas_administrasi1", name:"Batas Administrasi", layers:[{ id:"batas_administrasi_kota",name:"Kota"},{ id:"batas_administrasi_kemantren",name:"Kemantren"}, {id:"batas_administrasi_kelurahan",name:"Kelurahan"},{id:"batas_administrasi_kampung",name:"Kampung"},{id:"batas_administrasi_rw",name:"RW"}]},
   { id:"infrastruktur_pendukung", name:"Infrastruktur Pendukung", layers:[{id:"hidran",name:"Hidran"},{id:"papan_tanah_negara",name:"Papan Tanah Negara"}, {id:"rantai_pasok",name:"Rantai Pasok"},{id:"reklame",name:"Reklame"},{id:"titik_bm",name:"Titik Bench Mark"}]},
   { id:"jaringan_drainase", name:"Jaringan Drainase", layers:[{id:"inlet",name:"Inlet"},{id:"manhole_drainase",name:"Manhole Drainase"},{id:"sumur_resapan",name:"Sumur Resapan"},{id:"zona_drainase",name:"Zona Drainase"},{id:"saluran_air_hujan",name:"Saluran Air Hujan"}]},
