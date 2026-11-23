@@ -45,7 +45,7 @@ const LABELS: Record<string, string> = {
   titik_halte: "Titik Halte", jalur_halte_trans: "Jalur Halte Trans",
   hidran: "Hidran", rantai_pasok: "Rantai Pasok", reklame: "Reklame", titik_bench_mark: "Titik Bench Mark", papan_tanah_negara: "Papan Tanah Negara",
   inlet: "Inlet", manhole_drainase: "Manhole Drainase", sumur_resapan: "Sumur Resapan", zona_drainase: "Zona Drainase", saluran_air_hujan: "Saluran Air Hujan", kabel_fo: "Kabel Fiber Optik", manhole_fo: "Manhole Fiber Optik", tiang_fiber_optik: "Tiang Fiber Optik",
-  manhole_sal: "Manhole Saluran Air Limbah", pipa_glontor: "Pipa Glontor", pipa_induk: "Pipa Induk", pipa_lateral: "Pipa Lateral", jalan_kota: "Jalan Kota", jalan_lingkungan: "Jalan Lingkungan", jalur_pemandu: "Jalur Pemandu", jembatan: "Jembatan", trotoar: "Trotoar", rumija: "Rumija",
+  manhole_sal: "Manhole Saluran Air Limbah", pipa_glontor: "Pipa Glontor", pipa_induk: "Pipa Induk", pipa_lateral: "Pipa Lateral", jalan_kota: "Jalan Kota", jalan_inspeksi: "Jalan Inspeksi", jalan_lingkungan: "Jalan Lingkungan", jalur_pemandu: "Jalur Pemandu", jembatan: "Jembatan", trotoar: "Trotoar", rumija: "Rumija",
   tegangan_menengah: "Jaringan Kabel Listrik Tegangan Menengah", tegangan_rendah: "Jaringan Kabel Listrik Tegangan Rendah", rumah_kabel: "Rumah Kabel", tiang_listrik: "Tiang Listrik", trafo_listrik: "Trafo Listrik", jaringan_pdam: "Jaringan PDAM", sungai: "Sungai", talud_sungai: "Talud Sungai"
 };
 
@@ -58,7 +58,7 @@ const PRIMARY_KEYS: Record<string, string> = {
   inlet: "id", manhole_drainase: "id", sumur_resapan: "id", zona_drainase: "id", saluran_air_hujan: "id",
   kabel_fo: "id", manhole_fo: "id", tiang_fiber_optik: "id",
   manhole_sal: "id", pipa_glontor: "id", pipa_induk: "id", pipa_lateral: "id",
-  jalan_kota: "id_jalan", jalan_lingkungan: "id_jalan", jalur_pemandu: "id", jembatan: "id", trotoar: "id_trotoar",  jalan_inspeksi: "Jalan Inspeksi", rumija: "id",
+  jalan_kota: "id_jalan", jalan_lingkungan: "id_jalan", jalur_pemandu: "id", jembatan: "id", trotoar: "id_trotoar",  jalan_inspeksi: "id", rumija: "id",
   tegangan_menengah: "id_tm", tegangan_rendah: "id_tr", rumah_kabel: "id", tiang_listrik: "id", trafo_listrik: "id",
   jaringan_pdam: "id_pdam",
   sungai: "id"
