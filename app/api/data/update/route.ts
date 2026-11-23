@@ -61,7 +61,7 @@ const PRIMARY_KEYS: Record<string, string> = {
   jalan_kota: "id_jalan", jalan_lingkungan: "id_jalan", jalur_pemandu: "id", jembatan: "id", trotoar: "id_trotoar",  jalan_inspeksi: "id", rumija: "id",
   tegangan_menengah: "id_tm", tegangan_rendah: "id_tr", rumah_kabel: "id", tiang_listrik: "id", trafo_listrik: "id",
   jaringan_pdam: "id_pdam",
-  sungai: "id"
+  sungai: "id", talud_sungai: "id"
 };
 
 const ALLOWED_TABLES = new Set<string>(GROUPS.flatMap((group) => [...group.tables]));
