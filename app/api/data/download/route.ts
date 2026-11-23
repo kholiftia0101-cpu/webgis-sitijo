@@ -128,6 +128,7 @@ const GROUPS = [
     label: "Atribut Jalan",
     tables: [
       "cermin_jalan",
+      "high_mes_tower",
       "kamera_pengawas",
       "lampu_jalan",
       "lampu_lalin",
@@ -144,6 +145,7 @@ const GROUPS = [
     label: "Infrastruktur Pendukung",
     tables: [
       "hidran",
+      "papan_tanah_negara",
       "rantai_pasok",
       "reklame",
       "titik_bm",
@@ -189,6 +191,7 @@ const GROUPS = [
       "jalur_pemandu",
       "jembatan",
       "trotoar",
+      "rumija",
     ],
   },
   {
@@ -224,6 +227,7 @@ const LABELS: Record<string, string> = {
   lampu_jalan: "Lampu Jalan",
   lampu_lalin: "Lampu Lalu Lintas",
   rambu_lalin: "Rambu Lalu Lintas",
+  high_mes_tower: "High Mes Tower",
 
   titik_halte: "Titik Halte",
   jalur_halte: "Jalur Halte Trans",
@@ -235,6 +239,7 @@ const LABELS: Record<string, string> = {
   trafo_listrik: "Trafo Listrik",
 
   hidran: "Hidran",
+  papan_tanah_negara: "Papan Tanah Negara",
   rantai_pasok: "Rantai Pasok",
   reklame: "Reklame",
   titik_bm: "Titik Bench Mark",
@@ -265,6 +270,7 @@ const LABELS: Record<string, string> = {
   jalan_inspeksi: "Jalan Inspeksi",
   jalan_lingkungan: "Jalan Lingkungan",
   jembatan: "Jembatan",
+  rumija: "Rumija",
   trotoar: "Trotoar",
 };
 
