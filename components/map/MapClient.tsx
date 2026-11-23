@@ -48,6 +48,7 @@ export default function MapClient() {
   const [expanded,setExpanded]=useState<string[]>([]);
   const [checked,setChecked]=useState<string[]>([]);
   const [baseId,setBaseId]=useState("esri");
+  const [basemapOpen,setBasemapOpen]=useState(false);
   const [kemantren,setKemantren]=useState("");
   const [kelurahan,setKelurahan]=useState("");
   const [roadEnabled,setRoadEnabled]=useState(false);
@@ -522,130 +523,75 @@ export default function MapClient() {
         box-shadow: 0 1px 4px rgba(0,0,0,.25); white-space: nowrap;
       }
       .sitijo-road-label::before { display: none; }
-      .sitijo-ui-redesign { font-family: inherit; color:#102d70; }
-      .sitijo-sidebar-title { display:flex; align-items:center; justify-content:space-between; gap:10px; }
-      .sitijo-sidebar-title .title-left { display:flex; align-items:center; gap:10px; }
-      .sitijo-sidebar-title .title-icon { color:#087fe5; display:flex; }
-      .sitijo-sidebar-title .collapse-btn { border:0; background:transparent; color:#102d70; cursor:pointer; font-size:17px; padding:4px 8px; }
-      .sitijo-redesign-section-title { display:flex; align-items:center; gap:9px; font-size:14px; font-weight:800; color:#102d70; margin:4px 0 11px; }
-      .sitijo-redesign-filter-row { display:grid; grid-template-columns:100px minmax(0,1fr); align-items:center; gap:8px; margin:8px 0; }
-      .sitijo-redesign-filter-row label { font-size:12px; font-weight:700; color:#17366f; }
-      .sitijo-redesign-filter-row select { width:100%; min-width:0; height:34px; border:1px solid #cddced; border-radius:10px; background:#fff; padding:0 9px; color:#15346d; font-size:12px; }
-      .sitijo-redesign-group { border:1px solid #e0eaf5; border-radius:12px; overflow:hidden; margin:5px 0; background:#fff; }
-      .sitijo-redesign-group-btn { width:100%; display:flex; align-items:center; gap:9px; border:0; padding:10px 11px; color:#15346d; background:linear-gradient(180deg,#f4f8fe,#eaf2fd); cursor:pointer; text-align:left; font-size:12px; font-weight:800; }
-      .sitijo-redesign-group-btn .group-count { margin-left:auto; background:#dceafe; color:#1c4f9c; border-radius:20px; padding:2px 8px; font-size:11px; }
-      .sitijo-redesign-group-btn .group-arrow { margin-left:5px; font-size:11px; }
-      .sitijo-redesign-layer-list { padding:7px 10px 9px; background:#f9fbff; border-top:1px solid #e5edf7; }
-      .sitijo-redesign-layer-row { display:flex; align-items:center; gap:8px; min-height:29px; padding:2px 1px; font-size:12px; color:#18366e; }
-      .sitijo-redesign-layer-row input[type=checkbox] { display:none; }
-      .sitijo-redesign-switch { margin-left:auto; width:36px; height:20px; border-radius:20px; background:#cbd5e1; position:relative; transition:.18s; flex:none; }
-      .sitijo-redesign-switch:after { content:''; position:absolute; top:3px; left:3px; width:14px; height:14px; border-radius:50%; background:#fff; box-shadow:0 1px 3px #0002; transition:.18s; }
-      .sitijo-redesign-layer-row input:checked + .sitijo-redesign-switch { background:#0aa5e9; }
-      .sitijo-redesign-layer-row input:checked + .sitijo-redesign-switch:after { left:19px; }
-      .sitijo-redesign-basemap { position:absolute; top:12px; right:72px; z-index:1000; width:min(360px,calc(100vw - 450px)); background:rgba(255,255,255,.96); border:1px solid #dbe7f4; border-radius:18px; box-shadow:0 6px 22px #17376d1c; padding:10px; backdrop-filter:blur(10px); }
-      .sitijo-redesign-basemap-title { font-size:13px; font-weight:800; color:#16356f; padding:2px 5px 8px; display:flex; align-items:center; gap:7px; }
-      .sitijo-redesign-basemap-grid { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:7px; }
-      .sitijo-redesign-basemap-card { min-width:0; border:1px solid #dce6f3; border-radius:12px; background:#fff; padding:4px; cursor:pointer; color:#14336d; font-size:11px; font-weight:700; line-height:1.25; position:relative; overflow:hidden; }
-      .sitijo-redesign-basemap-card.selected { border:2px solid #0787e8; padding:3px; box-shadow:0 0 0 2px #0787e81a; }
-      .sitijo-redesign-basemap-card img { display:block; width:100%; height:67px; object-fit:cover; border-radius:8px; margin-bottom:5px; background:#e8f0f8; }
-      .sitijo-redesign-basemap-card span { display:block; min-height:28px; text-align:center; }
-      .sitijo-redesign-basemap-check { position:absolute; right:5px; top:5px; width:20px; height:20px; border-radius:50%; color:#fff; background:#0787e8; display:grid; place-items:center; font-size:12px; }
-      .sitijo-redesign-controls { display:flex; flex-direction:column; gap:7px; }
-      .sitijo-redesign-controls button { width:44px; height:44px; display:grid; place-items:center; border:1px solid #dce7f3; border-radius:12px; background:#fff; color:#15346e; font-size:20px; cursor:pointer; box-shadow:0 2px 8px #17376d12; }
-      .sitijo-redesign-controls button:hover { color:#0787e8; background:#f1f7ff; }
-      .sitijo-redesign-controls .sitijo-compass { padding:0; }
-      .sitijo-redesign-legend { background:rgba(255,255,255,.96); border:1px solid #dce7f3; border-radius:16px; box-shadow:0 5px 18px #17376d1c; backdrop-filter:blur(9px); }
-      .sitijo-redesign-status { display:flex; align-items:center; gap:8px; background:#fff; border:1px solid #dce7f3; border-radius:25px; box-shadow:0 4px 14px #17376d1c; padding:9px 14px; color:#17356d; font-size:12px; font-weight:800; }
-      @media(max-width:760px){ .sitijo-redesign-basemap{right:10px;top:10px;width:min(300px,calc(100vw - 90px));} .sitijo-redesign-basemap-grid{grid-template-columns:repeat(2,minmax(0,1fr));} .sitijo-redesign-basemap-card img{height:52px;} .sitijo-redesign-filter-row{grid-template-columns:82px minmax(0,1fr);} }
     `}</style>
     {loading&&<div className="sitijo-loading-overlay"><div className="loading-box"><div className="loader"/><h2>Sedang memuat peta...</h2><p>Menyiapkan data peta, mohon tunggu sebentar.</p></div></div>}
-    <button className="sitijo-sidebar-toggle" onClick={()=>setSidebarOpen(v=>!v)} aria-label="Buka/tutup panel">☰</button>
-    <aside className={`sitijo-sidebar ${sidebarOpen?"":"hidden"}`}>
-      <div className="sitijo-sidebar-title">
-        <span className="title-left"><span className="title-icon">▱</span>Pengaturan Peta</span>
-        <button className="collapse-btn" onClick={()=>setSidebarOpen(false)} aria-label="Tutup panel">⌃</button>
-      </div>
-      <div className="sitijo-sidebar-body">
-      <div className="sitijo-filter">
-        <label className="sitijo-road-toggle">
-          <input
-            type="checkbox"
-            checked={roadEnabled}
-            onChange={e => {
-              setRoadEnabled(e.target.checked);
-              if (!e.target.checked) setRoadSearch("");
-            }}
-          />
-          Aktifkan Fitur Jalan
-        </label>
-
-        <h5>Fitur Jalan</h5>
-
-        <input
-          list="sitijo-road-list"
-          type="text"
-          value={roadSearch}
-          disabled={!roadEnabled || !checked.includes("jalan_kota") || roadNames.length === 0}
-          onChange={e => setRoadSearch(e.target.value)}
-          placeholder={
-            !roadEnabled
-              ? "Aktifkan fitur jalan terlebih dahulu..."
-              : !checked.includes("jalan_kota")
-              ? "Aktifkan layer Jalan Kota terlebih dahulu..."
-              : roadNames.length === 0
-              ? "Menunggu data Jalan Kota..."
-              : "Cari nama jalan..."
-          }
-        />
-
-        <datalist id="sitijo-road-list">
-          {roadNames.map((name, index) => (
-            <option key={`${name}-${index}`} value={name} />
-          ))}
-        </datalist>
-
-        {roadEnabled && !checked.includes("jalan_kota") && (
-          <small className="sitijo-error">
-            Aktifkan layer Jalan Kota pada bagian Jaringan Jalan terlebih dahulu.
-          </small>
-        )}
-
-        {roadEnabled && checked.includes("jalan_kota") && roadNames.length > 0 && (
-          <small>{roadNames.length.toLocaleString("id-ID")} nama jalan tersedia</small>
-        )}
-
-        {roadEnabled && roadSearch.trim() && !roadNames.some(
-          name => name.toLowerCase() === roadSearch.trim().toLowerCase()
-        ) && (
-          <small className="sitijo-error">
-            Nama jalan tidak ditemukan.
-          </small>
-        )}
-      </div>
-
-        <div className="sitijo-filter">
-          <div className="sitijo-redesign-section-title">⌖ Filter Wilayah</div>
-          <div className="sitijo-redesign-filter-row"><label>Kemantren</label><select value={kemantren} onChange={e=>{setKemantren(e.target.value);setKelurahan("")}}>
-            <option value="">Pilih Kemantren…</option>{Object.keys(wilayah).sort().map(k=><option key={k} value={k}>{k}</option>)}
-          </select></div>
-          <div className="sitijo-redesign-filter-row"><label>Kelurahan</label><select value={kelurahan} disabled={!kemantren} onChange={e=>setKelurahan(e.target.value)}>
-            <option value="">Pilih Kelurahan…</option>{(wilayah[kemantren]||[]).sort().map(k=><option key={k} value={k}>{k}</option>)}
-          </select></div>
+    <style>{`
+      .sitijo-modern-toolbar{position:absolute;z-index:1000;left:14px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:7px;padding:7px;background:rgba(255,255,255,.92);border:1px solid rgba(226,232,240,.8);border-radius:18px;box-shadow:0 8px 28px rgba(15,35,70,.12);backdrop-filter:blur(14px)}
+      .sitijo-modern-toolbar button{width:42px;height:42px;border:0;background:transparent;border-radius:13px;color:#64748b;display:grid;place-items:center;cursor:pointer;transition:.18s}
+      .sitijo-modern-toolbar button:hover,.sitijo-modern-toolbar button.active{background:#eaf3ff;color:#1479f8}
+      .sitijo-modern-toolbar svg{width:21px;height:21px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+      .sitijo-modern-panel{position:absolute;z-index:999;left:72px;top:16px;bottom:16px;width:350px;max-width:calc(100vw - 90px);border-radius:20px;background:rgba(255,255,255,.95);border:1px solid rgba(255,255,255,.8);box-shadow:0 12px 40px rgba(16,35,65,.16);backdrop-filter:blur(18px);overflow:hidden;display:flex;flex-direction:column;color:#18365f}
+      .sitijo-modern-head{display:flex;align-items:center;justify-content:space-between;padding:17px 18px;border-bottom:1px solid #edf1f6;font-weight:700;font-size:15px}
+      .sitijo-modern-head button{border:0;background:#f1f6ff;color:#2675dd;border-radius:10px;width:32px;height:32px;cursor:pointer}
+      .sitijo-modern-body{padding:14px 16px 20px;overflow:auto}
+      .sitijo-modern-section{margin-bottom:17px}
+      .sitijo-modern-label{font-size:10px;font-weight:800;letter-spacing:.09em;color:#8b9bb1;margin:0 0 9px}
+      .sitijo-modern-panel select,.sitijo-modern-panel input[list]{width:100%;height:38px;border:1px solid #e2eaf3;background:#f8fafc;border-radius:11px;padding:0 11px;color:#344963;outline:none;margin-bottom:7px;font-size:12px}
+      .sitijo-modern-panel .sitijo-road-toggle{display:flex;align-items:center;gap:8px;font-size:12px;margin-bottom:8px}
+      .sitijo-modern-panel h5{font-size:12px;color:#64748b;margin:8px 0}
+      .sitijo-modern-tree>div{border-bottom:1px solid #f0f3f7}
+      .sitijo-modern-class{width:100%;display:flex;align-items:center;gap:9px;padding:11px 7px;border:0;background:transparent;color:#334b68;font-size:12px;font-weight:650;text-align:left;cursor:pointer}
+      .sitijo-modern-class:hover{background:#f7faff;border-radius:10px}
+      .sitijo-modern-count{margin-left:auto;background:#eef5ff;color:#3478d4;border-radius:20px;padding:3px 8px;font-size:10px}
+      .sitijo-modern-sub{padding:2px 8px 9px 16px;background:#f8fafc;border-radius:12px;margin-bottom:7px}
+      .sitijo-modern-sub label{display:flex;align-items:center;gap:9px;padding:7px 3px;font-size:12px;color:#475569}
+      .sitijo-modern-sub input{accent-color:#1685f5}
+      .sitijo-basemap-pop{position:absolute;z-index:1000;right:75px;top:16px;width:300px;padding:12px;background:rgba(255,255,255,.96);border:1px solid #e8eef6;border-radius:18px;box-shadow:0 12px 35px rgba(15,35,70,.18);backdrop-filter:blur(16px)}
+      .sitijo-basemap-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
+      .sitijo-basemap-card{border:1px solid #e5ebf3;background:#fff;border-radius:12px;padding:7px;text-align:left;cursor:pointer;color:#344963;font-size:11px;transition:.18s}
+      .sitijo-basemap-card:hover{transform:translateY(-2px);border-color:#93c5fd}
+      .sitijo-basemap-card.selected{border:2px solid #1685f5;background:#f3f8ff}
+      .sitijo-basemap-preview{height:65px;border-radius:8px;margin-bottom:6px;background-size:cover;background-position:center}
+      .sitijo-basemap-trigger{width:48px;height:48px;border:1px solid #dbe7f5;border-radius:15px;background:#fff;color:#1479f8;box-shadow:0 6px 20px rgba(20,60,100,.13);cursor:pointer;display:grid;place-items:center}
+      .sitijo-basemap-trigger svg{width:23px;height:23px}
+      .sitijo-modern-control button{border-radius:13px!important;margin-bottom:5px!important;background:#fff!important;border:1px solid #e8eef5!important;color:#52657d!important;box-shadow:0 4px 14px rgba(20,40,70,.08)!important;font-size:18px!important}
+      .sitijo-modern-control button:hover{color:#1479f8!important;background:#f3f8ff!important}
+      @media(max-width:600px){.sitijo-modern-panel{left:66px;width:calc(100vw - 82px);top:10px;bottom:10px}.sitijo-basemap-pop{right:66px;width:min(280px,calc(100vw - 80px))}}
+    `}</style>
+    <div className="sitijo-modern-toolbar">
+      <button className={sidebarOpen?"active":""} title="Layer" onClick={()=>setSidebarOpen(v=>!v)}><svg viewBox="0 0 24 24"><path d="m3 7 9-4 9 4-9 4-9-4Z"/><path d="m3 12 9 4 9-4M3 17l9 4 9-4"/></svg></button>
+      <button title="Update Data"><svg viewBox="0 0 24 24"><path d="M20 7v5h-5"/><path d="M4 17a8 8 0 0 0 13-5M4 7v5h5"/><path d="M20 17A8 8 0 0 0 7 5"/></svg></button>
+      <button title="Tambah Data"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg></button>
+      <button title="Unduhan"><svg viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5"/><path d="M4 17v3h16v-3"/></svg></button>
+    </div>
+    {sidebarOpen&&<aside className="sitijo-modern-panel">
+      <div className="sitijo-modern-head"><span>✦ Pengaturan Peta</span><button title="Tutup panel" onClick={()=>setSidebarOpen(false)}>×</button></div>
+      <div className="sitijo-modern-body">
+        <div className="sitijo-modern-section">
+          <p className="sitijo-modern-label">FILTER WILAYAH</p>
+          <select value={kemantren} onChange={e=>{setKemantren(e.target.value);setKelurahan("")}}>
+            <option value="">Pilih Kemantren...</option>{Object.keys(wilayah).sort().map(k=><option key={k} value={k}>{k}</option>)}
+          </select>
+          <select value={kelurahan} disabled={!kemantren} onChange={e=>setKelurahan(e.target.value)}>
+            <option value="">Pilih Kelurahan...</option>{(wilayah[kemantren]||[]).sort().map(k=><option key={k} value={k}>{k}</option>)}
+          </select>
           {boundaryError&&<small className="sitijo-error">{boundaryError}</small>}
         </div>
-        <div className="sitijo-filter">
-          <div className="sitijo-redesign-section-title">▱ Layer Infrastruktur</div>
-          <div className="sitijo-layer-tree">{groups.map(g=><div className="sitijo-redesign-group" key={g.id}>
-            <button className="sitijo-redesign-group-btn" onClick={()=>setExpanded(v=>v.includes(g.id)?v.filter(x=>x!==g.id):[...v,g.id])}>
-              <span>▱</span><span>{g.name}</span><span className="group-count">{g.layers.length}</span><span className="group-arrow">{expanded.includes(g.id)?"⌃":"⌄"}</span>
+        <div className="sitijo-modern-section">
+          <p className="sitijo-modern-label">LAYER INFRASTRUKTUR</p>
+          <label className="sitijo-road-toggle"><input type="checkbox" checked={roadEnabled} onChange={e=>{setRoadEnabled(e.target.checked);if(!e.target.checked)setRoadSearch("")}}/> Aktifkan fitur jalan</label>
+          <input list="sitijo-road-list" value={roadSearch} disabled={!roadEnabled||!checked.includes("jalan_kota")||roadNames.length===0} onChange={e=>setRoadSearch(e.target.value)} placeholder={!roadEnabled?"Aktifkan fitur jalan...":!checked.includes("jalan_kota")?"Aktifkan layer Jalan Kota...":"Cari nama jalan..."}/>
+          <datalist id="sitijo-road-list">{roadNames.map((name,index)=><option key={`${name}-${index}`} value={name}/>)}</datalist>
+          {roadEnabled&&!checked.includes("jalan_kota")&&<small className="sitijo-error">Aktifkan layer Jalan Kota terlebih dahulu.</small>}
+          <div className="sitijo-modern-tree">{groups.map(g=><div key={g.id}>
+            <button className="sitijo-modern-class" onClick={()=>setExpanded(v=>v.includes(g.id)?v.filter(x=>x!==g.id):[...v,g.id])}>
+              <span>{expanded.includes(g.id)?"⌄":"›"}</span>{g.name}<span className="sitijo-modern-count">{g.layers.filter(l=>checked.includes(l.id)).length||g.layers.length}</span>
             </button>
-            {expanded.includes(g.id)&&<div className="sitijo-redesign-layer-list">{g.layers.map(l=><label className="sitijo-redesign-layer-row" key={l.id}>
-              <input type="checkbox" checked={checked.includes(l.id)} onChange={e=>toggleLayer(l.id,e.target.checked)}/><span className="sitijo-redesign-switch"/><span>{l.name}</span>
-            </label>)}</div>}
+            {expanded.includes(g.id)&&<div className="sitijo-modern-sub">{g.layers.map(l=><label key={l.id}><input type="checkbox" checked={checked.includes(l.id)} onChange={e=>toggleLayer(l.id,e.target.checked)}/>{l.name}</label>)}</div>}
           </div>)}</div>
         </div>
       </div>
-    </aside>
+    </aside>}
     <div className="sitijo-layer-loading" style={{display:loadingLayers.length?"block":"none"}}>
       <div className="loading-header"><div className="loading-spinner"/><div><div className="loading-title">Sedang memuat</div><div className="loading-layer">{loadingLayers.join(", ")}</div></div></div>
       <div className="loading-progress"><div className="loading-progress-bar"/></div><div className="loading-count">{loadingLayers.length} layer sedang diproses</div>
@@ -653,10 +599,10 @@ export default function MapClient() {
     <MapContainer center={[-7.7972,110.3688]} zoom={15} minZoom={10} maxZoom={21} zoomControl={false} style={{height:"100%",width:"100%"}}>
       <TileLayer key={selectedBase.id} attribution={selectedBase.attribution} url={selectedBase.url} minZoom={selectedBase.minZoom??0} maxZoom={selectedBase.maxZoom??21} errorTileUrl={selectedBase.id==="ortho"?"/assets/blank.jpg":undefined}/>
       <MapExtras onReady={setMap}/>
-      <MapControls onFit={fitAll} onLocate={locate} baseId={baseId} onBaseChange={setBaseId}/>
+      <MapControls onFit={fitAll} onLocate={locate} baseId={baseId} onBaseChange={setBaseId} basemapOpen={basemapOpen} onBasemapToggle={()=>setBasemapOpen(v=>!v)}/>
     </MapContainer>
-    <div className="sitijo-status sitijo-redesign-status"><span>▱</span>{checked.length} layer aktif <span>⌄</span></div>
-    <div className="sitijo-legend sitijo-redesign-legend">
+    <div className="sitijo-status">{checked.length} layer dipilih</div>
+    <div className="sitijo-legend">
   <strong>Legenda</strong>
 
   <div className="legend-content">
@@ -685,43 +631,32 @@ export default function MapClient() {
   </div>;
 }
 
-function MapControls({onFit,onLocate,baseId,onBaseChange}:{onFit:()=>void;onLocate:()=>void;baseId:string;onBaseChange:(v:string)=>void}) {
+function MapControls({onFit,onLocate,baseId,onBaseChange,basemapOpen,onBasemapToggle}:{onFit:()=>void;onLocate:()=>void;baseId:string;onBaseChange:(v:string)=>void;basemapOpen:boolean;onBasemapToggle:()=>void}) {
   const map=useMap();
   const previews:Record<string,string> = {
-    esri:"https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/15/17095/26430",
-    topo:"https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/15/17095/26430",
-    street:"https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/15/17095/26430",
-    osm:"https://tile.openstreetmap.org/15/26430/17095.png",
-    ortho:"https://sitijo.wuaze.com/assets/ortho/15/26430/17095.png"
+    esri:"https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/10/510/510",
+    topo:"https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/10/510/510",
+    street:"https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/10/510/510",
+    osm:"https://tile.openstreetmap.org/10/510/510",
+    ortho:"https://sitijo.wuaze.com/assets/ortho/17/65432/65432.png"
   };
-  const shortNames:Record<string,string>={esri:"ESRI World Imagery",topo:"ESRI World Topographic",street:"ESRI World Street Map",osm:"Open Street Map",ortho:"Orthophoto 2023"};
   return <>
-    <div className="sitijo-redesign-basemap">
-      <div className="sitijo-redesign-basemap-title"><span>▱</span> Basemap</div>
-      <div className="sitijo-redesign-basemap-grid">
-        {baseLayers.map(x=><button key={x.id} type="button" className={`sitijo-redesign-basemap-card ${baseId===x.id?"selected":""}`} onClick={()=>onBaseChange(x.id)} aria-pressed={baseId===x.id}>
-          {baseId===x.id&&<span className="sitijo-redesign-basemap-check">✓</span>}
-          <img src={previews[x.id]} alt={shortNames[x.id]} loading="lazy" />
-          <span>{shortNames[x.id]}</span>
-        </button>)}
-      </div>
-    </div>
     <div className="leaflet-top leaflet-right sitijo-map-controls">
-      <div className="sitijo-redesign-controls">
-        <button title="Arah Utara" className="sitijo-compass" aria-label="Arah Utara">
-          <svg viewBox="0 0 40 40" width="28" height="28" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="20" cy="20" r="17" fill="#fff" stroke="#64748b" strokeWidth="1.5"/>
-            <path d="M20 5 L26 23 L20 19 L14 23 Z" fill="#dc2626"/>
-            <path d="M20 35 L14 17 L20 21 L26 17 Z" fill="#64748b"/>
-            <circle cx="20" cy="20" r="2" fill="#fff"/>
-            <text x="20" y="11" textAnchor="middle" fontSize="7" fontWeight="bold" fill="#dc2626">N</text>
-          </svg>
-        </button>
-        <button title="Perbesar seluruh layer" onClick={onFit}>⛶</button>
+      <div className="leaflet-control"><button className="sitijo-basemap-trigger" title="Pilih basemap" onClick={onBasemapToggle}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="m3 7 9-4 9 4-9 4-9-4Z"/><path d="m3 12 9 4 9-4M3 17l9 4 9-4"/></svg></button></div>
+      <div className="leaflet-control sitijo-modern-control">
+        <button title="Arah Utara" className="sitijo-compass" aria-label="Arah Utara"><svg viewBox="0 0 40 40" width="28" height="28"><circle cx="20" cy="20" r="17" fill="#fff" stroke="#64748b" strokeWidth="1.5"/><path d="M20 5 L26 23 L20 19 L14 23 Z" fill="#dc2626"/><path d="M20 35 L14 17 L20 21 L26 17 Z" fill="#64748b"/><circle cx="20" cy="20" r="2" fill="#fff"/><text x="20" y="11" textAnchor="middle" fontSize="7" fontWeight="bold" fill="#dc2626">N</text></svg></button>
+        <button title="Perbesar seluruh layer" onClick={onFit}>⌗</button>
         <button title="Lokasi saya" onClick={onLocate}>◎</button>
         <button title="Zoom in" onClick={()=>map.zoomIn()}>+</button>
         <button title="Zoom out" onClick={()=>map.zoomOut()}>−</button>
       </div>
     </div>
+    {basemapOpen&&<div className="sitijo-basemap-pop">
+      <div style={{display:"flex",justifyContent:"space-between",alignItems:"center",marginBottom:9,fontSize:13,fontWeight:700,color:"#294563"}}><span>Basemap</span><button onClick={onBasemapToggle} style={{border:0,background:"#f1f5f9",borderRadius:8,width:25,height:25,cursor:"pointer"}}>×</button></div>
+      <div className="sitijo-basemap-grid">{baseLayers.map(layer=><button key={layer.id} className={`sitijo-basemap-card ${baseId===layer.id?"selected":""}`} onClick={()=>{onBaseChange(layer.id);onBasemapToggle()}}>
+        <div className="sitijo-basemap-preview" style={{backgroundImage:`url(${previews[layer.id]})`}}/>
+        {layer.name.replace("ESRI World ","ESRI ")}
+      </button>)}</div>
+    </div>}
   </>;
 }
