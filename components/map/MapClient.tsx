@@ -546,7 +546,7 @@ export default function MapClient() {
       .sitijo-modern-sub{padding:2px 8px 9px 16px;background:#f8fafc;border-radius:12px;margin-bottom:7px}
       .sitijo-modern-sub label{display:flex;align-items:center;gap:9px;padding:7px 3px;font-size:12px;color:#475569}
       .sitijo-modern-sub input{accent-color:#1685f5}
-      .sitijo-basemap-pop{position:absolute;z-index:1000;right:75px;top:16px;width:300px;padding:12px;background:rgba(255,255,255,.96);border:1px solid #e8eef6;border-radius:18px;box-shadow:0 12px 35px rgba(15,35,70,.18);backdrop-filter:blur(16px)}
+      .sitijo-basemap-pop{position:absolute;z-index:1000;right:42px;top:16px;width:300px;padding:12px;background:rgba(255,255,255,.96);border:1px solid #e8eef6;border-radius:18px;box-shadow:0 12px 35px rgba(15,35,70,.18);backdrop-filter:blur(16px)}
       .sitijo-basemap-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:9px}
       .sitijo-basemap-card{border:1px solid #e5ebf3;background:#fff;border-radius:12px;padding:7px;text-align:left;cursor:pointer;color:#344963;font-size:11px;transition:.18s}
       .sitijo-basemap-card:hover{transform:translateY(-2px);border-color:#93c5fd}
@@ -561,8 +561,17 @@ export default function MapClient() {
       .sitijo-modern-control button:hover{color:#1685f5!important;background:#eaf3ff!important;border-color:#b8d7ff!important;transform:translateY(-1px)}
       .sitijo-modern-control button svg{width:22px!important;height:22px!important;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
       .sitijo-modern-control .sitijo-compass svg{width:26px!important;height:26px!important}
-      .sitijo-basemap-trigger{width:48px;height:48px;border:1px solid #dce8f8;border-radius:15px;background:#fff;color:#1685f5;box-shadow:0 8px 24px rgba(20,70,130,.13);cursor:pointer;display:grid;place-items:center;transition:.16s}
-      .sitijo-basemap-trigger:hover{background:#eaf3ff;border-color:#b8d7ff;transform:translateY(-1px)}
+      .sitijo-control-dock{display:flex;flex-direction:column;align-items:center;gap:4px;padding:3px;background:rgba(255,255,255,.95);border:1px solid #dce8f8;border-radius:11px;box-shadow:0 5px 16px rgba(20,70,130,.13);backdrop-filter:blur(10px)}
+      .sitijo-control-dock .sitijo-modern-control{padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;gap:3px!important;border-radius:0!important}
+      .sitijo-control-dock .sitijo-modern-control button,.sitijo-control-dock .sitijo-basemap-trigger{width:22px!important;height:22px!important;min-width:22px!important;border-radius:6px!important;border:1px solid #e2edfc!important;background:#fff!important;color:#1685f5!important}
+      .sitijo-control-dock button svg{width:11px!important;height:11px!important}
+      .sitijo-control-dock .sitijo-modern-control .sitijo-compass svg{width:13px!important;height:13px!important}
+      .sitijo-control-dock .sitijo-basemap-trigger{display:grid!important;place-items:center!important;padding:0!important;cursor:pointer;transition:.16s!important}
+      .sitijo-control-dock .sitijo-basemap-trigger svg{width:11px!important;height:11px!important}
+      .sitijo-control-dock:after{content:"";width:14px;height:1px;background:#e7effa;margin:1px 0}
+      .sitijo-basemap-trigger:hover{background:#eaf3ff!important;border-color:#b8d7ff!important}
+      .sitijo-map-controls{gap:0!important;margin:8px 8px 0 0!important}
+      .sitijo-control-dock button:hover{background:#eaf3ff!important;border-color:#b8d7ff!important}
       @media(max-width:600px){.sitijo-modern-panel{left:66px;width:calc(100vw - 82px);top:10px;bottom:10px}.sitijo-basemap-pop{right:66px;width:min(280px,calc(100vw - 80px))}}
     `}</style>
     <div className="sitijo-modern-toolbar">
@@ -649,14 +658,16 @@ function MapControls({onFit,onLocate,baseId,onBaseChange,basemapOpen,onBasemapTo
   };
   return <>
     <div className="leaflet-top leaflet-right sitijo-map-controls">
-      <div className="leaflet-control"><button className="sitijo-basemap-trigger" title="Pilih basemap" onClick={onBasemapToggle}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="m3 7 9-4 9 4-9 4-9-4Z"/><path d="m3 12 9 4 9-4M3 17l9 4 9-4"/></svg></button></div>
-      <div className="leaflet-control sitijo-modern-control">
+      <div className="leaflet-control sitijo-control-dock">
+        <button className="sitijo-basemap-trigger" title="Pilih basemap" aria-label="Pilih basemap" onClick={onBasemapToggle}><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8"><path d="m3 7 9-4 9 4-9 4-9-4Z"/><path d="m3 12 9 4 9-4M3 17l9 4 9-4"/></svg></button>
+        <div className="leaflet-control sitijo-modern-control">
         <button title="Arah Utara" className="sitijo-compass" aria-label="Arah Utara"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" stroke="#bfdbfe" strokeWidth="1.5"/><path d="M20 5 26 22 20 19 14 22Z" fill="#1685f5" stroke="#1685f5"/><path d="M20 35 14 18 20 21 26 18Z" fill="#60a5fa" stroke="#60a5fa"/><circle cx="20" cy="20" r="2.4" fill="#fff" stroke="#1685f5"/></svg></button>
         <button title="Perbesar seluruh layer" aria-label="Perbesar seluruh layer" onClick={onFit}><svg viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/></svg></button>
         <button title="Lokasi saya" aria-label="Lokasi saya" onClick={onLocate}><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></button>
         <button title="Layar penuh" aria-label="Layar penuh" onClick={()=>{const el=map.getContainer();if(!document.fullscreenElement)el.requestFullscreen?.();else document.exitFullscreen?.()}}><svg viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/></svg></button>
         <button title="Zoom in" aria-label="Zoom in" onClick={()=>map.zoomIn()}><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
         <button title="Zoom out" aria-label="Zoom out" onClick={()=>map.zoomOut()}><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
+        </div>
       </div>
     </div>
     {basemapOpen&&<div className="sitijo-basemap-pop">
