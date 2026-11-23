@@ -581,16 +581,20 @@ export default function MapClient() {
       .sitijo-map-info-coords span{font-size:9px;font-weight:800;letter-spacing:.04em;color:#8ba0b8}
       .sitijo-map-info-coords strong{font-weight:600;color:#375778}
       .sitijo-map-info-coords i{height:12px;width:1px;background:#dbe6f2;margin:0 2px}
-      .sitijo-legend-modern{position:absolute;z-index:850;right:14px;bottom:14px;max-width:220px;min-width:150px;padding:10px 12px;background:rgba(255,255,255,.95);border:1px solid #dce8f8;border-radius:13px;box-shadow:0 5px 18px rgba(20,70,130,.12);backdrop-filter:blur(12px);color:#23466e}
-      .sitijo-legend-heading{display:flex;align-items:center;gap:7px;margin-bottom:7px;font-size:12px;color:#173e73}
+      .sitijo-legend-modern{position:absolute;z-index:850;right:14px;bottom:54px;max-width:250px;min-width:190px;padding:11px 12px;background:rgba(255,255,255,.96);border:1px solid #dce8f8;border-radius:15px;box-shadow:0 6px 20px rgba(20,70,130,.14);backdrop-filter:blur(12px);color:#23466e}
+      .sitijo-legend-heading{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:12px;color:#173e73}
       .sitijo-legend-icon{display:grid;place-items:center;color:#1685f5}
-      .sitijo-legend-icon svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+      .sitijo-legend-icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+      .sitijo-legend-active{margin-left:auto;font-size:10px;font-weight:700;color:#1676d3;background:#eaf3ff;border-radius:999px;padding:4px 8px;white-space:nowrap}
+      .sitijo-legend-coords{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:9px;padding:7px 8px;background:#f4f8fd;border:1px solid #e7eef8;border-radius:9px;font-size:9px;color:#607995;font-variant-numeric:tabular-nums}
+      .sitijo-legend-coords span{font-weight:800;letter-spacing:.03em;color:#8ba0b8}
+      .sitijo-legend-coords strong{font-size:10px;font-weight:600;color:#375778}
       .sitijo-legend-content{display:flex;flex-direction:column;gap:5px;max-height:150px;overflow:auto}
       .sitijo-legend-row{display:flex;align-items:center;gap:7px;font-size:10px;line-height:1.35;color:#496582}
       .sitijo-legend-row>span:last-child{overflow-wrap:anywhere}
       .sitijo-legend-empty{font-size:10px;color:#9aabc0;font-style:italic}
       .sitijo-legend-modern .legend-swatch-line{flex:none;width:18px}
-      @media(max-width:600px){.sitijo-map-info{left:8px;bottom:8px;min-width:0;padding:7px 9px}.sitijo-legend-modern{right:8px;bottom:8px;max-width:165px;min-width:130px;padding:8px 10px}.sitijo-legend-content{max-height:110px}}
+      @media(max-width:600px){.sitijo-legend-modern{right:8px;bottom:48px;max-width:190px;min-width:155px;padding:8px 10px}.sitijo-legend-content{max-height:105px}.sitijo-legend-coords{gap:5px;padding:6px}}
       @media(max-width:600px){.sitijo-modern-panel{left:66px;width:calc(100vw - 82px);top:10px;bottom:10px}.sitijo-basemap-pop{right:66px;width:min(280px,calc(100vw - 80px))}}
     `}</style>
     <div className="sitijo-modern-toolbar">
@@ -636,19 +640,13 @@ export default function MapClient() {
       <MapExtras onReady={setMap} onCoordinate={(lat,lng)=>setCoordinates({lat,lng})}/>
       <MapControls onFit={fitAll} onLocate={locate} baseId={baseId} onBaseChange={setBaseId} basemapOpen={basemapOpen} onBasemapToggle={()=>setBasemapOpen(v=>!v)}/>
     </MapContainer>
-    <div className="sitijo-map-info">
-      <div className="sitijo-map-info-top">
-        <span className="sitijo-map-info-icon"><svg viewBox="0 0 24 24"><path d="m3 7 9-4 9 4-9 4-9-4Z"/><path d="m3 12 9 4 9-4M3 17l9 4 9-4"/></svg></span>
-        <span className="sitijo-map-info-count">{checked.length} layer aktif</span>
-      </div>
-      <div className="sitijo-map-info-coords"><span>LAT</span><strong>{coordinates.lat}</strong><i/><span>LNG</span><strong>{coordinates.lng}</strong></div>
-    </div>
     <div className="sitijo-legend sitijo-legend-modern">
-      <div className="sitijo-legend-heading"><span className="sitijo-legend-icon"><svg viewBox="0 0 24 24"><path d="m3 7 9-4 9 4-9 4-9-4Z"/><path d="m3 12 9 4 9-4M3 17l9 4 9-4"/></svg></span><strong>Legenda</strong></div>
+      <div className="sitijo-legend-heading"><span className="sitijo-legend-icon"><svg viewBox="0 0 24 24"><path d="M3.5 5.5 9 3l6 2 5.5-2.5V18L15 20.5l-6-2-5.5 2.5z"/><path d="M9 3v15.5M15 5v15.5"/></svg></span><strong>Legenda</strong><span className="sitijo-legend-active">{checked.length} aktif</span></div>
       <div className="sitijo-legend-content">
         {checked.length ? checked.map(id => <div className="sitijo-legend-row" key={id}>{getLegendSwatch(id)}<span>{groups.flatMap(g=>g.layers).find(x=>x.id===id)?.name||id}</span></div>) : <div className="sitijo-legend-empty">Tidak ada layer aktif</div>}
         <div className="sitijo-legend-row"><span className="legend-swatch-line" style={{borderTop:"2px dashed #fa2b66"}}/><span>Batas Kelurahan</span></div>
       </div>
+      <div className="sitijo-legend-coords"><span>LAT</span><strong>{coordinates.lat}</strong><span>LNG</span><strong>{coordinates.lng}</strong></div>
     </div>
   </div>;
 }
