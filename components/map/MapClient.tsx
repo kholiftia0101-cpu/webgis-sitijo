@@ -561,13 +561,13 @@ export default function MapClient() {
       .sitijo-modern-control button:hover{color:#1685f5!important;background:#eaf3ff!important;border-color:#b8d7ff!important;transform:translateY(-1px)}
       .sitijo-modern-control button svg{width:22px!important;height:22px!important;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
       .sitijo-modern-control .sitijo-compass svg{width:26px!important;height:26px!important}
-      .sitijo-control-dock{display:flex;flex-direction:column;align-items:center;gap:4px;padding:3px;background:rgba(255,255,255,.95);border:1px solid #dce8f8;border-radius:11px;box-shadow:0 5px 16px rgba(20,70,130,.13);backdrop-filter:blur(10px)}
+      .sitijo-control-dock{display:flex;flex-direction:column;align-items:center;gap:4px;padding:4px;background:rgba(255,255,255,.95);border:1px solid #dce8f8;border-radius:11px;box-shadow:0 5px 16px rgba(20,70,130,.13);backdrop-filter:blur(10px)}
       .sitijo-control-dock .sitijo-modern-control{padding:0!important;border:0!important;background:transparent!important;box-shadow:none!important;backdrop-filter:none!important;gap:3px!important;border-radius:0!important}
-      .sitijo-control-dock .sitijo-modern-control button,.sitijo-control-dock .sitijo-basemap-trigger{width:22px!important;height:22px!important;min-width:22px!important;border-radius:6px!important;border:1px solid #e2edfc!important;background:#fff!important;color:#1685f5!important}
-      .sitijo-control-dock button svg{width:11px!important;height:11px!important}
-      .sitijo-control-dock .sitijo-modern-control .sitijo-compass svg{width:13px!important;height:13px!important}
+      .sitijo-control-dock .sitijo-modern-control button,.sitijo-control-dock .sitijo-basemap-trigger{width:32px!important;height:32px!important;min-width:32px!important;border-radius:9px!important;border:1px solid #e2edfc!important;background:#fff!important;color:#1685f5!important}
+      .sitijo-control-dock button svg{width:16px!important;height:16px!important}
+      .sitijo-control-dock .sitijo-modern-control .sitijo-compass svg{width:18px!important;height:18px!important}
       .sitijo-control-dock .sitijo-basemap-trigger{display:grid!important;place-items:center!important;padding:0!important;cursor:pointer;transition:.16s!important}
-      .sitijo-control-dock .sitijo-basemap-trigger svg{width:11px!important;height:11px!important}
+      .sitijo-control-dock .sitijo-basemap-trigger svg{width:16px!important;height:16px!important}
       .sitijo-control-dock:after{content:"";width:14px;height:1px;background:#e7effa;margin:1px 0}
       .sitijo-basemap-trigger:hover{background:#eaf3ff!important;border-color:#b8d7ff!important}
       .sitijo-map-controls{gap:0!important;margin:8px 8px 0 0!important}
@@ -664,7 +664,6 @@ function MapControls({onFit,onLocate,baseId,onBaseChange,basemapOpen,onBasemapTo
         <button title="Arah Utara" className="sitijo-compass" aria-label="Arah Utara"><svg viewBox="0 0 40 40"><circle cx="20" cy="20" r="16" stroke="#bfdbfe" strokeWidth="1.5"/><path d="M20 5 26 22 20 19 14 22Z" fill="#1685f5" stroke="#1685f5"/><path d="M20 35 14 18 20 21 26 18Z" fill="#60a5fa" stroke="#60a5fa"/><circle cx="20" cy="20" r="2.4" fill="#fff" stroke="#1685f5"/></svg></button>
         <button title="Perbesar seluruh layer" aria-label="Perbesar seluruh layer" onClick={onFit}><svg viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/></svg></button>
         <button title="Lokasi saya" aria-label="Lokasi saya" onClick={onLocate}><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="7"/><circle cx="12" cy="12" r="2.5"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3"/></svg></button>
-        <button title="Layar penuh" aria-label="Layar penuh" onClick={()=>{const el=map.getContainer();if(!document.fullscreenElement)el.requestFullscreen?.();else document.exitFullscreen?.()}}><svg viewBox="0 0 24 24"><path d="M8 3H3v5M16 3h5v5M3 16v5h5M21 16v5h-5"/></svg></button>
         <button title="Zoom in" aria-label="Zoom in" onClick={()=>map.zoomIn()}><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></button>
         <button title="Zoom out" aria-label="Zoom out" onClick={()=>map.zoomOut()}><svg viewBox="0 0 24 24"><path d="M5 12h14"/></svg></button>
         </div>
