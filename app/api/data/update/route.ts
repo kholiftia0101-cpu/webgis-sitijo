@@ -55,7 +55,7 @@ const PRIMARY_KEYS: Record<string, string> = {
   cermin_jalan: "id", kamera_pengawas: "id", lampu_jalan: "id", lampu_lalu_lintas: "id", rambu_lalu_lintas: "id",  high_mes_tower: "id",
   titik_halte: "id", jalur_halte_trans: "id",
   hidran: "id", rantai_pasok: "id", reklame: "id", titik_bench_mark: "id", papan_tanah_negara: "id",
-  inlet: "id", manhole_drainase: "id", sumur_resapan: "id", zona_drainase: "id", saluran_air_hujan: "Saluran Air Hujan",
+  inlet: "id", manhole_drainase: "id", sumur_resapan: "id", zona_drainase: "id", saluran_air_hujan: "id",
   kabel_fo: "id", manhole_fo: "id", tiang_fiber_optik: "id",
   manhole_sal: "id", pipa_glontor: "id", pipa_induk: "id", pipa_lateral: "id",
   jalan_kota: "id_jalan", jalan_lingkungan: "id_jalan", jalur_pemandu: "id", jembatan: "id", trotoar: "id_trotoar",  jalan_inspeksi: "Jalan Inspeksi", rumija: "id",
