@@ -29,15 +29,14 @@ const baseLayers = [
   {id:"ortho",name:"Orthophoto 2023",url:"https://sitijo.wuaze.com/assets/ortho/{z}/{x}/{y}.png",attribution:"© Orthophoto 2023",minZoom:17,maxZoom:20},
 ];
 
-function CoordinateControl() {
-  const [position,setPosition] = useState("Lat: - , Lng: -");
-  useMapEvents({mousemove(e){setPosition(`Lat: ${e.latlng.lat.toFixed(6)}, Lng: ${e.latlng.lng.toFixed(6)}`)}});
-  return <div className="coords-info">{position}</div>;
+function CoordinateControl({onCoordinate}:{onCoordinate:(lat:string,lng:string)=>void}) {
+  useMapEvents({mousemove(e){onCoordinate(e.latlng.lat.toFixed(6),e.latlng.lng.toFixed(6))}});
+  return null;
 }
-function MapExtras({ onReady }: {onReady:(map:L.Map)=>void}) {
+function MapExtras({ onReady, onCoordinate }: {onReady:(map:L.Map)=>void;onCoordinate:(lat:string,lng:string)=>void}) {
   const map=useMap();
   useEffect(()=>{onReady(map);return ()=>{onReady(null as unknown as L.Map)}},[map,onReady]);
-  return <CoordinateControl/>;
+  return <CoordinateControl onCoordinate={onCoordinate}/>;
 }
 function escapeHtml(value: unknown) {
   return String(value ?? "-").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c] || c));
@@ -60,6 +59,7 @@ export default function MapClient() {
   const [boundaryData,setBoundaryData]=useState<GeoJSON.FeatureCollection|null>(null);
   const [boundaryError,setBoundaryError]=useState("");
   const [map,setMap]=useState<L.Map|null>(null);
+  const [coordinates,setCoordinates]=useState({lat:"—",lng:"—"});
   const boundaryLayer=useRef<L.GeoJSON|null>(null);
   const activeLayerRef = useRef<Record<string, L.Layer>>({});
   // Cache data GeoJSON
@@ -572,6 +572,25 @@ export default function MapClient() {
       .sitijo-basemap-trigger:hover{background:#eaf3ff!important;border-color:#b8d7ff!important}
       .sitijo-map-controls{gap:0!important;margin:8px 8px 0 0!important}
       .sitijo-control-dock button:hover{background:#eaf3ff!important;border-color:#b8d7ff!important}
+      .sitijo-map-info{position:absolute;z-index:850;left:14px;bottom:14px;display:flex;flex-direction:column;gap:5px;padding:9px 11px;background:rgba(255,255,255,.95);border:1px solid #dce8f8;border-radius:13px;box-shadow:0 5px 18px rgba(20,70,130,.12);backdrop-filter:blur(12px);color:#23466e;min-width:180px}
+      .sitijo-map-info-top{display:flex;align-items:center;gap:7px}
+      .sitijo-map-info-icon{display:grid;place-items:center;color:#1685f5}
+      .sitijo-map-info-icon svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+      .sitijo-map-info-count{font-size:11px;font-weight:700;color:#176dc5;background:#eaf3ff;border-radius:999px;padding:3px 8px}
+      .sitijo-map-info-coords{display:flex;align-items:center;gap:5px;font-size:10px;color:#647b98;font-variant-numeric:tabular-nums;white-space:nowrap}
+      .sitijo-map-info-coords span{font-size:9px;font-weight:800;letter-spacing:.04em;color:#8ba0b8}
+      .sitijo-map-info-coords strong{font-weight:600;color:#375778}
+      .sitijo-map-info-coords i{height:12px;width:1px;background:#dbe6f2;margin:0 2px}
+      .sitijo-legend-modern{position:absolute;z-index:850;right:14px;bottom:14px;max-width:220px;min-width:150px;padding:10px 12px;background:rgba(255,255,255,.95);border:1px solid #dce8f8;border-radius:13px;box-shadow:0 5px 18px rgba(20,70,130,.12);backdrop-filter:blur(12px);color:#23466e}
+      .sitijo-legend-heading{display:flex;align-items:center;gap:7px;margin-bottom:7px;font-size:12px;color:#173e73}
+      .sitijo-legend-icon{display:grid;place-items:center;color:#1685f5}
+      .sitijo-legend-icon svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+      .sitijo-legend-content{display:flex;flex-direction:column;gap:5px;max-height:150px;overflow:auto}
+      .sitijo-legend-row{display:flex;align-items:center;gap:7px;font-size:10px;line-height:1.35;color:#496582}
+      .sitijo-legend-row>span:last-child{overflow-wrap:anywhere}
+      .sitijo-legend-empty{font-size:10px;color:#9aabc0;font-style:italic}
+      .sitijo-legend-modern .legend-swatch-line{flex:none;width:18px}
+      @media(max-width:600px){.sitijo-map-info{left:8px;bottom:8px;min-width:0;padding:7px 9px}.sitijo-legend-modern{right:8px;bottom:8px;max-width:165px;min-width:130px;padding:8px 10px}.sitijo-legend-content{max-height:110px}}
       @media(max-width:600px){.sitijo-modern-panel{left:66px;width:calc(100vw - 82px);top:10px;bottom:10px}.sitijo-basemap-pop{right:66px;width:min(280px,calc(100vw - 80px))}}
     `}</style>
     <div className="sitijo-modern-toolbar">
@@ -614,36 +633,23 @@ export default function MapClient() {
     </div>
     <MapContainer center={[-7.7972,110.3688]} zoom={15} minZoom={10} maxZoom={21} zoomControl={false} style={{height:"100%",width:"100%"}}>
       <TileLayer key={selectedBase.id} attribution={selectedBase.attribution} url={selectedBase.url} minZoom={selectedBase.minZoom??0} maxZoom={selectedBase.maxZoom??21} errorTileUrl={selectedBase.id==="ortho"?"/assets/blank.jpg":undefined}/>
-      <MapExtras onReady={setMap}/>
+      <MapExtras onReady={setMap} onCoordinate={(lat,lng)=>setCoordinates({lat,lng})}/>
       <MapControls onFit={fitAll} onLocate={locate} baseId={baseId} onBaseChange={setBaseId} basemapOpen={basemapOpen} onBasemapToggle={()=>setBasemapOpen(v=>!v)}/>
     </MapContainer>
-    <div className="sitijo-status">{checked.length} layer dipilih</div>
-    <div className="sitijo-legend">
-  <strong>Legenda</strong>
-
-  <div className="legend-content">
-    {checked.length ? (
-      checked.map(id => (
-        <div key={id}>
-          {getLegendSwatch(id)}
-          {groups.flatMap(g => g.layers).find(x => x.id === id)?.name || id}
-        </div>
-      ))
-    ) : (
-      <i>Tidak ada layer aktif</i>
-    )}
-
-    <div>
-      <span
-        className="legend-swatch-line"
-        style={{
-          borderTop: "2.5px dashed #fa2b66",
-        }}
-      />
-      Batas Kelurahan
+    <div className="sitijo-map-info">
+      <div className="sitijo-map-info-top">
+        <span className="sitijo-map-info-icon"><svg viewBox="0 0 24 24"><path d="m3 7 9-4 9 4-9 4-9-4Z"/><path d="m3 12 9 4 9-4M3 17l9 4 9-4"/></svg></span>
+        <span className="sitijo-map-info-count">{checked.length} layer aktif</span>
+      </div>
+      <div className="sitijo-map-info-coords"><span>LAT</span><strong>{coordinates.lat}</strong><i/><span>LNG</span><strong>{coordinates.lng}</strong></div>
     </div>
-  </div>
-</div>
+    <div className="sitijo-legend sitijo-legend-modern">
+      <div className="sitijo-legend-heading"><span className="sitijo-legend-icon"><svg viewBox="0 0 24 24"><path d="m3 7 9-4 9 4-9 4-9-4Z"/><path d="m3 12 9 4 9-4M3 17l9 4 9-4"/></svg></span><strong>Legenda</strong></div>
+      <div className="sitijo-legend-content">
+        {checked.length ? checked.map(id => <div className="sitijo-legend-row" key={id}>{getLegendSwatch(id)}<span>{groups.flatMap(g=>g.layers).find(x=>x.id===id)?.name||id}</span></div>) : <div className="sitijo-legend-empty">Tidak ada layer aktif</div>}
+        <div className="sitijo-legend-row"><span className="legend-swatch-line" style={{borderTop:"2px dashed #fa2b66"}}/><span>Batas Kelurahan</span></div>
+      </div>
+    </div>
   </div>;
 }
 
