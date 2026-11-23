@@ -43,7 +43,7 @@ const LABELS: Record<string, string> = {
   kawasan_kumuh: "Kawasan Kumuh", pembangunan_gedung: "Pembangunan Gedung",
   cermin_jalan: "Cermin Jalan", kamera_pengawas: "Kamera Pengawas", lampu_jalan: "Lampu Jalan", lampu_lalu_lintas: "Lampu Lalu Lintas", rambu_lalu_lintas: "Rambu Lalu Lintas", high_mes_tower: "High Mes Tower",
   titik_halte: "Titik Halte", jalur_halte_trans: "Jalur Halte Trans",
-  hidran: "Hidran", rantai_pasok: "Rantai Pasok", reklame: "Reklame", titik_bench_mark: "Titik Bench Mark", papan_tanah_negara: "Papan_Tanah_Negara",
+  hidran: "Hidran", rantai_pasok: "Rantai Pasok", reklame: "Reklame", titik_bench_mark: "Titik Bench Mark", papan_tanah_negara: "Papan Tanah Negara",
   inlet: "Inlet", manhole_drainase: "Manhole Drainase", sumur_resapan: "Sumur Resapan", zona_drainase: "Zona Drainase", saluran_air_hujan: "Saluran Air Hujan", kabel_fo: "Kabel Fiber Optik", manhole_fo: "Manhole Fiber Optik", tiang_fiber_optik: "Tiang Fiber Optik",
   manhole_sal: "Manhole Saluran Air Limbah", pipa_glontor: "Pipa Glontor", pipa_induk: "Pipa Induk", pipa_lateral: "Pipa Lateral", jalan_kota: "Jalan Kota", jalan_lingkungan: "Jalan Lingkungan", jalur_pemandu: "Jalur Pemandu", jembatan: "Jembatan", trotoar: "Trotoar", rumija: "Rumija",
   tegangan_menengah: "Jaringan Kabel Listrik Tegangan Menengah", tegangan_rendah: "Jaringan Kabel Listrik Tegangan Rendah", rumah_kabel: "Rumah Kabel", tiang_listrik: "Tiang Listrik", trafo_listrik: "Trafo Listrik", jaringan_pdam: "Jaringan PDAM", sungai: "Sungai", talud_sungai: "Talud Sungai"
