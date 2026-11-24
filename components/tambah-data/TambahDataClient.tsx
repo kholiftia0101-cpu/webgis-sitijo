@@ -216,7 +216,7 @@ export default function TambahDataClient() {
         <div className="td-heading">
           <div>
             <Link href="/" className="td-back">
-              <ArrowLeft size={17} />
+              <ArrowLeft size={16} />
               Kembali ke Beranda
             </Link>
             <h1>Tambah Data Infrastruktur</h1>
