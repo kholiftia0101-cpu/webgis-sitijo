@@ -38,6 +38,49 @@ function MapExtras({ onReady, onCoordinate }: {onReady:(map:L.Map)=>void;onCoord
   useEffect(()=>{onReady(map);return ()=>{onReady(null as unknown as L.Map)}},[map,onReady]);
   return <CoordinateControl onCoordinate={onCoordinate}/>;
 }
+
+function pointInRing(point: [number, number], ring: number[][]): boolean {
+  const [x, y] = point;
+  let inside = false;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const xi = ring[i][0], yi = ring[i][1], xj = ring[j][0], yj = ring[j][1];
+    const intersect = ((yi > y) !== (yj > y)) && (x < ((xj - xi) * (y - yi)) / ((yj - yi) || 1e-12) + xi);
+    if (intersect) inside = !inside;
+  }
+  return inside;
+}
+function pointInPolygon(point: [number, number], polygon: number[][][]): boolean {
+  if (!polygon.length || !pointInRing(point, polygon[0])) return false;
+  return !polygon.slice(1).some(r => pointInRing(point, r));
+}
+function getPolygons(geometry: GeoJSON.Geometry | null): number[][][][] {
+  if (!geometry) return [];
+  if (geometry.type === "Polygon") return [geometry.coordinates as number[][][]];
+  if (geometry.type === "MultiPolygon") return geometry.coordinates as number[][][][];
+  if (geometry.type === "GeometryCollection") return geometry.geometries.flatMap(getPolygons);
+  return [];
+}
+function geometryTouchesArea(featureGeometry: GeoJSON.Geometry | null, area: GeoJSON.Geometry): boolean {
+  if (!featureGeometry) return false;
+  const polygons = getPolygons(area);
+  const coords: number[][] = [];
+  const walk = (v: unknown): void => {
+    if (Array.isArray(v) && typeof v[0] === "number" && typeof v[1] === "number") coords.push(v as number[]);
+    else if (Array.isArray(v)) v.forEach(walk);
+  };
+  walk((featureGeometry as any).coordinates);
+  if (featureGeometry.type === "GeometryCollection") featureGeometry.geometries.forEach(g => walk((g as any).coordinates));
+  if (coords.some(c => polygons.some(poly => pointInPolygon([c[0], c[1]], poly)))) return true;
+  // Catch lines/polygons crossing the selected boundary even if their vertices are outside.
+  const featureBounds = L.latLngBounds(coords.map(c => L.latLng(c[1], c[0])));
+  for (const poly of polygons) {
+    const ring = poly[0] || [];
+    const areaBounds = L.latLngBounds(ring.map(c => L.latLng(c[1], c[0])));
+    if (featureBounds.isValid() && featureBounds.intersects(areaBounds)) return true;
+  }
+  return false;
+}
+
 function escapeHtml(value: unknown) {
   return String(value ?? "-").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c] || c));
 }
@@ -207,6 +250,37 @@ export default function MapClient() {
         }
       }
     }, [map, checked]);
+
+  // Filter fitur layer aktif menggunakan geometri batas administrasi.
+  useEffect(() => {
+    if (!map || !boundaryData) return;
+    const selectedBoundaries = boundaryData.features.filter(f => {
+      const p = (f.properties || {}) as Record<string, string>;
+      return (!kemantren || p.kemantren === kemantren) && (!kelurahan || p.kelurahan === kelurahan);
+    });
+    const selectedArea: GeoJSON.Geometry | null = selectedBoundaries.length === 1
+      ? selectedBoundaries[0].geometry
+      : selectedBoundaries.length > 1
+        ? { type: "GeometryCollection", geometries: selectedBoundaries.map(f => f.geometry).filter(Boolean) as GeoJSON.Geometry[] }
+        : null;
+    for (const id of checkedRef.current) {
+      const layer = activeLayerRef.current[id];
+      if (!(layer instanceof L.GeoJSON)) continue;
+      let children = (layer as any).__allFeatureLayers as L.Layer[] | undefined;
+      if (!children) {
+        children = [];
+        layer.eachLayer(child => children!.push(child));
+        (layer as any).__allFeatureLayers = children;
+      }
+      children.forEach(child => {
+        const feature = (child as any).feature as GeoJSON.Feature | undefined;
+        const show = !selectedArea || geometryTouchesArea(feature?.geometry ?? null, selectedArea);
+        const present = layer.hasLayer(child);
+        if (show && !present) layer.addLayer(child);
+        if (!show && present) layer.removeLayer(child);
+      });
+    }
+  }, [map, boundaryData, kemantren, kelurahan, checked]);
 
   // Daftar nama jalan hanya berasal dari layer Jalan Kota.
   const roadNames = useMemo(() => {
@@ -581,7 +655,7 @@ export default function MapClient() {
       .sitijo-map-info-coords span{font-size:9px;font-weight:800;letter-spacing:.04em;color:#8ba0b8}
       .sitijo-map-info-coords strong{font-weight:600;color:#375778}
       .sitijo-map-info-coords i{height:12px;width:1px;background:#dbe6f2;margin:0 2px}
-      .sitijo-legend-modern{position:absolute;z-index:850;right:14px;bottom:32px;max-width:250px;min-width:190px;padding:5.5px 6px;background:rgba(255,255,255,.96);border:1px solid #dce8f8;border-radius:15px;box-shadow:0 6px 20px rgba(20,70,130,.14);backdrop-filter:blur(12px);color:#23466e}
+      .sitijo-legend-modern{position:absolute;z-index:850;right:14px;bottom:54px;max-width:250px;min-width:190px;padding:5.5px 6px;background:rgba(255,255,255,.96);border:1px solid #dce8f8;border-radius:15px;box-shadow:0 6px 20px rgba(20,70,130,.14);backdrop-filter:blur(12px);color:#23466e}
       .sitijo-legend-heading{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:13px;color:#173e73}
       .sitijo-legend-icon{display:grid;place-items:center;color:#1685f5}
       .sitijo-legend-icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
