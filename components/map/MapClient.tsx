@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import { useRouter } from "next/navigation";
 import { MapContainer, TileLayer, useMap, useMapEvents } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
@@ -119,6 +120,7 @@ function escapeHtml(value: unknown) {
 }
 
 export default function MapClient() {
+  const router = useRouter();
   const [sidebarOpen,setSidebarOpen]=useState(true);
   const [expanded,setExpanded]=useState<string[]>([]);
   const [checked,setChecked]=useState<string[]>([]);
@@ -707,9 +709,9 @@ export default function MapClient() {
     `}</style>
     <div className="sitijo-modern-toolbar">
       <button className={sidebarOpen?"active":""} title="Layer" onClick={()=>setSidebarOpen(v=>!v)}><svg viewBox="0 0 24 24"><path d="m3 7 9-4 9 4-9 4-9-4Z"/><path d="m3 12 9 4 9-4M3 17l9 4 9-4"/></svg></button>
-      <button title="Update Data"><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.8-4L3 9"/><path d="M3 4v5h5"/><path d="M4 13a8 8 0 0 0 14.8 4L21 15"/><path d="M21 20v-5h-5"/></svg></button>
-      <button title="Tambah Data"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg></button>
-      <button title="Unduhan"><svg viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5"/><path d="M4 17v3h16v-3"/></svg></button>
+      <button title="Update Data" onClick={() => router.push("/app/update")}><svg viewBox="0 0 24 24"><path d="M20 11a8 8 0 0 0-14.8-4L3 9"/><path d="M3 4v5h5"/><path d="M4 13a8 8 0 0 0 14.8 4L21 15"/><path d="M21 20v-5h-5"/></svg></button>
+      <button title="Tambah Data" onClick={() => router.push("/app/tambah_data")}><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg></button>
+      <button title="Unduhan" onClick={() => router.push("/app/download")}><svg viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5"/><path d="M4 17v3h16v-3"/></svg></button>
     </div>
     {sidebarOpen&&<aside className="sitijo-modern-panel">
       <div className="sitijo-modern-head"><span>✦ Pengaturan Peta</span><button title="Tutup panel" onClick={()=>setSidebarOpen(false)}>×</button></div>
