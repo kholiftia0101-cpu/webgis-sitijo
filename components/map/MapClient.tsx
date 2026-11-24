@@ -581,7 +581,7 @@ export default function MapClient() {
       .sitijo-map-info-coords span{font-size:9px;font-weight:800;letter-spacing:.04em;color:#8ba0b8}
       .sitijo-map-info-coords strong{font-weight:600;color:#375778}
       .sitijo-map-info-coords i{height:12px;width:1px;background:#dbe6f2;margin:0 2px}
-      .sitijo-legend-modern{position:absolute;z-index:850;right:14px;bottom:54px;max-width:250px;min-width:190px;padding:5.5px 6px;background:rgba(255,255,255,.96);border:1px solid #dce8f8;border-radius:15px;box-shadow:0 6px 20px rgba(20,70,130,.14);backdrop-filter:blur(12px);color:#23466e}
+      .sitijo-legend-modern{position:absolute;z-index:850;right:14px;bottom:32px;max-width:250px;min-width:190px;padding:5.5px 6px;background:rgba(255,255,255,.96);border:1px solid #dce8f8;border-radius:15px;box-shadow:0 6px 20px rgba(20,70,130,.14);backdrop-filter:blur(12px);color:#23466e}
       .sitijo-legend-heading{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:13px;color:#173e73}
       .sitijo-legend-icon{display:grid;place-items:center;color:#1685f5}
       .sitijo-legend-icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
