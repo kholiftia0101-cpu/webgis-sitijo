@@ -639,18 +639,53 @@ export default function DownloadDataClient({}: {
   return (
     <main className="dd-page">
       <div className="dd-container">
-        <div className="dd-title-row">
+        <div
+          className="dd-title-row"
+          style={{
+            display: "block",
+            marginBottom: 24,
+          }}
+        >
           <div>
-            <Link href="/" className="dd-back-home">
+            <Link
+              href="/"
+              className="dd-back-home"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                marginBottom: 20,
+                color: "#365779",
+                fontSize: 14,
+                fontWeight: 400,
+                textDecoration: "none",
+              }}
+            >
               <ArrowLeft size={16} />
               Kembali ke Beranda
             </Link>
 
-            <h1>Download Data Infrastruktur</h1>
 
-            <p>
-              Unduh data infrastruktur berdasarkan kelas dan subkelas
-              dalam format GeoJSON atau Shapefile.
+            <h1
+              style={{
+                margin: "0 0 8px",
+                color: "#0b3c66",
+                fontSize: 28,
+                lineHeight: 1.25,
+                fontWeight: 700,
+              }}
+            >
+              Download Data Infrastruktur
+            </h1>
+            <p
+              style={{
+                margin: 0,
+                color: "#64748b",
+                fontSize: 15,
+                lineHeight: 1.5,
+              }}
+            >
+              Unduh data infrastruktur berdasarkan kelas dan subkelas dalam format GeoJSON atau Shapefile.
             </p>
           </div>
         </div>
