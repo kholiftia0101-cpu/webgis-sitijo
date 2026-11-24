@@ -81,6 +81,28 @@ function geometryTouchesArea(featureGeometry: GeoJSON.Geometry | null, area: Geo
   return false;
 }
 
+function normalizeAdminName(value: unknown): string {
+  return String(value ?? "")
+    .trim()
+    .replace(/^kemantren\s+/i, "")
+    .replace(/^kelurahan\s+/i, "")
+    .replace(/\s+/g, " ");
+}
+function getAdminProperty(properties: Record<string, unknown>, type: "kemantren" | "kelurahan"): string {
+  const candidates = type === "kemantren"
+    ? ["kemantren", "KEMANTREN", "nama_kemantren", "NAMKEM", "nam_kem", "kecamatan", "KECAMATAN", "name", "NAMOBJ"]
+    : ["kelurahan", "KELURAHAN", "nama_kelurahan", "NAMKEL", "nam_kel", "desa", "DESA"];
+  for (const key of candidates) {
+    const value = properties[key];
+    if (value !== undefined && value !== null && String(value).trim()) return normalizeAdminName(value);
+  }
+  // Fallback for differently-cased or slightly different field names.
+  const key = Object.keys(properties).find(k => type === "kemantren"
+    ? /kemantren|kecamatan/i.test(k)
+    : /kelurahan|desa/i.test(k));
+  return key ? normalizeAdminName(properties[key]) : "";
+}
+
 function escapeHtml(value: unknown) {
   return String(value ?? "-").replace(/[&<>"']/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c] || c));
 }
@@ -119,8 +141,8 @@ export default function MapClient() {
     
       for (const f of boundaryData?.features ?? []) {
         const p = (f.properties || {}) as Record<string, string>;
-        const kem = p.kemantren;
-        const kel = p.kelurahan;
+        const kem = getAdminProperty(p, "kemantren");
+        const kel = getAdminProperty(p, "kelurahan");
     
         if (kem && kel) {
           result[kem] ||= [];
@@ -167,8 +189,8 @@ export default function MapClient() {
         const p = (f.properties || {}) as Record<string, string>;
     
         return (
-          (!kemantren || p.kemantren === kemantren) &&
-          (!kelurahan || p.kelurahan === kelurahan)
+          (!kemantren || getAdminProperty(p, "kemantren") === kemantren) &&
+          (!kelurahan || getAdminProperty(p, "kelurahan") === kelurahan)
         );
       });
     
@@ -256,7 +278,7 @@ export default function MapClient() {
     if (!map || !boundaryData) return;
     const selectedBoundaries = boundaryData.features.filter(f => {
       const p = (f.properties || {}) as Record<string, string>;
-      return (!kemantren || p.kemantren === kemantren) && (!kelurahan || p.kelurahan === kelurahan);
+      return (!kemantren || getAdminProperty(p, "kemantren") === kemantren) && (!kelurahan || getAdminProperty(p, "kelurahan") === kelurahan);
     });
     const selectedArea: GeoJSON.Geometry | null = selectedBoundaries.length === 1
       ? selectedBoundaries[0].geometry
