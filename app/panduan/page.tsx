@@ -11,44 +11,54 @@ export default function PanduanPage() {
         background: "#f4f6f9",
       }}
     >
-      <header
-        style={{
-          padding: "18px 5%",
-          background: "#fff",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "center",
-          borderBottom: "1px solid #e5e7eb",
-        }}
-      >
-        <div>
-          <h2 style={{ margin: 0, color: "#17365d" }}>
-            Panduan Penggunaan SITIJO
-          </h2>
-          <small style={{ color: "#64748b" }}>
-            Sistem Informasi Infrastruktur Kota Yogyakarta
-          </small>
-        </div>
-
-        <Link
-          href="/"
-          style={{
-            textDecoration: "none",
-            color: "#17365d",
-            fontWeight: 600,
-          }}
-        >
-          ← Beranda
-        </Link>
-      </header>
-
       <section
         style={{
-          padding: "20px 4%",
+          padding: "24px",
           maxWidth: "1500px",
           margin: "0 auto",
         }}
       >
+        {/* HEADER SAMAKAN DENGAN UPDATE & DOWNLOAD */}
+        <div style={{ marginBottom: 24 }}>
+          <Link
+            href="/"
+            style={{
+              display: "inline-flex",
+              alignItems: "center",
+              gap: 6,
+              textDecoration: "none",
+              color: "#365779",
+              fontSize: 14,
+              fontWeight: 400,
+              marginBottom: 20,
+            }}
+          >
+            ← Kembali ke Beranda
+          </Link>
+
+          <h1
+            style={{
+              margin: 0,
+              fontSize: 28,
+              fontWeight: 700,
+              color: "#0b3c66",
+            }}
+          >
+            Panduan Penggunaan SITIJO
+          </h1>
+
+          <p
+            style={{
+              margin: "8px 0 0",
+              color: "#64748b",
+              fontSize: 15,
+            }}
+          >
+            Sistem Informasi Infrastruktur Kota Yogyakarta
+          </p>
+        </div>
+
+        {/* KONTEN PANDUAN */}
         <div
           style={{
             display: "flex",
@@ -86,6 +96,7 @@ export default function PanduanPage() {
           </a>
         </div>
 
+        {/* PDF PREVIEW */}
         <div
           style={{
             height: "calc(100vh - 190px)",
