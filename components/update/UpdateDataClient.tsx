@@ -438,21 +438,6 @@ export default function UpdateDataClient({
 
   return (
     <main className="ud-page">
-      <header className="ud-header">
-        <div>
-          <Link href="/" className="ud-brand">
-            SITIJO
-          </Link>
-          <span>
-            Sistem Informasi Infrastruktur Kota Yogyakarta
-          </span>
-        </div>
-
-        <Link href="/peta" className="ud-back">
-          <ArrowLeft size={16} />
-          Kembali ke Peta
-        </Link>
-      </header>
 
       <div className="ud-container">
         <div
