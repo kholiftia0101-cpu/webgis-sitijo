@@ -122,7 +122,6 @@ function escapeHtml(value: unknown) {
 export default function MapClient() {
   const router = useRouter();
   const [sidebarOpen,setSidebarOpen]=useState(true);
-  const [toolbarVisible,setToolbarVisible]=useState(true);
   const [legendVisible,setLegendVisible]=useState(true);
   const [expanded,setExpanded]=useState<string[]>([]);
   const [checked,setChecked]=useState<string[]>([]);
@@ -642,9 +641,6 @@ export default function MapClient() {
       .sitijo-modern-toolbar button{width:36px;height:36px;border:0;background:transparent;border-radius:13px;color:#64748b;display:grid;place-items:center;cursor:pointer;transition:.18s}
       .sitijo-modern-toolbar button:hover,.sitijo-modern-toolbar button.active{background:#eaf3ff;color:#1479f8}
       .sitijo-modern-toolbar svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-      .sitijo-toolbar-reveal{position:absolute;z-index:1001;left:10px;top:50%;transform:translateY(-50%);width:36px;height:36px;border:0;border-radius:12px;background:#eff6ff;color:#3478c8;box-shadow:none;display:grid;place-items:center;cursor:pointer;transition:background .18s,transform .18s}
-      .sitijo-toolbar-reveal svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
-      .sitijo-toolbar-reveal:hover{background:#e2efff;transform:translateY(-50%) scale(1.03)}
       .sitijo-modern-panel{position:absolute;z-index:999;left:72px;top:16px;bottom:16px;width:350px;max-width:calc(100vw - 90px);border-radius:20px;background:rgba(255,255,255,.95);border:1px solid rgba(255,255,255,.8);box-shadow:0 12px 40px rgba(16,35,65,.16);backdrop-filter:blur(18px);overflow:hidden;display:flex;flex-direction:column;color:#18365f}
       .sitijo-modern-head{display:flex;align-items:center;justify-content:space-between;padding:17px 18px;border-bottom:1px solid #edf1f6;font-weight:700;font-size:15px}
       .sitijo-modern-head button{border:0;background:#f1f6ff;color:#2675dd;border-radius:10px;width:32px;height:32px;cursor:pointer}
@@ -715,14 +711,13 @@ export default function MapClient() {
       @media(max-width:600px){.sitijo-legend-modern{right:8px;bottom:48px;max-width:190px;min-width:155px;padding:4px 5px}.sitijo-legend-content{max-height:105px}.sitijo-legend-coords{gap:5px;padding:3px}}
       @media(max-width:600px){.sitijo-modern-panel{left:66px;width:calc(100vw - 82px);top:10px;bottom:10px}.sitijo-basemap-pop{right:66px;width:min(280px,calc(100vw - 80px))}}
     `}</style>
-    {toolbarVisible ? <div className="sitijo-modern-toolbar">
+    <div className="sitijo-modern-toolbar">
       <button className={sidebarOpen?"active":""} title="Layer" onClick={()=>setSidebarOpen(v=>!v)}><svg viewBox="0 0 24 24"><path d="m3 7 9-4 9 4-9 4-9-4Z"/><path d="m3 12 9 4 9-4M3 17l9 4 9-4"/></svg></button>
       <button title="Update Data" onClick={() => router.push("/update")}><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="7" ry="2.8"/><path d="M5 5v10c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8V5"/><path d="M5 10c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8"/></svg></button>
       <button title="Tambah Data" onClick={() => router.push("/tambah_data")}><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg></button>
       <button title="Unduhan" onClick={() => router.push("/download")}><svg viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5"/><path d="M4 17v3h16v-3"/></svg></button>
-      <button title="Sembunyikan toolbar" onClick={()=>{setSidebarOpen(false);setToolbarVisible(false)}}><svg viewBox="0 0 24 24"><path d="M15 5 9 12l6 7"/></svg></button>
-    </div> : <button className="sitijo-toolbar-reveal" title="Tampilkan toolbar" onClick={()=>setToolbarVisible(true)}><svg viewBox="0 0 24 24"><path d="M9 5 15 12 9 19"/></svg></button>}
-    {sidebarOpen&&toolbarVisible&&<aside className="sitijo-modern-panel">
+    </div>
+    {sidebarOpen&&<aside className="sitijo-modern-panel">
       <div className="sitijo-modern-head"><span>✦ Pengaturan Peta</span><button title="Tutup panel" onClick={()=>setSidebarOpen(false)}>×</button></div>
       <div className="sitijo-modern-body">
         <div className="sitijo-modern-section">
