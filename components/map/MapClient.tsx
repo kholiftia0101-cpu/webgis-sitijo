@@ -639,12 +639,12 @@ export default function MapClient() {
     {loading&&<div className="sitijo-loading-overlay"><div className="loading-box"><div className="loader"/><h2>Sedang memuat peta...</h2><p>Menyiapkan data peta, mohon tunggu sebentar.</p></div></div>}
     <style>{`
       .sitijo-modern-toolbar{position:absolute;z-index:1000;left:10px;top:50%;transform:translateY(-50%);display:flex;flex-direction:column;gap:5px;padding:5px;background:rgba(255,255,255,.92);border:1px solid rgba(226,232,240,.8);border-radius:16px;box-shadow:0 8px 28px rgba(15,35,70,.12);backdrop-filter:blur(14px)}
-      .sitijo-modern-toolbar button{width:36px;height:36px;border:0;background:transparent;border-radius:13px;color:#64748b;display:grid;place-items:center;cursor:pointer;transition:.18s}
+      .sitijo-modern-toolbar button{width:34px;height:34px;border:0;background:transparent;border-radius:13px;color:#64748b;display:grid;place-items:center;cursor:pointer;transition:.18s}
       .sitijo-modern-toolbar button:hover,.sitijo-modern-toolbar button.active{background:#eaf3ff;color:#1479f8}
       .sitijo-modern-toolbar svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
       .sitijo-toolbar-reveal{position:absolute;z-index:1001;left:10px;top:50%;transform:translateY(-50%);width:34px;height:34px;border:1px solid #dce8f8;border-radius:13px;background:rgba(255,255,255,.94);color:#64748b;box-shadow:0 6px 20px rgba(15,35,70,.12);display:grid;place-items:center;cursor:pointer}
       .sitijo-toolbar-reveal svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-      .sitijo-modern-panel{position:absolute;z-index:999;left:84px;top:16px;bottom:16px;width:350px;max-width:calc(100vw - 90px);border-radius:20px;background:rgba(255,255,255,.95);border:1px solid rgba(255,255,255,.8);box-shadow:0 12px 40px rgba(16,35,65,.16);backdrop-filter:blur(18px);overflow:hidden;display:flex;flex-direction:column;color:#18365f}
+      .sitijo-modern-panel{position:absolute;z-index:999;left:72px;top:16px;bottom:16px;width:350px;max-width:calc(100vw - 90px);border-radius:20px;background:rgba(255,255,255,.95);border:1px solid rgba(255,255,255,.8);box-shadow:0 12px 40px rgba(16,35,65,.16);backdrop-filter:blur(18px);overflow:hidden;display:flex;flex-direction:column;color:#18365f}
       .sitijo-modern-head{display:flex;align-items:center;justify-content:space-between;padding:17px 18px;border-bottom:1px solid #edf1f6;font-weight:700;font-size:15px}
       .sitijo-modern-head button{border:0;background:#f1f6ff;color:#2675dd;border-radius:10px;width:32px;height:32px;cursor:pointer}
       .sitijo-modern-body{padding:14px 16px 20px;overflow:auto}
@@ -710,17 +710,17 @@ export default function MapClient() {
       .sitijo-legend-modern .legend-swatch-line{flex:none;width:18px}
       .sitijo-legend-hide{margin-left:auto;border:0;background:#eaf3ff;color:#1676d3;border-radius:8px;width:24px;height:24px;display:grid;place-items:center;cursor:pointer}
       .sitijo-legend-hide svg,.sitijo-legend-reveal svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-      .sitijo-legend-reveal{position:absolute;z-index:850;right:14px;bottom:54px;border:1px solid #dce8f8;background:rgba(255,255,255,.96);color:#1676d3;border-radius:10px;height:32px;padding:0 9px;box-shadow:0 6px 20px rgba(20,70,130,.14);display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;font:600 12px/1.2 inherit;white-space:nowrap}
+      .sitijo-legend-reveal{position:absolute;z-index:850;right:14px;bottom:54px;border:1px solid #dce8f8;background:rgba(255,255,255,.96);color:#1676d3;border-radius:9px;height:30px;padding:0 8px;box-shadow:0 6px 20px rgba(20,70,130,.14);display:flex;align-items:center;justify-content:center;gap:6px;cursor:pointer;font:600 12px/1.2 inherit;white-space:nowrap}
       @media(max-width:600px){.sitijo-legend-modern{right:8px;bottom:48px;max-width:190px;min-width:155px;padding:4px 5px}.sitijo-legend-content{max-height:105px}.sitijo-legend-coords{gap:5px;padding:3px}}
-      @media(max-width:600px){.sitijo-modern-panel{left:78px;width:calc(100vw - 94px);top:10px;bottom:10px}.sitijo-basemap-pop{right:66px;width:min(280px,calc(100vw - 80px))}}
+      @media(max-width:600px){.sitijo-modern-panel{left:66px;width:calc(100vw - 82px);top:10px;bottom:10px}.sitijo-basemap-pop{right:66px;width:min(280px,calc(100vw - 80px))}}
     `}</style>
     {toolbarVisible ? <div className="sitijo-modern-toolbar">
       <button className={sidebarOpen?"active":""} title="Layer" onClick={()=>setSidebarOpen(v=>!v)}><svg viewBox="0 0 24 24"><path d="m3 7 9-4 9 4-9 4-9-4Z"/><path d="m3 12 9 4 9-4M3 17l9 4 9-4"/></svg></button>
-      <button title="Update Data" onClick={() => router.push("/app/update")}><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="7" ry="2.8"/><path d="M5 5v10c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8V5"/><path d="M5 10c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8"/></svg></button>
-      <button title="Tambah Data" onClick={() => router.push("/app/tambah_data")}><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg></button>
-      <button title="Unduhan" onClick={() => router.push("/app/download")}><svg viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5"/><path d="M4 17v3h16v-3"/></svg></button>
-      <button title="Sembunyikan toolbar" onClick={()=>setToolbarVisible(false)}><svg viewBox="0 0 24 24"><path d="M8 5h8M8 12h8M8 19h8"/><path d="m4 5 16 14"/></svg></button>
-    </div> : <button className="sitijo-toolbar-reveal" title="Tampilkan toolbar" onClick={()=>setToolbarVisible(true)}><svg viewBox="0 0 24 24"><path d="m9 5 6 7-6 7"/></svg></button>}
+      <button title="Update Data" onClick={() => router.push("/update")}><svg viewBox="0 0 24 24"><ellipse cx="12" cy="5" rx="7" ry="2.8"/><path d="M5 5v10c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8V5"/><path d="M5 10c0 1.6 3.1 2.8 7 2.8s7-1.2 7-2.8"/></svg></button>
+      <button title="Tambah Data" onClick={() => router.push("/tambah_data")}><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M12 8v8M8 12h8"/></svg></button>
+      <button title="Unduhan" onClick={() => router.push("/download")}><svg viewBox="0 0 24 24"><path d="M12 3v12m-5-5 5 5 5-5"/><path d="M4 17v3h16v-3"/></svg></button>
+      <button title="Sembunyikan toolbar" onClick={()=>setToolbarVisible(false)}><svg viewBox="0 0 24 24"><path d="m15 5-7 7 7 7M19 5l-7 7 7 7"/></svg></button>
+    </div> : <button className="sitijo-toolbar-reveal" title="Tampilkan toolbar" onClick={()=>setToolbarVisible(true)}><svg viewBox="0 0 24 24"><path d="m9 5 7 7-7 7M5 5l7 7-7 7"/></svg></button>}
     {sidebarOpen&&<aside className="sitijo-modern-panel">
       <div className="sitijo-modern-head"><span>✦ Pengaturan Peta</span><button title="Tutup panel" onClick={()=>setSidebarOpen(false)}>×</button></div>
       <div className="sitijo-modern-body">
