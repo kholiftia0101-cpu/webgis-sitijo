@@ -455,21 +455,53 @@ export default function UpdateDataClient({
       </header>
 
       <div className="ud-container">
-        <div className="ud-title-row">
+        <div
+          className="ud-title-row"
+          style={{
+            display: "block",
+            marginBottom: 24,
+          }}
+        >
           <div>
-            <div className="ud-eyebrow">
-              PENGELOLAAN DATA INFRASTRUKTUR
-            </div>
-            <h1>Update Data Infrastruktur</h1>
-            <p>
-              Pilih jenis infrastruktur untuk melihat,
-              memperbarui, atau menghapus data.
-            </p>
-          </div>
+            <Link
+              href="/"
+              className="ud-back-home"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                gap: 8,
+                marginBottom: 20,
+                color: "#365779",
+                fontSize: 14,
+                fontWeight: 400,
+                textDecoration: "none",
+              }}
+            >
+              <ArrowLeft size={16} />
+              Kembali ke Beranda
+            </Link>
 
-          <div className="ud-user">
-            <span>{username}</span>
-            <small>{unit}</small>
+            <h1
+              style={{
+                margin: "0 0 8px",
+                color: "#0b3c66",
+                fontSize: 28,
+                lineHeight: 1.25,
+                fontWeight: 700,
+              }}
+            >
+              Update Data Infrastruktur
+            </h1>
+            <p
+              style={{
+                margin: 0,
+                color: "#64748b",
+                fontSize: 15,
+                lineHeight: 1.5,
+              }}
+            >
+              Pilih jenis infrastruktur untuk melihat, memperbarui, atau menghapus data.
+            </p>
           </div>
         </div>
 
