@@ -642,8 +642,8 @@ export default function MapClient() {
       .sitijo-modern-toolbar button{width:36px;height:36px;border:0;background:transparent;border-radius:13px;color:#64748b;display:grid;place-items:center;cursor:pointer;transition:.18s}
       .sitijo-modern-toolbar button:hover,.sitijo-modern-toolbar button.active{background:#eaf3ff;color:#1479f8}
       .sitijo-modern-toolbar svg{width:18px;height:18px;stroke:currentColor;fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-      .sitijo-toolbar-reveal{position:absolute;z-index:1001;left:10px;top:50%;transform:translateY(-50%);width:48px;height:48px;border:0;border-radius:15px;background:#eff6ff;color:#3478c8;box-shadow:none;display:grid;place-items:center;cursor:pointer;transition:background .18s,transform .18s}
-      .sitijo-toolbar-reveal svg{width:16px;height:16px;stroke:currentColor;fill:none;stroke-width:2.1;stroke-linecap:round;stroke-linejoin:round}
+      .sitijo-toolbar-reveal{position:absolute;z-index:1001;left:10px;top:50%;transform:translateY(-50%);width:36px;height:36px;border:0;border-radius:12px;background:#eff6ff;color:#3478c8;box-shadow:none;display:grid;place-items:center;cursor:pointer;transition:background .18s,transform .18s}
+      .sitijo-toolbar-reveal svg{width:12px;height:12px;stroke:currentColor;fill:none;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
       .sitijo-toolbar-reveal:hover{background:#e2efff;transform:translateY(-50%) scale(1.03)}
       .sitijo-modern-panel{position:absolute;z-index:999;left:72px;top:16px;bottom:16px;width:350px;max-width:calc(100vw - 90px);border-radius:20px;background:rgba(255,255,255,.95);border:1px solid rgba(255,255,255,.8);box-shadow:0 12px 40px rgba(16,35,65,.16);backdrop-filter:blur(18px);overflow:hidden;display:flex;flex-direction:column;color:#18365f}
       .sitijo-modern-head{display:flex;align-items:center;justify-content:space-between;padding:17px 18px;border-bottom:1px solid #edf1f6;font-weight:700;font-size:15px}
