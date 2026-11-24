@@ -6,6 +6,8 @@ import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
 type Group = { id: string; name: string; layers: { id: string; name: string }[] };
+type CachedGeoJSONLayer = L.GeoJSON & { __allFeatureLayers?: L.Layer[] };
+type FeatureLayer = L.Layer & { feature?: GeoJSON.Feature };
 
 const groups: Group[] = [
   { id:"atribut_jalan", name:"Atribut Jalan", layers:[{ id:"cermin_jalan",name:"Cermin Jalan"},{ id:"high_mes_tower",name:"High Mes Tower"}, {id:"kamera_pengawas",name:"Kamera Pengawas"},{id:"lampu_jalan",name:"Lampu Jalan"},{id:"lampu_lalin",name:"Lampu Lalu Lintas"},{id:"rambu_lalin",name:"Rambu Lalu Lintas"}]},
@@ -64,12 +66,21 @@ function geometryTouchesArea(featureGeometry: GeoJSON.Geometry | null, area: Geo
   if (!featureGeometry) return false;
   const polygons = getPolygons(area);
   const coords: number[][] = [];
-  const walk = (v: unknown): void => {
-    if (Array.isArray(v) && typeof v[0] === "number" && typeof v[1] === "number") coords.push(v as number[]);
-    else if (Array.isArray(v)) v.forEach(walk);
+  const walk = (value: unknown): void => {
+    if (Array.isArray(value) && typeof value[0] === "number" && typeof value[1] === "number") {
+      coords.push(value as number[]);
+    } else if (Array.isArray(value)) {
+      value.forEach(walk);
+    }
   };
-  walk((featureGeometry as any).coordinates);
-  if (featureGeometry.type === "GeometryCollection") featureGeometry.geometries.forEach(g => walk((g as any).coordinates));
+  const collectGeometryCoordinates = (geometry: GeoJSON.Geometry): void => {
+    if (geometry.type === "GeometryCollection") {
+      geometry.geometries.forEach(collectGeometryCoordinates);
+    } else {
+      walk(geometry.coordinates);
+    }
+  };
+  collectGeometryCoordinates(featureGeometry);
   if (coords.some(c => polygons.some(poly => pointInPolygon([c[0], c[1]], poly)))) return true;
   // Catch lines/polygons crossing the selected boundary even if their vertices are outside.
   const featureBounds = L.latLngBounds(coords.map(c => L.latLng(c[1], c[0])));
@@ -288,14 +299,15 @@ export default function MapClient() {
     for (const id of checkedRef.current) {
       const layer = activeLayerRef.current[id];
       if (!(layer instanceof L.GeoJSON)) continue;
-      let children = (layer as any).__allFeatureLayers as L.Layer[] | undefined;
+      const cachedLayer = layer as CachedGeoJSONLayer;
+      let children = cachedLayer.__allFeatureLayers;
       if (!children) {
         children = [];
         layer.eachLayer(child => children!.push(child));
-        (layer as any).__allFeatureLayers = children;
+        cachedLayer.__allFeatureLayers = children;
       }
       children.forEach(child => {
-        const feature = (child as any).feature as GeoJSON.Feature | undefined;
+        const feature = (child as FeatureLayer).feature;
         const show = !selectedArea || geometryTouchesArea(feature?.geometry ?? null, selectedArea);
         const present = layer.hasLayer(child);
         if (show && !present) layer.addLayer(child);
