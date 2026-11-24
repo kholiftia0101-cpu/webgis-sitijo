@@ -318,10 +318,7 @@ async function createPolylineZip(
 // KOMPONEN DOWNLOAD DATA
 // =====================================================
 
-export default function DownloadDataClient({
-  username,
-  unit,
-}: {
+export default function DownloadDataClient({}: {
   username: string;
   unit: string;
 }) {
@@ -641,29 +638,13 @@ export default function DownloadDataClient({
 
   return (
     <main className="dd-page">
-      <header className="dd-header">
-        <div className="dd-brand-wrap">
-          <Link href="/" className="dd-brand">
-            SITIJO
-          </Link>
-
-          <span>
-            Sistem Informasi Infrastruktur Kota Yogyakarta
-          </span>
-        </div>
-
-        <Link href="/peta" className="dd-back">
-          <ArrowLeft size={16} />
-          Kembali ke Peta
-        </Link>
-      </header>
-
       <div className="dd-container">
         <div className="dd-title-row">
           <div>
-            <div className="dd-eyebrow">
-              PENGELOLAAN DATA INFRASTRUKTUR
-            </div>
+            <Link href="/" className="dd-back-home">
+              <ArrowLeft size={16} />
+              Kembali ke Beranda
+            </Link>
 
             <h1>Download Data Infrastruktur</h1>
 
@@ -671,11 +652,6 @@ export default function DownloadDataClient({
               Unduh data infrastruktur berdasarkan kelas dan subkelas
               dalam format GeoJSON atau Shapefile.
             </p>
-          </div>
-
-          <div className="dd-user">
-            <strong>{username}</strong>
-            <small>{unit}</small>
           </div>
         </div>
 
