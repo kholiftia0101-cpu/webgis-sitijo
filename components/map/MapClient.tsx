@@ -36,9 +36,21 @@ function CoordinateControl({onCoordinate}:{onCoordinate:(lat:string,lng:string)=
   useMapEvents({mousemove(e){onCoordinate(e.latlng.lat.toFixed(6),e.latlng.lng.toFixed(6))}});
   return null;
 }
-function MapExtras({ onReady, onCoordinate }: {onReady:(map:L.Map)=>void;onCoordinate:(lat:string,lng:string)=>void}) {
+function MapExtras({ onReady, onCoordinate, onScale }: {onReady:(map:L.Map)=>void;onCoordinate:(lat:string,lng:string)=>void;onScale:(scale:string)=>void}) {
   const map=useMap();
-  useEffect(()=>{onReady(map);return ()=>{onReady(null as unknown as L.Map)}},[map,onReady]);
+  useEffect(()=>{
+    onReady(map);
+    const updateScale=()=>{
+      const zoom=map.getZoom();
+      const latitude=map.getCenter().lat;
+      const metersPerPixel=(156543.03392*Math.cos(latitude*Math.PI/180))/Math.pow(2,zoom);
+      const denominator=Math.round((metersPerPixel*96)/0.0254);
+      onScale(`1:${denominator.toLocaleString("id-ID")}`);
+    };
+    updateScale();
+    map.on("zoomend moveend",updateScale);
+    return ()=>{map.off("zoomend moveend",updateScale);onReady(null as unknown as L.Map)};
+  },[map,onReady,onScale]);
   return <CoordinateControl onCoordinate={onCoordinate}/>;
 }
 
@@ -139,6 +151,7 @@ export default function MapClient() {
   const [boundaryError,setBoundaryError]=useState("");
   const [map,setMap]=useState<L.Map|null>(null);
   const [coordinates,setCoordinates]=useState({lat:"—",lng:"—"});
+  const [scaleText,setScaleText]=useState("1:—");
   const boundaryLayer=useRef<L.GeoJSON|null>(null);
   const activeLayerRef = useRef<Record<string, L.Layer>>({});
   // Cache data GeoJSON
@@ -546,6 +559,24 @@ export default function MapClient() {
   };
 
 
+  const refreshSelectedLayers = async () => {
+    const selected = [...checkedRef.current];
+    if (!selected.length) {
+      window.alert("Tidak ada layer aktif untuk diperbarui.");
+      return;
+    }
+    for (const id of selected) {
+      const oldLayer = activeLayerRef.current[id];
+      if (map && oldLayer && map.hasLayer(oldLayer)) map.removeLayer(oldLayer);
+      delete activeLayerRef.current[id];
+      delete dataCacheRef.current[id];
+      delete pendingRequestsRef.current[id];
+    }
+    // Refresh layer terpilih tanpa perlu mematikan checkbox satu per satu.
+    for (const id of selected) await toggleLayer(id, true);
+  };
+
+
   const fitAll=()=>{
     if(!map)return;
     const bounds=L.latLngBounds([]);
@@ -647,6 +678,11 @@ export default function MapClient() {
       .sitijo-modern-body{padding:14px 16px 20px;overflow:auto}
       .sitijo-modern-section{margin-bottom:17px}
       .sitijo-modern-label{font-size:10px;font-weight:800;letter-spacing:.09em;color:#8b9bb1;margin:0 0 9px}
+      .sitijo-modern-label-row{display:flex;align-items:center;justify-content:space-between;margin-bottom:9px}
+      .sitijo-modern-label-row .sitijo-modern-label{margin:0}
+      .sitijo-panel-refresh{width:26px;height:26px;border:0;border-radius:8px;background:#eaf3ff;color:#1676d3;display:grid;place-items:center;cursor:pointer;flex:none}
+      .sitijo-panel-refresh svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+      .sitijo-panel-refresh:disabled{opacity:.45;cursor:default}
       .sitijo-modern-panel select,.sitijo-modern-panel input[list]{width:100%;height:38px;border:1px solid #e2eaf3;background:#f8fafc;border-radius:11px;padding:0 11px;color:#344963;outline:none;margin-bottom:7px;font-size:12px}
       .sitijo-modern-panel .sitijo-road-toggle{display:flex;align-items:center;gap:8px;font-size:12px;margin-bottom:8px}
       .sitijo-modern-panel h5{font-size:12px;color:#64748b;margin:8px 0}
@@ -696,11 +732,13 @@ export default function MapClient() {
       .sitijo-legend-heading{display:flex;align-items:center;gap:8px;margin-bottom:6px;font-size:13px;color:#173e73}
       .sitijo-legend-icon{display:grid;place-items:center;color:#1685f5}
       .sitijo-legend-icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-      .sitijo-legend-active{margin-left:auto;font-size:11px;font-weight:700;color:#1676d3;background:#eaf3ff;border-radius:999px;padding:4px 8px;white-space:nowrap}
+      .sitijo-legend-active{margin-left:4px;font-size:11px;font-weight:700;color:#1676d3;background:#eaf3ff;border-radius:999px;padding:4px 8px;white-space:nowrap}
       .sitijo-legend-coords{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4.5px;padding:3.5px 4px;background:#f4f8fd;border:1px solid #e7eef8;border-radius:9px;font-size:10px;color:#607995;font-variant-numeric:tabular-nums}
       .sitijo-legend-coords span{font-weight:800;letter-spacing:.03em;color:#8ba0b8}
       .sitijo-legend-coords strong{font-size:11px;font-weight:600;color:#375778}
       .sitijo-legend-content{display:flex;flex-direction:column;gap:5px;max-height:150px;overflow:auto}
+      .sitijo-legend-scale{display:flex;align-items:center;gap:8px;margin-top:4px;padding:5px 7px;background:#eaf3ff;border-radius:9px;font-size:10px;color:#6b8bad}
+      .sitijo-legend-scale strong{font-size:11px;font-weight:700;color:#176dc5}
       .sitijo-legend-row{display:flex;align-items:center;gap:7px;font-size:12px;line-height:1.4;color:#496582}
       .sitijo-legend-row>span:last-child{overflow-wrap:anywhere}
       .sitijo-legend-empty{font-size:12px;color:#8a9fb7;font-style:italic}
@@ -731,7 +769,7 @@ export default function MapClient() {
           {boundaryError&&<small className="sitijo-error">{boundaryError}</small>}
         </div>
         <div className="sitijo-modern-section">
-          <p className="sitijo-modern-label">LAYER INFRASTRUKTUR</p>
+          <div className="sitijo-modern-label-row"><p className="sitijo-modern-label">LAYER INFRASTRUKTUR</p><button className="sitijo-panel-refresh" title="Refresh layer aktif" onClick={refreshSelectedLayers} disabled={!checked.length}><svg viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5M5.5 9A7 7 0 0 1 18 6.5L20 12M4 12l2 5.5A7 7 0 0 0 18.5 15"/></svg></button></div>
           <label className="sitijo-road-toggle"><input type="checkbox" checked={roadEnabled} onChange={e=>{setRoadEnabled(e.target.checked);if(!e.target.checked)setRoadSearch("")}}/> Aktifkan fitur jalan</label>
           <input list="sitijo-road-list" value={roadSearch} disabled={!roadEnabled||!checked.includes("jalan_kota")||roadNames.length===0} onChange={e=>setRoadSearch(e.target.value)} placeholder={!roadEnabled?"Aktifkan fitur jalan...":!checked.includes("jalan_kota")?"Aktifkan layer Jalan Kota...":"Cari nama jalan..."}/>
           <datalist id="sitijo-road-list">{roadNames.map((name,index)=><option key={`${name}-${index}`} value={name}/>)}</datalist>
@@ -751,7 +789,7 @@ export default function MapClient() {
     </div>
     <MapContainer center={[-7.7972,110.3688]} zoom={15} minZoom={10} maxZoom={21} zoomControl={false} style={{height:"100%",width:"100%"}}>
       <TileLayer key={selectedBase.id} attribution={selectedBase.attribution} url={selectedBase.url} minZoom={selectedBase.minZoom??0} maxZoom={selectedBase.maxZoom??21} errorTileUrl={selectedBase.id==="ortho"?"/assets/blank.jpg":undefined}/>
-      <MapExtras onReady={setMap} onCoordinate={(lat,lng)=>setCoordinates({lat,lng})}/>
+      <MapExtras onReady={setMap} onCoordinate={(lat,lng)=>setCoordinates({lat,lng})} onScale={setScaleText}/>
       <MapControls onFit={fitAll} onLocate={locate} baseId={baseId} onBaseChange={setBaseId} basemapOpen={basemapOpen} onBasemapToggle={()=>setBasemapOpen(v=>!v)}/>
     </MapContainer>
     {legendVisible ? <div className="sitijo-legend sitijo-legend-modern">
@@ -760,7 +798,7 @@ export default function MapClient() {
         {checked.length ? checked.map(id => <div className="sitijo-legend-row" key={id}>{getLegendSwatch(id)}<span>{groups.flatMap(g=>g.layers).find(x=>x.id===id)?.name||id}</span></div>) : <div className="sitijo-legend-empty">Tidak ada layer aktif</div>}
         <div className="sitijo-legend-row"><span className="legend-swatch-line" style={{borderTop:"2px dashed #fa2b66"}}/><span>Batas Kelurahan</span></div>
       </div>
-      <div className="sitijo-legend-coords"><span>LAT</span><strong>{coordinates.lat}</strong><span>LNG</span><strong>{coordinates.lng}</strong></div>
+      <div className="sitijo-legend-coords"><span>LAT</span><strong>{coordinates.lat}</strong><span>LNG</span><strong>{coordinates.lng}</strong></div><div className="sitijo-legend-scale"><span>Skala</span><strong>{scaleText}</strong></div>
     </div> : <button className="sitijo-legend-reveal" title="Tampilkan legenda" onClick={()=>setLegendVisible(true)}><svg viewBox="0 0 24 24"><path d="M3.5 5.5 9 3l6 2 5.5-2.5V18L15 20.5l-6-2-5.5 2.5z"/><path d="M9 3v15.5M15 5v15.5"/></svg><span>Legenda</span></button>}
   </div>;
 }
