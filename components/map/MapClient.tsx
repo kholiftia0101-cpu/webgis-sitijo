@@ -40,7 +40,7 @@ function MapExtras({ onReady, onCoordinate }: {onReady:(map:L.Map)=>void;onCoord
   const map=useMap();
   useEffect(()=>{
     onReady(map);
-    const scaleControl=L.control.scale({position:"bottomleft",metric:true,imperial:true,maxWidth:100}).addTo(map);
+    const scaleControl=L.control.scale({position:"bottomleft",metric:true,imperial:false,maxWidth:110}).addTo(map);
     const moveScaleIntoLegend=()=>{
       const host=document.querySelector(".sitijo-legend-scale-host");
       const scaleContainer=(scaleControl as L.Control & {_container?:HTMLElement})._container;
@@ -732,9 +732,13 @@ export default function MapClient() {
       .sitijo-legend-icon{display:grid;place-items:center;color:#1685f5}
       .sitijo-legend-icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
       .sitijo-legend-active{margin-left:4px;font-size:11px;font-weight:700;color:#1676d3;background:#eaf3ff;border-radius:999px;padding:4px 8px;white-space:nowrap}
-      .sitijo-legend-coords{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:4.5px;padding:3.5px 4px;background:#f4f8fd;border:1px solid #e7eef8;border-radius:9px;font-size:10px;color:#607995;font-variant-numeric:tabular-nums}
+      .sitijo-legend-coords{display:grid;grid-template-columns:auto 1fr auto 1fr;align-items:center;justify-items:center;gap:5px;margin-top:4.5px;padding:5px 6px;background:#f4f8fd;border:1px solid #e7eef8;border-radius:9px;font-size:10px;color:#607995;font-variant-numeric:tabular-nums;text-align:center}
       .sitijo-legend-coords span{font-weight:800;letter-spacing:.03em;color:#8ba0b8}
-      .sitijo-legend-coords strong{font-size:11px;font-weight:600;color:#375778}
+      .sitijo-legend-coords strong{font-size:11px;font-weight:600;color:#375778;text-align:center;width:100%}
+      .sitijo-legend-scale-host{margin-top:6px}
+      .sitijo-legend-scale-host .leaflet-control-scale{margin:0!important}
+      .sitijo-legend-scale-host .leaflet-control-scale-line{border:1px solid #94a3b8;border-top:0;border-radius:0 0 4px 4px;background:rgba(248,250,252,.92);color:#475569;font-size:10px;line-height:1.2;padding:2px 5px;box-shadow:none}
+      .sitijo-legend-scale-host .leaflet-control-scale-line:not(:first-child){border-top:1px solid #94a3b8;border-bottom:0;border-radius:4px 4px 0 0}
       .sitijo-legend-content{display:flex;flex-direction:column;gap:5px;max-height:150px;overflow:auto}
       .sitijo-legend-row{display:flex;align-items:center;gap:7px;font-size:12px;line-height:1.4;color:#496582}
       .sitijo-legend-row>span:last-child{overflow-wrap:anywhere}
