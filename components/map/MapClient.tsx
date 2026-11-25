@@ -558,21 +558,26 @@ export default function MapClient() {
   };
 
 
-  const refreshSelectedLayers = async () => {
+  // Tombol di sebelah "LAYER INFRASTRUKTUR" berfungsi mematikan semua layer.
+  const clearAllLayers = () => {
     const selected = [...checkedRef.current];
-    if (!selected.length) {
-      window.alert("Tidak ada layer aktif untuk diperbarui.");
-      return;
-    }
-    for (const id of selected) {
-      const oldLayer = activeLayerRef.current[id];
-      if (map && oldLayer && map.hasLayer(oldLayer)) map.removeLayer(oldLayer);
-      delete activeLayerRef.current[id];
-      delete dataCacheRef.current[id];
-      delete pendingRequestsRef.current[id];
-    }
-    // Refresh layer terpilih tanpa perlu mematikan checkbox satu per satu.
-    for (const id of selected) await toggleLayer(id, true);
+
+    // Kosongkan status checkbox secara serentak.
+    checkedRef.current = [];
+    setChecked([]);
+
+    // Hapus semua layer aktif dari peta.
+    selected.forEach(id => {
+      const layer = activeLayerRef.current[id];
+      if (map && layer && map.hasLayer(layer)) map.removeLayer(layer);
+    });
+
+    // Bersihkan indikator loading agar panel tidak tertinggal.
+    setLoadingLayers([]);
+
+    // Bersihkan fitur pencarian jalan yang bergantung pada layer Jalan Kota.
+    setRoadSearch("");
+    setRoadEnabled(false);
   };
 
 
@@ -770,7 +775,7 @@ export default function MapClient() {
           {boundaryError&&<small className="sitijo-error">{boundaryError}</small>}
         </div>
         <div className="sitijo-modern-section">
-          <div className="sitijo-modern-label-row"><p className="sitijo-modern-label">LAYER INFRASTRUKTUR</p><button className="sitijo-panel-refresh" title="Refresh layer aktif" onClick={refreshSelectedLayers} disabled={!checked.length}><svg viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5M5.5 9A7 7 0 0 1 18 6.5L20 12M4 12l2 5.5A7 7 0 0 0 18.5 15"/></svg></button></div>
+          <div className="sitijo-modern-label-row"><p className="sitijo-modern-label">LAYER INFRASTRUKTUR</p><button className="sitijo-panel-refresh" title="Matikan semua layer" onClick={clearAllLayers} disabled={!checked.length && !loadingLayers.length}><svg viewBox="0 0 24 24"><path d="M20 7v5h-5M4 17v-5h5M5.5 9A7 7 0 0 1 18 6.5L20 12M4 12l2 5.5A7 7 0 0 0 18.5 15"/></svg></button></div>
           <label className="sitijo-road-toggle"><input type="checkbox" checked={roadEnabled} onChange={e=>{setRoadEnabled(e.target.checked);if(!e.target.checked)setRoadSearch("")}}/> Aktifkan fitur jalan</label>
           <input list="sitijo-road-list" value={roadSearch} disabled={!roadEnabled||!checked.includes("jalan_kota")||roadNames.length===0} onChange={e=>setRoadSearch(e.target.value)} placeholder={!roadEnabled?"Aktifkan fitur jalan...":!checked.includes("jalan_kota")?"Aktifkan layer Jalan Kota...":"Cari nama jalan..."}/>
           <datalist id="sitijo-road-list">{roadNames.map((name,index)=><option key={`${name}-${index}`} value={name}/>)}</datalist>
