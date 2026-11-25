@@ -737,9 +737,9 @@ export default function MapClient() {
       .sitijo-legend-icon{display:grid;place-items:center;color:#1685f5}
       .sitijo-legend-icon svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
       .sitijo-legend-active{margin-left:4px;font-size:11px;font-weight:700;color:#1676d3;background:#eaf3ff;border-radius:999px;padding:4px 8px;white-space:nowrap}
-      .sitijo-legend-coords{display:grid;grid-template-columns:auto 1fr auto 1fr;align-items:center;justify-items:center;gap:5px;margin-top:4.5px;padding:5px 6px;background:#f4f8fd;border:1px solid #e7eef8;border-radius:9px;font-size:10px;color:#607995;font-variant-numeric:tabular-nums;text-align:center}
+      .sitijo-legend-coords{display:grid;grid-template-columns:22px minmax(0,1fr) 22px minmax(0,1fr);align-items:center;justify-items:center;gap:4px;margin-top:4.5px;padding:6px 7px;background:#f4f8fd;border:1px solid #e7eef8;border-radius:9px;font-size:10px;color:#607995;font-variant-numeric:tabular-nums;text-align:center}
       .sitijo-legend-coords span{font-weight:800;letter-spacing:.03em;color:#8ba0b8}
-      .sitijo-legend-coords strong{font-size:11px;font-weight:600;color:#375778;text-align:center;width:100%}
+      .sitijo-legend-coords strong{font-size:11px;font-weight:600;color:#375778;text-align:center;width:100%;display:flex;align-items:center;justify-content:center;min-height:16px;white-space:nowrap}
       .sitijo-legend-scale-row{display:flex;align-items:center;gap:7px;margin-top:6px;padding:0 2px}
       .sitijo-legend-scale-label{font-size:10px;font-weight:700;color:#8ba0b8;letter-spacing:.02em}
       .sitijo-legend-scale-host .leaflet-control-scale{margin:0!important}
@@ -804,7 +804,7 @@ export default function MapClient() {
         {checked.length ? checked.map(id => <div className="sitijo-legend-row" key={id}>{getLegendSwatch(id)}<span>{groups.flatMap(g=>g.layers).find(x=>x.id===id)?.name||id}</span></div>) : <div className="sitijo-legend-empty">Tidak ada layer aktif</div>}
         <div className="sitijo-legend-row"><span className="legend-swatch-line" style={{borderTop:"2px dashed #fa2b66"}}/><span>Batas Kelurahan</span></div>
       </div>
-      <div className="sitijo-legend-coords"><span>LAT</span><strong>{coordinates.lat}</strong><span>LNG</span><strong>{coordinates.lng}</strong></div>
+      <div className="sitijo-legend-coords"><span>L</span><strong>{coordinates.lat}</strong><span>B</span><strong>{coordinates.lng}</strong></div>
       <div className="sitijo-legend-scale-row"><span className="sitijo-legend-scale-label">Skala</span><div className="sitijo-legend-scale-host" aria-label="Skala peta"/></div>
     </div> : <button className="sitijo-legend-reveal" title="Tampilkan legenda" onClick={()=>setLegendVisible(true)}><svg viewBox="0 0 24 24"><path d="M3.5 5.5 9 3l6 2 5.5-2.5V18L15 20.5l-6-2-5.5 2.5z"/><path d="M9 3v15.5M15 5v15.5"/></svg><span>Legenda</span></button>}
   </div>;
