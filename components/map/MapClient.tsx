@@ -36,34 +36,21 @@ function CoordinateControl({onCoordinate}:{onCoordinate:(lat:string,lng:string)=
   useMapEvents({mousemove(e){onCoordinate(e.latlng.lat.toFixed(6),e.latlng.lng.toFixed(6))}});
   return null;
 }
-function niceScaleDistance(maxMeters:number):number {
-  if (!Number.isFinite(maxMeters) || maxMeters <= 0) return 1;
-  const power=Math.pow(10,Math.floor(Math.log10(maxMeters)));
-  const normalized=maxMeters/power;
-  const step=normalized>=5?5:normalized>=3?3:normalized>=2?2:1;
-  return step*power;
-}
-function MapExtras({ onReady, onCoordinate, onScale }: {onReady:(map:L.Map)=>void;onCoordinate:(lat:string,lng:string)=>void;onScale:(scale:{metric:string;metricWidth:number;imperial:string;imperialWidth:number})=>void}) {
+function MapExtras({ onReady, onCoordinate }: {onReady:(map:L.Map)=>void;onCoordinate:(lat:string,lng:string)=>void}) {
   const map=useMap();
   useEffect(()=>{
     onReady(map);
-    const updateScale=()=>{
-      const latitude=map.getCenter().lat;
-      const zoom=map.getZoom();
-      const metersPerPixel=(156543.03392*Math.cos(latitude*Math.PI/180))/Math.pow(2,zoom);
-      const maxMeters=metersPerPixel*78;
-      const metricMeters=niceScaleDistance(maxMeters);
-      const imperialFeet=niceScaleDistance(maxMeters*3.280839895);
-      const metricWidth=Math.max(12,Math.min(78,metricMeters/metersPerPixel));
-      const imperialWidth=Math.max(12,Math.min(78,(imperialFeet/3.280839895)/metersPerPixel));
-      const metricLabel=metricMeters>=1000?`${(metricMeters/1000).toLocaleString("id-ID",{maximumFractionDigits:1})} km`:`${Math.round(metricMeters)} m`;
-      const imperialLabel=imperialFeet>=5280?`${(imperialFeet/5280).toLocaleString("id-ID",{maximumFractionDigits:1})} mi`:`${Math.round(imperialFeet)} ft`;
-      onScale({metric:metricLabel,metricWidth,imperial:imperialLabel,imperialWidth});
+    const scaleControl=L.control.scale({position:"bottomleft",metric:true,imperial:true,maxWidth:100}).addTo(map);
+    const moveScaleIntoLegend=()=>{
+      const host=document.querySelector(".sitijo-legend-scale-host");
+      const scaleContainer=(scaleControl as L.Control & {_container?:HTMLElement})._container;
+      if(host && scaleContainer && scaleContainer.parentElement!==host) host.appendChild(scaleContainer);
     };
-    updateScale();
-    map.on("zoomend moveend",updateScale);
-    return ()=>{map.off("zoomend moveend",updateScale);onReady(null as unknown as L.Map)};
-  },[map,onReady,onScale]);
+    moveScaleIntoLegend();
+    const observer=new MutationObserver(moveScaleIntoLegend);
+    observer.observe(document.body,{childList:true,subtree:true});
+    return ()=>{observer.disconnect();map.removeControl(scaleControl);onReady(null as unknown as L.Map)};
+  },[map,onReady]);
   return <CoordinateControl onCoordinate={onCoordinate}/>;
 }
 
@@ -164,7 +151,6 @@ export default function MapClient() {
   const [boundaryError,setBoundaryError]=useState("");
   const [map,setMap]=useState<L.Map|null>(null);
   const [coordinates,setCoordinates]=useState({lat:"—",lng:"—"});
-  const [scaleBar,setScaleBar]=useState({metric:"—",metricWidth:40,imperial:"—",imperialWidth:40});
   const boundaryLayer=useRef<L.GeoJSON|null>(null);
   const activeLayerRef = useRef<Record<string, L.Layer>>({});
   // Cache data GeoJSON
@@ -750,10 +736,6 @@ export default function MapClient() {
       .sitijo-legend-coords span{font-weight:800;letter-spacing:.03em;color:#8ba0b8}
       .sitijo-legend-coords strong{font-size:11px;font-weight:600;color:#375778}
       .sitijo-legend-content{display:flex;flex-direction:column;gap:5px;max-height:150px;overflow:auto}
-      .sitijo-legend-scale{display:flex;flex-direction:column;gap:2px;margin-top:5px;padding:3px 5px;background:rgba(255,255,255,.88);border:1px solid #d6dce5;border-radius:3px;width:max-content;max-width:100%;font-size:10px;color:#4b5563;box-shadow:0 1px 3px rgba(15,23,42,.08)}
-      .sitijo-legend-scale-row{height:13px;display:flex;align-items:center;gap:5px;white-space:nowrap}
-      .sitijo-legend-scale-bar{height:8px;flex:none;border:1px solid #6b7280;background:linear-gradient(90deg,#d1d5db,#f3f4f6);box-sizing:border-box}
-      .sitijo-legend-scale-label{font-size:10px;line-height:1;color:#4b5563;font-weight:500}
       .sitijo-legend-row{display:flex;align-items:center;gap:7px;font-size:12px;line-height:1.4;color:#496582}
       .sitijo-legend-row>span:last-child{overflow-wrap:anywhere}
       .sitijo-legend-empty{font-size:12px;color:#8a9fb7;font-style:italic}
@@ -804,7 +786,7 @@ export default function MapClient() {
     </div>
     <MapContainer center={[-7.7972,110.3688]} zoom={15} minZoom={10} maxZoom={21} zoomControl={false} style={{height:"100%",width:"100%"}}>
       <TileLayer key={selectedBase.id} attribution={selectedBase.attribution} url={selectedBase.url} minZoom={selectedBase.minZoom??0} maxZoom={selectedBase.maxZoom??21} errorTileUrl={selectedBase.id==="ortho"?"/assets/blank.jpg":undefined}/>
-      <MapExtras onReady={setMap} onCoordinate={(lat,lng)=>setCoordinates({lat,lng})} onScale={setScaleBar}/>
+      <MapExtras onReady={setMap} onCoordinate={(lat,lng)=>setCoordinates({lat,lng})}/>
       <MapControls onFit={fitAll} onLocate={locate} baseId={baseId} onBaseChange={setBaseId} basemapOpen={basemapOpen} onBasemapToggle={()=>setBasemapOpen(v=>!v)}/>
     </MapContainer>
     {legendVisible ? <div className="sitijo-legend sitijo-legend-modern">
@@ -814,10 +796,7 @@ export default function MapClient() {
         <div className="sitijo-legend-row"><span className="legend-swatch-line" style={{borderTop:"2px dashed #fa2b66"}}/><span>Batas Kelurahan</span></div>
       </div>
       <div className="sitijo-legend-coords"><span>LAT</span><strong>{coordinates.lat}</strong><span>LNG</span><strong>{coordinates.lng}</strong></div>
-      <div className="sitijo-legend-scale" aria-label="Skala peta">
-        <div className="sitijo-legend-scale-row"><span className="sitijo-legend-scale-bar" style={{width:`${scaleBar.metricWidth}px`}}/><span className="sitijo-legend-scale-label">{scaleBar.metric}</span></div>
-        <div className="sitijo-legend-scale-row"><span className="sitijo-legend-scale-bar" style={{width:`${scaleBar.imperialWidth}px`}}/><span className="sitijo-legend-scale-label">{scaleBar.imperial}</span></div>
-      </div>
+      <div className="sitijo-legend-scale-host" aria-label="Skala peta"/>
     </div> : <button className="sitijo-legend-reveal" title="Tampilkan legenda" onClick={()=>setLegendVisible(true)}><svg viewBox="0 0 24 24"><path d="M3.5 5.5 9 3l6 2 5.5-2.5V18L15 20.5l-6-2-5.5 2.5z"/><path d="M9 3v15.5M15 5v15.5"/></svg><span>Legenda</span></button>}
   </div>;
 }
