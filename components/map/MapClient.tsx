@@ -746,7 +746,7 @@ export default function MapClient() {
       </div>
     </aside>}
     <div className="sitijo-layer-loading" style={{display:loadingLayers.length?"block":"none"}}>
-      <div className="loading-header"><div className="loading-spinner"/><div><div className="loading-title">Sedang memuat</div><div className="loading-layer">{loadingLayers.join(", ")}</div></div></div>
+      <div className="loading-header"><div className="loading-spinner"/><div><div className="loading-title">Sedang memuat</div><div className="loading-layer">{loadingLayers.map(id=>groups.flatMap(g=>g.layers).find(layer=>layer.id===id)?.name||id).join(", ")}</div></div></div>
       <div className="loading-progress"><div className="loading-progress-bar"/></div><div className="loading-count">{loadingLayers.length} layer sedang diproses</div>
     </div>
     <MapContainer center={[-7.7972,110.3688]} zoom={15} minZoom={10} maxZoom={21} zoomControl={false} style={{height:"100%",width:"100%"}}>
