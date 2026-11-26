@@ -1518,3 +1518,82 @@ html {
     overflow: visible !important;
   }
 }
+/* =========================================
+   SITIJO FOOTER - TWO COLUMN FINAL
+========================================= */
+
+.home .footer {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  grid-template-areas:
+    "info map"
+    "bottom bottom";
+
+  align-items: start;
+  gap: 35px 55px;
+
+  width: 100%;
+  height: auto;
+  min-height: 0;
+  margin-top: 40px;
+  padding: 55px clamp(24px, 6vw, 100px) 0;
+}
+
+/* Seluruh informasi di kiri */
+.home .footer-top {
+  grid-area: info;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+.home .footer-content {
+  display: contents;
+}
+
+/* Kontak di kolom kiri */
+.home .footer-contact {
+  grid-column: 1;
+}
+
+/* Google Maps di kolom kanan */
+.home .footer-map-section {
+  grid-area: map;
+  width: 100%;
+  min-width: 0;
+}
+
+/* Sosial media tetap di kiri */
+.home .footer-social-section {
+  grid-column: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 0;
+  padding: 25px 0;
+}
+
+/* Copyright membentang di bawah */
+.home .footer-bottom {
+  grid-area: bottom;
+  width: 100%;
+  max-width: none;
+  margin: 0;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .home .footer {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "info"
+      "map"
+      "bottom";
+    gap: 28px;
+  }
+
+  .home .footer-contact,
+  .home .footer-social-section {
+    grid-column: 1;
+  }
+}
