@@ -1,4 +1,3 @@
-
 import Link from "next/link";
 import { getSession } from "@/lib/auth/session";
 
@@ -29,21 +28,15 @@ const departments = [
 
 export default async function Home() {
   const user = await getSession();
-
   const isLoggedIn = Boolean(user);
   const isAdmin =
     String(user?.unit || "").toLowerCase() === "admin";
-
-  // Semua halaman internal memerlukan login.
-  // Riwayat akses hanya ditampilkan untuk admin.
   const protectedHref = (href: string) =>
     isLoggedIn ? href : `/login?redirect=${encodeURIComponent(href)}`;
-
   const visibleFeatures = features.filter(([, , href]) => {
     if (href === "/riwayat" && !isAdmin) {
       return false;
     }
-
     return true;
   });
 
@@ -53,7 +46,6 @@ export default async function Home() {
         <div className="brand">
           <img src={asset("jogja.png")} alt="Logo Jogja" />
           <img src={asset("logo.png")} alt="Logo DPUPKP" />
-
           <div>
             <b>SITIJO</b>
             <span>
@@ -64,22 +56,17 @@ export default async function Home() {
             </small>
           </div>
         </div>
-
         <nav>
           <Link href="/">Beranda</Link>
-
           <Link href={protectedHref("/jenisdata")}>
             Jenis Data
           </Link>
-
           <div className="navdrop">
             Data Infrastruktur ▾
-
             <div className="dropdown">
               <Link href={protectedHref("/peta")}>
                 Peta Infrastruktur
               </Link>
-
               <Link href={protectedHref("/update")}>
                 Update Data
               </Link>
@@ -93,13 +80,11 @@ export default async function Home() {
               </Link>
             </div>
           </div>
-
           {isAdmin && (
             <Link href="/riwayat">
               Riwayat Akses
             </Link>
           )}
-
           <Link href={protectedHref("/panduan")}>
             Panduan Penggunaan
           </Link>
@@ -336,11 +321,11 @@ export default async function Home() {
 
         <div className="stat-grid">
           {[
-            ["luas.png", "0", "Luas Wilayah (km²)"],
+            ["luas.png", "32.82", "Luas Wilayah (km²)"],
             ["kecamatan.png", "14", "Kemantren"],
             ["kelurahan.png", "45", "Kelurahan"],
-            ["rw.png", "0", "RW"],
-            ["rt.png", "0", "RT"],
+            ["rw.png", "616", "RW"],
+            ["rt.png", "2535", "RT"],
           ].map(([img, n, label]) => (
             <div className="stat" key={label}>
               <img src={asset(img)} alt="" />
