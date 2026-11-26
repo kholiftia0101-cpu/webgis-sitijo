@@ -231,22 +231,25 @@ return (
         </div>
       </section>
       
-<footer className="footer">
-  <div className="footer-top">
-    <div className="footer-heading">
-      <span className="footer-kicker">SITIJO · OFFICIAL INFORMATION PORTAL</span>
-      <h2>
-        Hubungi <span>KOTA YOGYAKARTA</span>
-      </h2>
-      <p>
-        Dinas Pekerjaan Umum Perumahan dan Kawasan Permukiman
-        Pemerintah Kota Yogyakarta
-      </p>
-    </div>
-  </div>
 
-  <div className="footer-content">
-    {/* INFORMASI KONTAK */}
+<footer className="footer">
+  {/* KOLOM KIRI: SELURUH INFORMASI */}
+  <div className="footer-info-column">
+    <div className="footer-top">
+      <div className="footer-heading">
+        <span className="footer-kicker">
+          SITIJO · OFFICIAL INFORMATION PORTAL
+        </span>
+        <h2>
+          Hubungi <span>KOTA YOGYAKARTA</span>
+        </h2>
+        <p>
+          Dinas Pekerjaan Umum Perumahan dan Kawasan Permukiman
+          Pemerintah Kota Yogyakarta
+        </p>
+      </div>
+    </div>
+
     <div className="footer-contact">
       <div className="footer-contact-item">
         <span className="footer-icon">⌂</span>
@@ -257,11 +260,8 @@ return (
             Kemantren Umbulharjo, Kota Yogyakarta,
             Daerah Istimewa Yogyakarta 55165
           </p>
-          <a
-            href="https://www.google.com/maps/search/?api=1&query=Jl.+Kenari+No.+56+Yogyakarta"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
+          <a href="https://www.google.com/maps/search/?api=1&query=Jl.+Kenari+No.+56+Yogyakarta"
+            target="_blank" rel="noopener noreferrer">
             Lihat petunjuk lokasi ↗
           </a>
         </div>
@@ -272,10 +272,8 @@ return (
         <div>
           <h3>Telepon</h3>
           <p>
-            <a href="tel:+62274515867">(0274) 515867</a>
-            <br />
-            <a href="tel:+62274586795">(0274) 586795</a>
-            <br />
+            <a href="tel:+62274515867">(0274) 515867</a><br />
+            <a href="tel:+62274586795">(0274) 586795</a><br />
             <a href="tel:+62274515866">(0274) 515866</a>
           </p>
         </div>
@@ -306,10 +304,8 @@ return (
         <div>
           <h3>Hotline Pengaduan</h3>
           <p>
-            SMS: <a href="sms:08122780001">08122780001</a>
-            <br />
-            Email:{" "}
-            <a href="mailto:upik@jogjakota.go.id">
+            SMS: <a href="sms:08122780001">08122780001</a><br />
+            Email: <a href="mailto:upik@jogjakota.go.id">
               upik@jogjakota.go.id
             </a>
           </p>
@@ -317,85 +313,63 @@ return (
       </div>
     </div>
 
-    {/* GOOGLE MAPS */}
-    <div className="footer-map-section">
-      <div className="footer-map-heading">
-        <div>
-          <span>LOCATION</span>
-          <h3>Lokasi Kantor DPUPKP</h3>
-        </div>
-        <span className="footer-map-pin">⌖</span>
+    {/* SOSIAL MEDIA TETAP DI KIRI */}
+    <div className="footer-social-section">
+      <div className="footer-social-heading">
+        <span>STAY CONNECTED</span>
+        <h3>Ikuti Informasi DPUPKP</h3>
       </div>
 
-      <div className="footer-map">
-        <iframe
-          title="Lokasi Kantor DPUPKP Kota Yogyakarta"
-          src="https://www.google.com/maps?q=Jl.%20Kenari%20No.%2056%2C%20Muja%20Muju%2C%20Umbulharjo%2C%20Yogyakarta&output=embed"
-          loading="lazy"
-          referrerPolicy="no-referrer-when-downgrade"
-          allowFullScreen
-        />
-      </div>
+      <div className="footer-social-links">
+        <a href="https://www.instagram.com/dpupkpkotajogja/"
+          target="_blank" rel="noopener noreferrer">
+          <span>◎</span> Instagram
+        </a>
 
-      <a
-        className="footer-map-link"
-        href="https://www.google.com/maps/search/?api=1&query=Jl.+Kenari+No.+56+Yogyakarta"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        Buka Google Maps
-        <span>↗</span>
-      </a>
+        <a href="https://www.youtube.com/@dinaspupkpkotayogyakarta"
+          target="_blank" rel="noopener noreferrer">
+          <span>▶</span> YouTube
+        </a>
+
+        <a href="mailto:puperkim@jogjakota.go.id">
+          <span>✉</span> Email
+        </a>
+
+        <a href="mailto:upik@jogjakota.go.id">
+          <span>☏</span> Pengaduan UPIK
+        </a>
+      </div>
     </div>
   </div>
 
-  {/* SOCIAL MEDIA */}
-  <div className="footer-social-section">
-    <div className="footer-social-heading">
-      <span>STAY CONNECTED</span>
-      <h3>Ikuti Informasi DPUPKP</h3>
+  {/* KOLOM KANAN: GOOGLE MAPS */}
+  <div className="footer-map-section">
+    <div className="footer-map-heading">
+      <div>
+        <span>LOCATION</span>
+        <h3>Lokasi Kantor DPUPKP</h3>
+      </div>
+      <span className="footer-map-pin">⌖</span>
     </div>
 
-    <div className="footer-social-links">
-      <a
-        href="https://www.instagram.com/dpupkpkotajogja/"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="Instagram DPUPKP"
-      >
-        <span>◎</span>
-        Instagram
-      </a>
-
-      <a
-        href="https://www.youtube.com/@dinaspupkpkotayogyakarta"
-        target="_blank"
-        rel="noopener noreferrer"
-        aria-label="YouTube DPUPKP"
-      >
-        <span>▶</span>
-        YouTube
-      </a>
-
-      <a
-        href="mailto:puperkim@jogjakota.go.id"
-        aria-label="Email DPUPKP"
-      >
-        <span>✉</span>
-        Email
-      </a>
-
-      <a
-        href="mailto:upik@jogjakota.go.id"
-        aria-label="Layanan Pengaduan UPIK"
-      >
-        <span>☏</span>
-        Pengaduan UPIK
-      </a>
+    <div className="footer-map">
+      <iframe
+        title="Lokasi Kantor DPUPKP Kota Yogyakarta"
+        src="https://www.google.com/maps?q=Jl.%20Kenari%20No.%2056%2C%20Muja%20Muju%2C%20Umbulharjo%2C%20Yogyakarta&output=embed"
+        loading="lazy"
+        referrerPolicy="no-referrer-when-downgrade"
+        allowFullScreen
+      />
     </div>
+
+    <a className="footer-map-link"
+      href="https://www.google.com/maps/search/?api=1&query=Jl.+Kenari+No.+56+Yogyakarta"
+      target="_blank" rel="noopener noreferrer">
+      Buka Google Maps <span>↗</span>
+    </a>
   </div>
 
-  {/* COPYRIGHT */}
+  {/* COPYRIGHT FULL WIDTH */}
   <div className="footer-bottom">
     <div className="footer-copyright">
       <span className="footer-copyright-mark">S</span>
@@ -403,20 +377,20 @@ return (
         © {new Date().getFullYear()} Dinas Pekerjaan Umum,
         Perumahan dan Kawasan Permukiman Kota Yogyakarta.
         <br />
-        <span>Sistem Informasi Infrastruktur Kota Yogyakarta · SITIJO</span>
+        <span>
+          Sistem Informasi Infrastruktur Kota Yogyakarta · SITIJO
+        </span>
       </p>
     </div>
 
-    <a
-      href="https://pu.jogjakota.go.id/"
-      target="_blank"
-      rel="noopener noreferrer"
-      className="footer-official-link"
-    >
+    <a href="https://pu.jogjakota.go.id/"
+      target="_blank" rel="noopener noreferrer"
+      className="footer-official-link">
       Website Resmi DPUPKP ↗
     </a>
   </div>
 </footer>
+
 
     </main>
   );
