@@ -241,12 +241,8 @@ return (
           SITIJO · OFFICIAL INFORMATION PORTAL
         </span>
         <h2>
-          Hubungi <span>KOTA YOGYAKARTA</span>
+          Hubungi <span>DPUPKP Kota Yogyakarta</span>
         </h2>
-        <p>
-          Dinas Pekerjaan Umum Perumahan dan Kawasan Permukiman
-          Pemerintah Kota Yogyakarta
-        </p>
       </div>
     </div>
 
