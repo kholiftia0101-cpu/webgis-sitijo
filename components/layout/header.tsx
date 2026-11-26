@@ -5,7 +5,7 @@ import { getSession } from "@/lib/auth/session";
 const asset = (name: string) =>
   `${process.env.NEXT_PUBLIC_ASSET_BASE || "https://sitijo-assets.ruli-andaru.workers.dev"}/assets/${name}`;
 
-export default async function header() {
+export default async function SitijoHeader() {
   const user = await getSession();
 
   const isLoggedIn = Boolean(user);
@@ -19,7 +19,6 @@ export default async function header() {
 
   return (
     <header className="site-header">
-      {/* BRAND IDENTITY */}
       <div className="brand">
         <img src={asset("jogja.png")} alt="Logo Jogja" />
         <img src={asset("logo.png")} alt="Logo DPUPKP" />
@@ -35,7 +34,6 @@ export default async function header() {
         </div>
       </div>
 
-      {/* MAIN NAVIGATION */}
       <nav>
         <Link href="/">Beranda</Link>
 
@@ -43,7 +41,6 @@ export default async function header() {
           Jenis Data
         </Link>
 
-        {/* INFRASTRUCTURE DROPDOWN */}
         <div className="navdrop">
           <span>Data Infrastruktur ▾</span>
 
@@ -66,7 +63,6 @@ export default async function header() {
           </div>
         </div>
 
-        {/* ADMIN MENU */}
         {isAdmin && (
           <Link href="/riwayat">
             Riwayat Akses
@@ -77,7 +73,6 @@ export default async function header() {
           Panduan Penggunaan
         </Link>
 
-        {/* USER AUTHENTICATION */}
         {isLoggedIn ? (
           <div className="nav-user">
             <span className="nav-username">
