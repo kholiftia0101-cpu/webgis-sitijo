@@ -49,9 +49,6 @@
   }
 }
 
-.intro-grid,.external,.footer{grid-template-columns:1fr}.feature-grid,.department-grid{grid-template-columns:repeat(2,1fr);gap:10px}.section,.facts{padding:48px 18px}.stat-grid{grid-template-columns:repeat(2,1fr)}.map-header{height:58px;padding:0 12px}.map-brand b{font-size:19px}.map-brand span{display:none}.map-sidebar{width:min(285px,85vw)}.sub-card{margin:35px 16px;padding:28px 22px}}
-
-
 .page-signin {
   min-height: 100vh;
   display: flex;
