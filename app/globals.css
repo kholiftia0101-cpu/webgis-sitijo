@@ -1461,3 +1461,48 @@
     animation-duration: .01ms !important;
   }
 }
+/* =========================================
+   HOMEPAGE - NATURAL PAGE SCROLL
+   Header tetap menggunakan style sebelumnya
+========================================= */
+
+.home {
+  width: 100%;
+  min-height: 100vh;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  position: relative;
+}
+
+/* Konten beranda mengikuti tinggi halaman */
+.home > section,
+.home > footer {
+  position: relative;
+  width: 100%;
+  max-height: none;
+}
+
+/* Mencegah konten beranda terpotong */
+.home .hero,
+.home .intro-grid,
+.home .section,
+.home .stats,
+.home .footer {
+  overflow: visible;
+  max-height: none;
+}
+
+/* Scroll halaman secara normal */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Responsif untuk layar kecil */
+@media (max-width: 768px) {
+  .home {
+    height: auto !important;
+    min-height: 100vh;
+    overflow: visible !important;
+  }
+}
