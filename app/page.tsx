@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getSession } from "@/lib/auth/session";
-import header from "@/components/layout/header"; 
+import Header from "@/components/layout/header";
 const asset = (name: string) =>
   `${process.env.NEXT_PUBLIC_ASSET_BASE || "https://sitijo-assets.ruli-andaru.workers.dev"}/assets/${name}`;
 const features = [
