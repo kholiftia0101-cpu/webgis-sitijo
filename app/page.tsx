@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getSession } from "@/lib/auth/session";
-
+import SitijoHeader from "@/components/layout/header"; 
 const asset = (name: string) =>
   `${process.env.NEXT_PUBLIC_ASSET_BASE || "https://sitijo-assets.ruli-andaru.workers.dev"}/assets/${name}`;
 const features = [
@@ -36,82 +36,18 @@ export default async function Home() {
     }
     return true;
   });
-  return (
-    <main className="home">
-      <header className="site-header">
-        <div className="brand">
-          <img src={asset("jogja.png")} alt="Logo Jogja" />
-          <img src={asset("logo.png")} alt="Logo DPUPKP" />
-          <div>
-            <b>SITIJO</b>
-            <span>
-              Sistem Informasi Infrastruktur Kota Yogyakarta
-            </span>
-            <small>
-              Dinas Pekerjaan Umum Perumahan dan Kawasan Permukiman
-            </small>
-          </div>
-        </div>
-        <nav>
-          <Link href="/">Beranda</Link>
-          <Link href={protectedHref("/jenisdata")}>
-            Jenis Data
-          </Link>
-          <div className="navdrop">
-            Data Infrastruktur ▾
-            <div className="dropdown">
-              <Link href={protectedHref("/peta")}>
-                Peta Infrastruktur
-              </Link>
-              <Link href={protectedHref("/update")}>
-                Update Data
-              </Link>
-              <Link href={protectedHref("/tambah_data")}>
-                Tambah Data
-              </Link>
-              <Link href={protectedHref("/download")}>
-                Download Data
-              </Link>
-            </div>
-          </div>
-          {isAdmin && (
-            <Link href="/riwayat">
-              Riwayat Akses
-            </Link>
-          )}
-          <Link href={protectedHref("/panduan")}>
-            Panduan Penggunaan
-          </Link>
-          {isLoggedIn ? (
-            <div className="nav-user">
-              <span className="nav-username">
-                {user?.username}
-              </span>
-              <form
-                action="/api/auth/signout"
-                method="POST"
-              >
-                <button
-                  type="submit"
-                  className="signin"
-                >
-                  Logout
-                </button>
-              </form>
-            </div>
-          ) : (
-            <Link className="signin" href="/login">
-              Sign In
-            </Link>
-          )}
-        </nav>
-      </header>
-      <section
-        className="hero"
-        style={{
-          backgroundImage: `linear-gradient(90deg,rgba(0,26,58,.82),rgba(0,37,74,.35)),url(${asset("background.jpg")})`,
-        }}
-      >
+return (
+  <main className="home">
+
+    <header />
+
+    <section
+      className="hero"
+      style={{
+        backgroundImage: `linear-gradient(90deg,rgba(0,26,58,.82),rgba(0,37,74,.35)),url(${asset("background.jpg")})`,
+      }}
+    >
+    
         <div className="hero-copy">
           <span className="eyebrow">
             WEBGIS INFRASTRUKTUR KOTA YOGYAKARTA
