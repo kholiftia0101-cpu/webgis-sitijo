@@ -3,7 +3,6 @@ import { getSession } from "@/lib/auth/session";
 
 const asset = (name: string) =>
   `${process.env.NEXT_PUBLIC_ASSET_BASE || "https://sitijo-assets.ruli-andaru.workers.dev"}/assets/${name}`;
-
 const features = [
   ["profil.png", "Informasi Profil DPUPKP Kota Yogyakarta", "/info"],
   ["data.png", "Ketersediaan Data Infrastruktur", "/jenisdata"],
@@ -14,7 +13,6 @@ const features = [
   ["riwayat.png", "Riwayat Akses Pengguna", "/riwayat"],
   ["panduan.png", "Panduan Penggunaan WEBGIS SITIJO", "/panduan"],
 ];
-
 const departments = [
   ["penataan_bangunan.png", "Bidang Penataan Bangunan"],
   ["konstruksi.png", "Bidang Pengendalian & Pembinaan Jasa Konstruksi"],
@@ -25,7 +23,6 @@ const departments = [
   ["rusunawa.png", "UPT Pengelolaan Rusunawa"],
   ["pju.png", "UPT Penerangan Jalan Umum"],
 ];
-
 export default async function Home() {
   const user = await getSession();
   const isLoggedIn = Boolean(user);
@@ -39,7 +36,6 @@ export default async function Home() {
     }
     return true;
   });
-
   return (
     <main className="home">
       <header className="site-header">
@@ -70,11 +66,9 @@ export default async function Home() {
               <Link href={protectedHref("/update")}>
                 Update Data
               </Link>
-
               <Link href={protectedHref("/tambah_data")}>
                 Tambah Data
               </Link>
-
               <Link href={protectedHref("/download")}>
                 Download Data
               </Link>
@@ -88,13 +82,11 @@ export default async function Home() {
           <Link href={protectedHref("/panduan")}>
             Panduan Penggunaan
           </Link>
-
           {isLoggedIn ? (
             <div className="nav-user">
               <span className="nav-username">
                 {user?.username}
               </span>
-
               <form
                 action="/api/auth/signout"
                 method="POST"
@@ -114,7 +106,6 @@ export default async function Home() {
           )}
         </nav>
       </header>
-
       <section
         className="hero"
         style={{
@@ -125,13 +116,11 @@ export default async function Home() {
           <span className="eyebrow">
             WEBGIS INFRASTRUKTUR KOTA YOGYAKARTA
           </span>
-
           <h1>
             Satu Data, Satu Peta
             <br />
             Infrastruktur Kota Yogyakarta
           </h1>
-
           <p>
             Sistem Informasi Infrastruktur Kota Yogyakarta
             (SITIJO) merupakan platform digital internal Dinas
@@ -139,7 +128,6 @@ export default async function Home() {
             Kota Yogyakarta yang menyajikan data spasial dan
             data atribut penunjang infrastruktur Kota Yogyakarta.
           </p>
-
           <Link
             className="gold-button"
             href={protectedHref("/peta")}
@@ -148,15 +136,12 @@ export default async function Home() {
           </Link>
         </div>
       </section>
-
       <section className="intro-grid">
         <article>
           <span className="section-kicker">
             KOLABORASI DAN INTEGRASI DATA
           </span>
-
           <h2>Kolaborasi dan Integrasi Data</h2>
-
           <p>
             Website based Geographic Information System
             (WEBGIS) SITIJO dapat digunakan sebagai sarana
@@ -164,22 +149,18 @@ export default async function Home() {
             Kota Yogyakarta untuk pengelolaan data infrastruktur.
           </p>
         </article>
-
         <article className="access-card">
           <div className="lock">♙</div>
-
           <h2>
             {isLoggedIn
               ? "Akses Berhasil Diaktifkan"
               : "Akses Terbatas dan Terlindungi"}
           </h2>
-
           <p>
             {isLoggedIn
               ? `Selamat datang, ${user?.username}. Kamu sudah login dan dapat mengakses menu sesuai hak akses akun.`
               : "Platform digital ini hanya dapat diakses oleh Bidang, UPT, dan beberapa pihak terkait di lingkup DPUPKP Kota Yogyakarta."}
           </p>
-
           {isLoggedIn ? (
             <Link href="/peta">
               Buka Peta Infrastruktur →
@@ -191,21 +172,17 @@ export default async function Home() {
           )}
         </article>
       </section>
-
       <section className="section">
         <div className="section-heading">
           <span className="section-kicker">
             FITUR YANG TERSEDIA PADA WEBGIS SITIJO
           </span>
-
           <h2>Fitur WEBGIS SITIJO</h2>
-
           <p>
             Seluruh kebutuhan informasi dan pengelolaan data
             infrastruktur dalam satu platform.
           </p>
         </div>
-
         <div className="feature-grid">
           {visibleFeatures.map(([img, label, href]) => (
             <Link
@@ -214,9 +191,7 @@ export default async function Home() {
               key={label}
             >
               <img src={asset(img)} alt="" />
-
               <strong>{label}</strong>
-
               <span>
                 {isLoggedIn
                   ? "Jelajahi fitur →"
@@ -226,22 +201,18 @@ export default async function Home() {
           ))}
         </div>
       </section>
-
       <section className="section department-section">
         <div className="section-heading">
           <span className="section-kicker">
             BIDANG TERKAIT
           </span>
-
           <h2>Data Infrastruktur pada WEBGIS SITIJO</h2>
-
           <p>
             Telusuri bidang-bidang yang berkaitan dengan
             penyajian data geospasial pada Sistem Informasi
             Infrastruktur Kota Yogyakarta (SITIJO).
           </p>
         </div>
-
         <div className="department-grid">
           {departments.map(([img, label]) => (
             <article
@@ -253,7 +224,6 @@ export default async function Home() {
             </article>
           ))}
         </div>
-
         <div className="center">
           <Link
             href={protectedHref("/jenisdata")}
@@ -263,18 +233,15 @@ export default async function Home() {
           </Link>
         </div>
       </section>
-
       <section className="section external">
         <div>
           <span className="section-kicker">
             WEBSITE DPUPKP KOTA YOGYAKARTA
           </span>
-
           <h2>
             Ketersediaan Website di DPUPKP Kota Yogyakarta
           </h2>
         </div>
-
         <div className="external-links">
           <a
             href="https://lintas.geo-ai.id"
@@ -283,7 +250,6 @@ export default async function Home() {
           >
             LINTAS — Layanan Informasi Jembatan Kota Yogyakarta ↗
           </a>
-
           <a
             href="https://pu.jogjakota.go.id"
             target="_blank"
@@ -291,7 +257,6 @@ export default async function Home() {
           >
             Website DPUPKP Kota Yogyakarta ↗
           </a>
-
           <a
             href="https://yogyapsu.vercel.app"
             target="_blank"
@@ -301,15 +266,12 @@ export default async function Home() {
           </a>
         </div>
       </section>
-
       <section className="facts">
         <div className="section-heading">
           <span className="section-kicker">
             KILAS BATASAN DATA
           </span>
-
           <h2>Kilas Batasan Data Kota Yogyakarta</h2>
-
           <p>
             Kota Yogyakarta secara astronomis terletak di
             antara 7°15&apos;24&quot; sampai dengan 7°49&apos;26&quot; Lintang
@@ -318,7 +280,6 @@ export default async function Home() {
             di atas permukaan laut.
           </p>
         </div>
-
         <div className="stat-grid">
           {[
             ["luas.png", "32.82", "Luas Wilayah (km²)"],
@@ -335,18 +296,15 @@ export default async function Home() {
           ))}
         </div>
       </section>
-
       <footer className="footer">
         <div>
           <h2>DPUPKP KOTA YOGYAKARTA</h2>
-
           <p>
             Dinas Pekerjaan Umum Perumahan dan Kawasan
             Permukiman
             <br />
             Pemerintah Kota Yogyakarta
           </p>
-
           <p>
             Jl. Kenari No. 56, Kelurahan Muja Muju,
             Kemantren Umbulharjo,
@@ -354,18 +312,14 @@ export default async function Home() {
             Kota Yogyakarta, Daerah Istimewa Yogyakarta 55165
           </p>
         </div>
-
         <div>
           <b>Kontak</b>
-
           <p>
             Telepon: (0274) 515867, (0274) 586795,
             (0274) 515866
           </p>
-
           <p>Email: puperkim@jogjakota.go.id</p>
         </div>
-
         <small>
           © 2025 Dinas Pekerjaan Umum, Perumahan dan
           Kawasan Permukiman Kota Yogyakarta
