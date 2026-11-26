@@ -5,7 +5,7 @@ import { getSession } from "@/lib/auth/session";
 const asset = (name: string) =>
   `${process.env.NEXT_PUBLIC_ASSET_BASE || "https://sitijo-assets.ruli-andaru.workers.dev"}/assets/${name}`;
 
-export default async function SitijoHeader() {
+export default async function Header() {
   const user = await getSession();
 
   const isLoggedIn = Boolean(user);
