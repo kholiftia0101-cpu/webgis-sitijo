@@ -1597,3 +1597,70 @@ html {
     grid-column: 1;
   }
 }
+/* FIX: Footer dua kolom */
+.home .footer {
+  display: grid;
+  grid-template-columns: 1.15fr 0.85fr;
+  grid-template-areas:
+    "info map"
+    "copyright copyright";
+  align-items: start;
+  column-gap: 50px;
+  row-gap: 30px;
+}
+
+/* Elemen informasi di sisi kiri */
+.home .footer-top {
+  grid-area: info;
+  margin: 0;
+}
+
+.home .footer-content {
+  grid-area: info;
+  display: flex;
+  flex-direction: column;
+  gap: 25px;
+  margin: 0;
+  max-width: none;
+}
+
+/* Kontak dan email tetap di kiri */
+.home .footer-contact {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  width: 100%;
+}
+
+/* Peta hanya di kanan */
+.home .footer-map-section {
+  grid-area: map;
+  width: 100%;
+}
+
+/* Sosial media di kiri */
+.home .footer-social-section {
+  grid-column: 1;
+  margin: 0;
+  max-width: none;
+}
+
+/* Copyright di bawah kedua kolom */
+.home .footer-bottom {
+  grid-area: copyright;
+  width: 100%;
+  max-width: none;
+}
+
+@media (max-width: 768px) {
+  .home .footer {
+    grid-template-columns: 1fr;
+    grid-template-areas:
+      "info"
+      "map"
+      "copyright";
+  }
+
+  .home .footer-contact {
+    grid-template-columns: 1fr;
+  }
+}
