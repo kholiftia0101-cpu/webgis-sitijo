@@ -1667,7 +1667,7 @@ html {
 
 .home .footer {
   display: grid;
-  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.6fr);
   grid-template-areas:
     "info map"
     "bottom bottom";
@@ -1678,7 +1678,6 @@ html {
   min-height: 0;
   margin-top: 55px;
   padding: 55px clamp(24px, 6vw, 100px) 0;
-
   overflow: hidden;
 }
 
