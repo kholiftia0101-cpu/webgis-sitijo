@@ -1665,10 +1665,6 @@ html {
   }
 }
 
-/* ========================================
-   SITIJO FOOTER - TWO COLUMN LAYOUT
-======================================== */
-
 .home .footer {
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
@@ -1676,8 +1672,7 @@ html {
     "info map"
     "bottom bottom";
   align-items: start;
-  gap: 35px 55px;
-
+  gap: 10px 10px;
   width: 100%;
   height: auto;
   min-height: 0;
@@ -1687,7 +1682,6 @@ html {
   overflow: hidden;
 }
 
-/* KOLOM KIRI */
 .home .footer-info-column {
   grid-area: info;
   min-width: 0;
@@ -1701,7 +1695,7 @@ html {
 .home .footer-contact {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 25px 22px;
+  gap: 10px 30px;
   width: 100%;
 }
 
@@ -1717,15 +1711,12 @@ html {
 /* SOSIAL MEDIA DI KIRI */
 .home .footer-social-section {
   display: flex;
-  flex-direction: column;
   align-items: flex-start;
   gap: 18px;
-
   width: 100%;
   max-width: none;
-  margin: 35px 0 0;
+  margin: 20px 0 0;
   padding: 25px 0;
-
   border-top: 1px solid rgba(255,255,255,.15);
   border-bottom: 1px solid rgba(255,255,255,.15);
 }
@@ -1736,7 +1727,6 @@ html {
   gap: 12px;
 }
 
-/* KOLOM KANAN: MAPS */
 .home .footer-map-section {
   grid-area: map;
   width: 100%;
