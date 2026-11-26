@@ -38,11 +38,9 @@ export default async function Home() {
   });
 return (
   <main className="home">
+  <Header />
 
-    <header />
-
-    <section
-      className="hero"
+  <section className="hero"
       style={{
         backgroundImage: `linear-gradient(90deg,rgba(0,26,58,.82),rgba(0,37,74,.35)),url(${asset("background.jpg")})`,
       }}
