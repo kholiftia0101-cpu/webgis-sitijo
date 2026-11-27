@@ -77,9 +77,15 @@ export async function POST(request: NextRequest) {
       .maybeSingle();
 
     if (error) {
-      console.error("Supabase login error:", error.message);
-      return redirectToSignin(request, "database");
-    }
+  console.error("Supabase login diagnostic:", {
+    code: error.code,
+    message: error.message,
+    details: error.details,
+    hint: error.hint,
+  });
+
+  return redirectToSignin(request, "database");
+}
 
     if (!user) {
       return redirectToSignin(request, "username");
