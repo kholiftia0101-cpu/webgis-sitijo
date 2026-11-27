@@ -247,7 +247,7 @@ export default function JenisDataClient() {
             border: { display: false },
             ticks: {
               color: "#334155",
-              font: { size: 11, weight: "600", family: "Inter, Arial, sans-serif" },
+              font: { size: 11, weight: 600, family: "Inter, Arial, sans-serif" },
               padding: 12,
             },
             grid: { display: false },
