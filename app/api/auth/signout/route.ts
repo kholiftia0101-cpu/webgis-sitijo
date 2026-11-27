@@ -6,7 +6,7 @@ export async function POST(request: Request) {
   await destroySession();
 
   return NextResponse.redirect(
-    new URL("/signin", request.url),
+    new URL("/", request.url),
     303
   );
 }
