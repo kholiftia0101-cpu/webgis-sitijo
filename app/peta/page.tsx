@@ -1,6 +1,6 @@
 
-import Link from "next/link";
 import { cek_role } from "@/lib/auth/cek_role";
+import Header from "@/components/layout/header";
 import MapClientLoader from "@/components/map/MapClientLoader";
 
 export default async function PetaPage() {
@@ -8,7 +8,7 @@ export default async function PetaPage() {
 
   return (
     <main className="map-page">
-   <Header />
+      <Header />
 
       <section className="map-content">
         <MapClientLoader />
