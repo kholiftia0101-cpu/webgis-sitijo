@@ -8,18 +8,7 @@ export default async function PetaPage() {
 
   return (
     <main className="map-page">
-      <header className="map-header">
-        <div className="map-brand">
-          <b>SITIJO</b>
-          <span>
-            Sistem Informasi Infrastruktur Kota Yogyakarta
-          </span>
-        </div>
-
-        <Link href="/" className="map-home">
-          Beranda
-        </Link>
-      </header>
+   <Header />
 
       <section className="map-content">
         <MapClientLoader />
