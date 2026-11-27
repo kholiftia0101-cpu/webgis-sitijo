@@ -38,9 +38,9 @@ const dataManual: Record<string, KelasData> = {
   Bangunan: {
     icon: "bangunan.jpg",
     desc: "Berdasarkan Peraturan Pemerintah Republik Indonesia Nomor 16 Tahun 2021 tentang Peraturan Pelaksanaan Undang-Undang Nomor 28 Tahun 2002 tentang Bangunan Gedung, bahwa bangunan gedung merupakan wujud fisik hasil pekerjaan konstruksi yang menyatu dengan tempat kedudukannya, sebagian atau seluruhnya berada di atas dan/atau di dalam tanah dan/atau di air, yang berfungsi sebagai tempat manusia melakukan kegiatannya, baik untuk hunian atau tempat tinggal, kegiatan keagamaan, kegiatan usaha, kegiatan sosial dan budaya, maupun kegiatan khusus.",
-    subkelas: ["Bangunan", "Rusunawa"],
-    chartData: [33.33, 0],
-    jumlahData: ["Fitur Bangunan Tahap 1", "0"],
+    subkelas: ["Bangunan", "Pembangunan Gedung", "Rusunawa"],
+    chartData: [99.93, 0.06, 0],
+    jumlahData: ["99.625 Fitur", "62 Fitur", "0"],
   },
 
   Halte: {
