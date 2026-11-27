@@ -1783,3 +1783,95 @@ html {
     align-items: flex-start;
   }
 }
+/* =============================================
+   SITIJO HOMEPAGE REDESIGN — MODERN / RESPONSIVE
+   Appended overrides: existing map and subpage styles stay intact.
+============================================= */
+:root {
+  --navy: #082b52;
+  --blue: #1456a0;
+  --gold: #f5bd28;
+  --ink: #15283e;
+  --muted: #64758b;
+  --paper: #f4f7fb;
+  --home-radius: 22px;
+}
+.home { overflow: clip; background:#fff; }
+.home .hero {
+  min-height: clamp(520px, 68vh, 760px);
+  position:relative; isolation:isolate; background-position:center 48%;
+  padding: clamp(48px,7vw,100px) clamp(22px,8vw,120px);
+}
+.home .hero::after { content:""; position:absolute; inset:0; z-index:-1;
+  background:linear-gradient(110deg,rgba(3,24,48,.92) 0%,rgba(5,35,65,.74) 48%,rgba(7,38,67,.24) 100%); }
+.home .hero-copy { max-width:780px; animation:homeRise .65s ease both; }
+.home .eyebrow,.home .section-kicker { display:inline-flex; align-items:center; gap:9px;
+  font-size:10px; letter-spacing:2.3px; font-weight:800; color:#e9b526; }
+.home .hero h1 { font-size:clamp(38px,5.5vw,72px); letter-spacing:-2px; line-height:1.04;
+  margin:20px 0 22px; max-width:780px; }
+.home .hero p { max-width:620px; color:#e2edf8; font-size:clamp(14px,1.3vw,16px); line-height:1.85; }
+.home .gold-button { margin-top:28px; padding:15px 23px; gap:28px; border-radius:999px;
+  background:linear-gradient(135deg,#ffd24b,#f2b20b); color:#08294d; box-shadow:0 10px 30px #f2b70533;
+  transition:transform .2s,box-shadow .2s; }
+.home .gold-button:hover { transform:translateY(-3px); box-shadow:0 14px 34px #f2b70555; }
+.home .intro-grid { padding:64px clamp(22px,8vw,120px); gap:clamp(25px,5vw,70px); align-items:center; background:#f4f7fb; }
+.home .intro-grid h2,.home .section h2,.home .facts h2,.home .external h2 { font-size:clamp(23px,2.5vw,34px); letter-spacing:-.8px; }
+.home .intro-grid p,.home .section-heading p { line-height:1.85; font-size:14px; }
+.home .access-card { border:1px solid #e6edf5; border-left:4px solid var(--gold); border-radius:var(--home-radius);
+  padding:30px; box-shadow:0 16px 45px #0b2e5010; }
+.home .access-card .lock { display:inline-grid; place-items:center; width:48px;height:48px;border-radius:15px;background:#eaf2fb;color:var(--blue);font-size:23px;margin-bottom:12px; }
+.home .access-card h2 { margin:0 0 12px; }
+.home .access-card p { margin:0 0 18px; }
+.home .access-card a { display:inline-flex; padding:10px 15px;border-radius:10px;background:#eaf2fb;color:var(--blue); }
+.home .section { padding:76px clamp(22px,8vw,120px); }
+.home .section-heading { margin-bottom:40px; }
+.home .section-heading h2 { font-size:clamp(24px,2.5vw,34px); letter-spacing:-.8px; }
+.home .feature-grid { grid-template-columns:repeat(4,minmax(0,1fr)); gap:18px; }
+.home .feature-card { position:relative; min-height:210px; padding:24px 18px; border:1px solid #e6edf4; border-radius:18px;
+  box-shadow:0 6px 20px #0b2e5007; gap:14px; transition:transform .22s,border-color .22s,box-shadow .22s; }
+.home .feature-card:hover { transform:translateY(-5px); border-color:#c7d9eb; box-shadow:0 16px 34px #0b2e5012; }
+.home .feature-card img { height:86px;width:112px; }
+.home .feature-card strong { font-size:13px;line-height:1.5; }
+.home .feature-card span { color:#9a7308;font-size:11px; }
+.home .department-section { background:linear-gradient(180deg,#f4f7fb,#edf3f9); }
+.home .department-grid { grid-template-columns:repeat(4,minmax(0,1fr)); gap:18px; }
+.home .department-card { border:1px solid #e1eaf3;border-radius:18px;box-shadow:0 5px 18px #0b2e5007; }
+.home .department-card img { height:clamp(110px,13vw,165px);object-fit:contain;background:white;padding:8px; }
+.home .department-card h3 { padding:14px 14px 18px; min-height:66px; font-size:13px; line-height:1.5; }
+.home .outline-button { border:1px solid #b5c8dc; border-radius:999px;padding:12px 24px;background:white;transition:.2s; }
+.home .outline-button:hover { background:var(--navy);color:white;border-color:var(--navy); }
+.home .external { padding:66px clamp(22px,8vw,120px); }
+.home .external-links a { border:1px solid #e3ebf3;border-radius:12px;padding:16px 18px;transition:.2s; }
+.home .external-links a:hover { transform:translateX(3px);background:#f5f8fc;border-color:#c7d9eb; }
+.home .facts { padding:70px clamp(22px,8vw,120px); background:#f4f7fb; }
+.home .stat-grid { grid-template-columns:repeat(5,minmax(0,1fr));gap:18px; }
+.home .stat { border:1px solid #e5edf4;border-radius:18px;padding:24px 14px;box-shadow:0 5px 18px #0b2e5007; }
+.home .stat img { width:52px;height:52px; }
+.home .stat b { font-size:clamp(24px,3vw,36px); }
+.home .footer { margin-top:0; padding:55px clamp(22px,8vw,120px) 0; }
+.home .footer-bottom { margin-top:36px; }
+@keyframes homeRise { from {opacity:0;transform:translateY(14px)} to {opacity:1;transform:translateY(0)} }
+@media(max-width:1050px) {
+  .home .feature-grid,.home .department-grid { grid-template-columns:repeat(2,minmax(0,1fr)); }
+  .home .stat-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+}
+@media(max-width:650px) {
+  .home .hero { min-height:550px;padding:50px 22px;background-position:60% center; }
+  .home .hero h1 { font-size:clamp(34px,10vw,48px);letter-spacing:-1.2px; }
+  .home .hero p { font-size:14px; }
+  .home .intro-grid { grid-template-columns:1fr;padding:44px 20px;gap:24px; }
+  .home .section { padding:52px 18px; }
+  .home .section-heading { margin-bottom:28px; }
+  .home .feature-grid,.home .department-grid { grid-template-columns:repeat(2,minmax(0,1fr));gap:12px; }
+  .home .feature-card { min-height:180px;padding:18px 12px;border-radius:15px; }
+  .home .feature-card img { width:85px;height:70px; }
+  .home .feature-card strong { font-size:12px; }
+  .home .department-card { border-radius:15px; }
+  .home .department-card img { height:105px; }
+  .home .department-card h3 { font-size:11px;padding:10px 9px;min-height:58px; }
+  .home .external { grid-template-columns:1fr;padding:48px 18px;gap:22px; }
+  .home .facts { padding:48px 18px; }
+  .home .stat-grid { grid-template-columns:repeat(2,minmax(0,1fr));gap:12px; }
+  .home .footer { padding:42px 18px 0; }
+}
+@media(prefers-reduced-motion:reduce) { .home * {animation:none!important;transition:none!important} }
