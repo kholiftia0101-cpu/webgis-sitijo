@@ -1,4 +1,4 @@
-import Header from "@/components/layout/Header";
+import Header from "@/components/layout/header";
 import PasswordInput from "./PasswordInput";
 
 type SigninPageProps = {
@@ -31,7 +31,10 @@ export default async function SigninPage({
       ? params.redirect
       : "/";
 
-  return (
+return (
+  <>
+    <Header />
+
     <main className="page-signin">
       <div className="login-container">
         <div className="login-box">
@@ -88,5 +91,6 @@ export default async function SigninPage({
         </div>
       </div>
     </main>
-  );
+  </>
+);
 }
