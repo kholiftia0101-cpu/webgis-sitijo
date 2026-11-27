@@ -1,4 +1,4 @@
-
+import Header from "@/components/layout/Header";
 import PasswordInput from "./PasswordInput";
 
 type SigninPageProps = {
