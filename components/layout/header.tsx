@@ -12,10 +12,10 @@ export default async function Header() {
   const isAdmin =
     String(user?.unit || "").toLowerCase() === "admin";
 
-  const protectedHref = (href: string) =>
-    isLoggedIn
-      ? href
-      : `/login?redirect=${encodeURIComponent(href)}`;
+const protectedHref = (href: string) =>
+  isLoggedIn
+    ? href
+    : `/signin?redirect=${encodeURIComponent(href)}`;
 
   return (
     <header className="site-header">
@@ -155,7 +155,7 @@ export default async function Header() {
                   </form>
                 </>
               ) : (
-                <Link href="/login" className="signin-button">
+                <Link href="/signin" className="signin-button">
                   <span>Sign In</span>
                   <span className="signin-arrow" aria-hidden="true">↗</span>
                 </Link>
