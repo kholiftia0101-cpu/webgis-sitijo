@@ -256,10 +256,6 @@ return (
             Kemantren Umbulharjo, Kota Yogyakarta,
             Daerah Istimewa Yogyakarta 55165
           </p>
-          <a href="https://www.google.com/maps/search/?api=1&query=Jl.+Kenari+No.+56+Yogyakarta"
-            target="_blank" rel="noopener noreferrer">
-            Lihat petunjuk lokasi ↗
-          </a>
         </div>
       </div>
 
@@ -343,9 +339,7 @@ return (
     <div className="footer-map-heading">
       <div>
         <span>LOCATION</span>
-        <h3>Lokasi Kantor DPUPKP</h3>
       </div>
-      <span className="footer-map-pin">⌖</span>
     </div>
 
     <div className="footer-map">
@@ -357,12 +351,6 @@ return (
         allowFullScreen
       />
     </div>
-
-    <a className="footer-map-link"
-      href="https://www.google.com/maps/search/?api=1&query=Jl.+Kenari+No.+56+Yogyakarta"
-      target="_blank" rel="noopener noreferrer">
-      Buka Google Maps <span>↗</span>
-    </a>
   </div>
 
   {/* COPYRIGHT FULL WIDTH */}
