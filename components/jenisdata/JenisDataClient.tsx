@@ -297,13 +297,13 @@ export default function JenisDataClient() {
 
   return (
     <main className="jenisdata-page">
-      <header className="jenisdata-header">
+      {/* <header className="jenisdata-header">
         <Link href="/" className="jenisdata-brand">
           SITIJO
         </Link>
         <span>Jenis Data Infrastruktur</span>
         <Link href="/">⌂ Beranda</Link>
-      </header>
+      </header> */}
 
       <div className="jenisdata-main">
         <div className="jenisdata-heading">
