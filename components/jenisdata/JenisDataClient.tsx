@@ -3,6 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import Chart from "chart.js/auto";
 
+type KelasData = {
+  icon: string;
+  desc: string;
+  subkelas: string[];
+  chartData: number[];
+  jumlahData: (string | number)[];
+};
+
 const asset = (name: string) =>
   `${process.env.NEXT_PUBLIC_ASSET_BASE || "https://sitijo-assets.ruli-andaru.workers.dev"}/assets/${name}`;
 
@@ -168,18 +176,7 @@ const dataManual: Record<string, KelasData> = {
   },
 };
 
-const softColors = [
-  "#FFB3BA",
-  "#fffcbaff",
-  "#BAFFC9",
-  "#bad7ffff",
-  "#f1baffff",
-  "#efccecff",
-  "#D1C4E9",
-  "#B2EBF2",
-  "#F8BBD0",
-  "#DCEDC8",
-];
+
 
 
 export default function JenisDataClient() {
